@@ -11,3 +11,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
     vctrs
+URL: https://github.com/EmilHvitfeldt/sparsevctrs
+BugReports: https://github.com/EmilHvitfeldt/sparsevctrs/issues
