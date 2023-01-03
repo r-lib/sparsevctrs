@@ -1,0 +1,54 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+set.seed(1234)
+```
+
+# sparsevctrs
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+THIS IS A PROTOTYPE. DO NOT USE
+
+The goal of sparsevctrs is to provide a sparse vector class that is compatible with tibbles.
+
+## Installation
+
+You can install the development version of sparsevctrs like so:
+
+``` r
+remotes::install_github("emilhvitfeldt/sparsevctrs")
+```
+
+## Example
+
+```{r}
+library(sparsevctrs)
+
+x <- new_sparse_vector(4, 7, 10)
+
+x
+sum(x)
+
+new_sparse_vector(4, 7, 10) + new_sparse_vector(3, 2, 10)
+```
+
+This class is compatible with tibbles
+
+```{r}
+library(tibble)
+
+tibble(x = sample(1:10), y = new_sparse_vector(1, 7, 10))
+```
+
