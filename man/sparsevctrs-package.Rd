@@ -8,6 +8,14 @@
 \description{
 What the package does (one paragraph).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/EmilHvitfeldt/sparsevctrs}
+  \item Report bugs at \url{https://github.com/EmilHvitfeldt/sparsevctrs/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Emil Hvitfeldt \email{emilhhvitfeldt@gmail.com} (\href{https://orcid.org/0000-0002-0679-1945}{ORCID})
 
