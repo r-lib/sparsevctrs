@@ -15,3 +15,6 @@ Imports:
     vctrs
 URL: https://github.com/EmilHvitfeldt/sparsevctrs
 BugReports: https://github.com/EmilHvitfeldt/sparsevctrs/issues
+Suggests: 
+    rlang,
+    rsparse

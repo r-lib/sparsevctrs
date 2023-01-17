@@ -1,3 +1,16 @@
+#' Convert sparse matrices to tibbles
+#'
+#' @param x a sparse matrix
+#'
+#' @return a tibble
+#' @export
+#'
+#' @seealso [tibble_to_sparse()]
+#'
+#' @examplesIf rlang::is_installed("rsparse")
+#' data("movielens100k", package = "rsparse")
+#'
+#' sparse_to_tibble(movielens100k)
 sparse_to_tibble <- function(x) {
   start <- x@p[seq(1, length(x@p) - 1)] + 1
   end <- x@p[seq(2, length(x@p))]
@@ -20,6 +33,22 @@ sparse_to_tibble <- function(x) {
   tibble::as_tibble(results)
 }
 
+#' Convert tibbles to sparse matrices
+#'
+#' @param x a tibble
+#'
+#' @return a sparse matrix
+#' @export
+#'
+#' @seealso [sparse_to_tibble()]
+#'
+#' @examples
+#' mts <- mtcars
+#' mts$new <- new_sparse_vector(c(1, 4, 8), c(8, 1, 20), nrow(mts))
+#'
+#' tibble_to_sparse(mtcars)
+#'
+#' tibble_to_sparse(mts)
 tibble_to_sparse <- function(x) {
   any_sparse_vector <- any(
     vapply(x, inherits, "sparse_vector", FUN.VALUE = logical(1))
