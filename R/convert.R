@@ -1,5 +1,23 @@
 sparse_to_tibble <- function(x) {
+  start <- x@p[seq(1, length(x@p) - 1)] + 1
+  end <- x@p[seq(2, length(x@p))]
 
+  column_length <- nrow(x)
+
+  results <- list()
+
+  for (column in seq_along(start)) {
+    index <- seq(start[column], end[column])
+    results[[column]] <- new_sparse_vector(
+      values = x@x[index],
+      positions = x@i[index],
+      length = column_length
+    )
+  }
+
+  names(results) <- colnames(x)
+
+  tibble::as_tibble(results)
 }
 
 tibble_to_sparse <- function(x) {
