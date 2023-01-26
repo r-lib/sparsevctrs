@@ -21,6 +21,24 @@ new_sparse_vector <- function(values, positions, length) {
   res
 }
 
+#' Create new sparse vector
+#'
+#' @param values Vector of values
+#' @param positions Vector of positions, must be integers and same length as
+#'   values.
+#' @param length Length of resulting vector
+#'
+#' @return A sparse_vector object.
+#' @export
+#'
+#' @examples
+#' sparse_vector(1, 4, 10)
+sparse_vector <- function(values = double(),
+                          positions = double(),
+                          length = double()) {
+  new_sparse_vector(values, positions, length)
+}
+
 #' @export
 format.sparse_vector <- function(x, ...) {
   out <- rep(0, length(x))
