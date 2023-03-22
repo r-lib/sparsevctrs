@@ -13,7 +13,7 @@ Imports:
     Matrix,
     tibble,
     vctrs
-URL: https://github.com/EmilHvitfeldt/sparsevctrs
+URL: https://github.com/EmilHvitfeldt/sparsevctrs, https://emilhvitfeldt.github.io/sparsevctrs/
 BugReports: https://github.com/EmilHvitfeldt/sparsevctrs/issues
 Suggests: 
     rlang,
