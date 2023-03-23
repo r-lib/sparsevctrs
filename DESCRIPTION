@@ -18,3 +18,4 @@ BugReports: https://github.com/EmilHvitfeldt/sparsevctrs/issues
 Suggests: 
     rlang,
     rsparse
+Config/Needs/website: rmarkdown

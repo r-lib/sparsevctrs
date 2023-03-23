@@ -1,0 +1,158 @@
+---
+title: "sparsevctrs tidyop"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sparsevctrs)
+```
+
+## Abstract
+
+Many statistical and machine learning methods work with and are optimized to work with sparse data. By working in a tidy way (using tibbles) excludes you from certain methods and workflows by not being able to take advantage of sparse formats. The purpose of this tidyup is to propose adding sparse column support for tibbles.
+
+## What is sparse data?
+
+TODO
+
+## Motivation
+
+One of the great features of using tibbles compared to traditional data types such as matrices and sparse matrices is that you are not constrained to use just 1 type. Effortlessly storing numerics, factors, and dates makes data wrangling and preprocessing much cleaner.
+
+In {recipes}, tibbles are used internally to handle the data. Each step receives a tibble and some instructions and returns a (possibly) modified tibble. {recipes} also allow one to return the final result in the following desired formats "tibble", "matrix", "data.frame", or "dgCMatrix", but the effects of using a `dgcMatrix` is negligent because you are forced to have carried around the data in the non-sparse format first. This could be excluding you from working data that would fit in memory sparsely but would be too big to store non-sparsely. This is a blocker for using most of {tidymodels} if you have large sparse data and excludes certain modeling tasks from being feasible within the {tidymodels} framework.
+
+TODO: Add diagram here
+
+One of the cases where sparse data is used in modeling comes when extracting count features from text data. Below is a small example using the `friends` data set which includes almost 70.000 lines of dialog. Creating count features of the different words results in a 4.69 GB tibble.  
+
+# TODO prerun this:
+```{r, eval=FALSE}
+library(tidymodels)
+library(textrecipes)
+library(friends)
+
+preped_rec <- recipe(season ~ text, data = friends) %>%
+  step_tokenize(text) %>%
+  step_tf(text) %>%
+  prep()
+
+term_freq <- bake(preped_rec, new_data = NULL)
+
+dim(term_freq)
+
+lobstr::obj_size(term_freq)
+```
+
+```{r, eval=FALSE}
+glimpse(term_freq[7070:7080])
+```
+
+Other counts such as bigrams would result in 164734 columns, and including 1, 2, and 3-grams include 552852 columns, filtering to n-grams that appear at least 5 times would still result in 35988 columns. Having all these columns represented non-sparsely would be a non-starter for many people. On the other hand the sparse format would be many times smaller. Here shown using {quanteda}.
+
+```{r, eval=FALSE}
+library(quanteda)
+library(friends)
+
+sparse_mat <- tokens(friends$text) %>%
+  dfm()
+
+dim(sparse_mat)
+
+lobstr::obj_size(sparse_mat)
+```
+
+## Possible Solution
+
+{sparsevctrs}
+
+- Creating an {vctrs} vector that works mimics/encapsulates `Matrix::sparseVector()`
+- Creating the appropriate `as.*` to efficiently move from tibbles to Matrix sparse formats
+
+```{r}
+vec <- new_sparse_vector(
+  values = c(2, 1, 3),
+  positions = c(2, 5, 9),
+  length = 10
+)
+
+vec
+str(vec)
+
+vctrs::vec_data(vec)
+
+new_sparse_vector
+```
+
+
+What I want this to be:
+- something that passes `vec_is()` and thus able to be passed to a `tibble()`
+- behaves like other vectors w.r.t. subsetting, etc etc
+- has support for as many arithmetic and math operations as possible
+
+```{r}
+library(dplyr)
+
+df <- tibble(
+  x = rep(1:2, length.out = 10),
+  y = new_sparse_vector(values = 1, positions = 7, length = 10),
+  z = new_sparse_vector(values = 2, positions = 6, length = 10)
+)
+
+df
+
+df |>
+  filter(x == 1) |>
+  summarise(sum(y + z))
+```
+
+What I don't want this to be:
+
+- A replacement for {Matrix} package.
+
+## What needs to happen
+
+2 main areas
+
+- vctrs / ALTREP infrastructure 
+
+This package works enough to showcase what I want, but missing a lot of things. This is likely to be because I don't understand {vctrs} enough, or because it can't be done in the current state of {vctrs}. 
+
+After chatting with some people, an ALTREP thing might also be the solution.
+
+Regardless of the choice, I would need help with this part.
+
+- algorithms to perform the tasks
+
+Depending on above choice these would be implemented in R or C. Many are fairly simple as the data structure itself is simple
+
+```{r}
+sparse_multiplication <- function(x, y) {
+  x_pos <- positions(x)
+  x_val <- values(x)
+  y_pos <- positions(y)
+  y_val <- values(y)
+  
+  out_pos <- intersect(x_pos, y_pos)
+  out_val <- x_val[match(out_pos, x_pos)] * y_val[match(out_pos, y_pos)]
+  
+  new_sparse_vector(
+    values = out_val,
+    positions = out_pos,
+    length = length(x)
+  )
+}
+```
+
+And I should be able to handle these.
+
+## Demand
+
+This request has been brought up before in this related issues:
+https://github.com/tidyverse/tibble/issues/196
+https://github.com/tidyverse/tibble/issues/339

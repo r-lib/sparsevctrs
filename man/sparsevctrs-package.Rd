@@ -12,6 +12,7 @@ What the package does (one paragraph).
 Useful links:
 \itemize{
   \item \url{https://github.com/EmilHvitfeldt/sparsevctrs}
+  \item \url{https://emilhvitfeldt.github.io/sparsevctrs/}
   \item Report bugs at \url{https://github.com/EmilHvitfeldt/sparsevctrs/issues}
 }
 
