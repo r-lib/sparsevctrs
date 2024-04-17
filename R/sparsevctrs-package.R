@@ -9,5 +9,6 @@
 NULL
 
 ## usethis namespace: start
+#' @useDynLib sparsevctrs, .registration = TRUE
 ## usethis namespace: end
 NULL
