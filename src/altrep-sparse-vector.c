@@ -1,5 +1,5 @@
 #define R_NO_REMAP
-#include <R.h>
+#include "R.h"
 #include <Rinternals.h>
 #include <R_ext/Altrep.h>
 #include <R_ext/Rdynload.h>
@@ -28,7 +28,7 @@ sparsevctrs_real_Get_region(SEXP sx, R_xlen_t i, R_xlen_t n, double* buf) {
   return n;
 }
 
-static void InitRealClass(DllInfo* dll) {
+void InitRealClass(DllInfo* dll) {
   R_altrep_class_t cls =
       R_make_altreal_class("sparsevctrs_real", "sparsevctrs", dll);
   sparsevctrs_real_class = cls;
@@ -44,15 +44,4 @@ static void InitRealClass(DllInfo* dll) {
 
 SEXP do_sparsevctrs(SEXP sWhat) {
   return R_new_altrep(sparsevctrs_real_class, sWhat, R_NilValue);
-}
-
-static const R_CallMethodDef CallEntries[] = {
-    {"sparsevctrs", (DL_FUNC) &do_sparsevctrs, -1},
-    {NULL, NULL, 0}};
-
-void R_init_sparsevctrs(DllInfo* dll) {
-  InitRealClass(dll);
-
-  R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
-  R_useDynamicSymbols(dll, FALSE);
 }

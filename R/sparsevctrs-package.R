@@ -9,6 +9,7 @@
 NULL
 
 ## usethis namespace: start
+#' @useDynLib sparsevctrs, .registration = TRUE
 #' @useDynLib sparsevctrs, .registration = TRUE, .fixes = "C_"
 ## usethis namespace: end
 NULL
