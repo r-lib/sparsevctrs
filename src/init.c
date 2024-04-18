@@ -1,11 +1,11 @@
 #include <Rinternals.h>
 
 // Defined in altrep-sparse-vector.c
-extern SEXP do_sparsevctrs(SEXP);
+extern SEXP ffi_altrep_new_sparse_real(SEXP);
 extern void InitRealClass(DllInfo*);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"sparsevctrs", (DL_FUNC) &do_sparsevctrs, 1},
+    {"ffi_altrep_new_sparse_real", (DL_FUNC) &ffi_altrep_new_sparse_real, 1},
     {NULL, NULL, 0}
 };
 

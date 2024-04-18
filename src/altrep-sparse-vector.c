@@ -6,7 +6,7 @@
 // Initialised at load time
 R_altrep_class_t sparsevctrs_real_class;
 
-SEXP do_sparsevctrs(SEXP sWhat) {
+SEXP ffi_altrep_new_sparse_real(SEXP sWhat) {
   return R_new_altrep(sparsevctrs_real_class, sWhat, R_NilValue);
 }
 
