@@ -4,12 +4,14 @@
 \alias{new_sparse_real}
 \title{Create sparse numeric vector}
 \usage{
-new_sparse_real(x, len)
+new_sparse_real(value, position, length)
 }
 \arguments{
-\item{x}{thing}
+\item{value}{Numeric vector, values of non-zero entries.}
 
-\item{len}{length of vector}
+\item{position}{integer vector, indices of non-zero entries.}
+
+\item{length}{Integer, Length of vector.}
 }
 \description{
 Create sparse numeric vector

@@ -1,10 +1,12 @@
 #' Create sparse numeric vector
 #' 
-#' @param x thing
-#' @param len length of vector
-#' 
+#' @param value Numeric vector, values of non-zero entries.
+#' @param position integer vector, indices of non-zero entries.
+#' @param length Integer, Length of vector.
 #'
 #' @export
-new_sparse_real <- function(x, len) {
-  .Call(ffi_altrep_new_sparse_real, x, len)
+new_sparse_real <- function(value, position, length) {
+  x <- list(val = value, pos = position)
+
+  .Call(ffi_altrep_new_sparse_real, x, length)
 }
