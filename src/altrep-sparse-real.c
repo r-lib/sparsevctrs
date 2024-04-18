@@ -6,8 +6,8 @@
 // Initialised at load time
 R_altrep_class_t altrep_sparse_real_class;
 
-SEXP ffi_altrep_new_sparse_real(SEXP sWhat, SEXP len) {
-  return R_new_altrep(altrep_sparse_real_class, sWhat, len);
+SEXP ffi_altrep_new_sparse_real(SEXP x, SEXP len) {
+  return R_new_altrep(altrep_sparse_real_class, x, len);
 }
 
 // -----------------------------------------------------------------------------
@@ -35,12 +35,29 @@ R_xlen_t altrep_sparse_real_Length(SEXP x) {
 // -----------------------------------------------------------------------------
 // ALTREAL
 
-static double altrep_sparse_real_real_Elt(SEXP sx, R_xlen_t i) {
-  return i;
+static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
+
+  SEXP data1 = PROTECT(R_altrep_data1(x));
+  SEXP val = PROTECT(VECTOR_ELT(data1, 0));
+  SEXP pos = PROTECT(VECTOR_ELT(data1, 1));
+  
+  const R_len_t n = Rf_length(val);
+  
+  double out = 0;
+
+  for (int j = 0; j < n; ++j) {
+    if (INTEGER(pos)[j] == i + 1) {
+      out = REAL(val)[j];
+      break;
+    }
+  }
+  
+  UNPROTECT(3);
+
+  return out;
 }
 
-static R_xlen_t
-altrep_sparse_real_real_Get_region(SEXP sx, R_xlen_t i, R_xlen_t n, double* buf) {
+static R_xlen_t altrep_sparse_real_Get_region(SEXP sx, R_xlen_t i, R_xlen_t n, double* buf) {
   return n;
 }
 
@@ -58,6 +75,6 @@ void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
   // TODO add altrep_sparse_real_Inspect
 
   // ALTREAL
-  R_set_altreal_Elt_method(altrep_sparse_real_class, altrep_sparse_real_real_Elt);
-  R_set_altreal_Get_region_method(altrep_sparse_real_class, altrep_sparse_real_real_Get_region);
+  R_set_altreal_Elt_method(altrep_sparse_real_class, altrep_sparse_real_Elt);
+  R_set_altreal_Get_region_method(altrep_sparse_real_class, altrep_sparse_real_Get_region);
 }
