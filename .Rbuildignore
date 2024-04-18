@@ -9,3 +9,4 @@
 ^vignettes/articles$
 ^compile_commands\.json$
 .clang-format
+^.cache$
