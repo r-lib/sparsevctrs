@@ -4,10 +4,12 @@
 \alias{new_sparse_real}
 \title{Create sparse numeric vector}
 \usage{
-new_sparse_real(x)
+new_sparse_real(x, len)
 }
 \arguments{
 \item{x}{thing}
+
+\item{len}{length of vector}
 }
 \description{
 Create sparse numeric vector
