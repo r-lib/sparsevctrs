@@ -1,6 +1,6 @@
 #include <Rinternals.h>
 
-// Defined in altrep-sparse-vector.c
+// Defined in altrep-sparse-real.c
 extern SEXP ffi_altrep_new_sparse_real(SEXP);
 extern void sparsevctrs_init_altrep_sparse_real(DllInfo*);
 
