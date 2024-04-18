@@ -2,14 +2,16 @@
 #include "R.h"
 #include <Rinternals.h>
 #include <R_ext/Altrep.h>
-#include <R_ext/Rdynload.h>
 
-static R_altrep_class_t sparsevctrs_real_class;
+// Initialised at load time
+R_altrep_class_t sparsevctrs_real_class;
 
-static R_xlen_t sparsevctrs_Length(SEXP sx) {
-  double res = 32;
-  return res;
+SEXP do_sparsevctrs(SEXP sWhat) {
+  return R_new_altrep(sparsevctrs_real_class, sWhat, R_NilValue);
 }
+
+// -----------------------------------------------------------------------------
+// ALTVEC
 
 static void* sparsevctrs_Dataptr(SEXP sx, Rboolean writeable) {
   return sx;
@@ -18,6 +20,19 @@ static void* sparsevctrs_Dataptr(SEXP sx, Rboolean writeable) {
 static const void* sparsevctrs_Dataptr_or_null(SEXP sx) {
   return sx;
 }
+
+// -----------------------------------------------------------------------------
+// ALTREP
+
+static R_xlen_t sparsevctrs_Length(SEXP sx) {
+  double res = 32;
+  return res;
+}
+
+// TODO add sparsevctrs_Inspect
+
+// -----------------------------------------------------------------------------
+// ALTREAL
 
 static double sparsevctrs_real_Elt(SEXP sx, R_xlen_t i) {
   return i;
@@ -28,20 +43,20 @@ sparsevctrs_real_Get_region(SEXP sx, R_xlen_t i, R_xlen_t n, double* buf) {
   return n;
 }
 
+// -----------------------------------------------------------------------------
+
 void InitRealClass(DllInfo* dll) {
-  R_altrep_class_t cls =
-      R_make_altreal_class("sparsevctrs_real", "sparsevctrs", dll);
-  sparsevctrs_real_class = cls;
+  sparsevctrs_real_class =  R_make_altreal_class("sparsevctrs_real", "sparsevctrs", dll);
 
-  R_set_altrep_Length_method(cls, sparsevctrs_Length);
+  // ALTVEC
+  R_set_altvec_Dataptr_method(sparsevctrs_real_class, sparsevctrs_Dataptr);
+  R_set_altvec_Dataptr_or_null_method(sparsevctrs_real_class, sparsevctrs_Dataptr_or_null);
 
-  R_set_altvec_Dataptr_method(cls, sparsevctrs_Dataptr);
-  R_set_altvec_Dataptr_or_null_method(cls, sparsevctrs_Dataptr_or_null);
+  // ALTREP
+  R_set_altrep_Length_method(sparsevctrs_real_class, sparsevctrs_Length);
+  // TODO add sparsevctrs_Inspect
 
-  R_set_altreal_Elt_method(cls, sparsevctrs_real_Elt);
-  R_set_altreal_Get_region_method(cls, sparsevctrs_real_Get_region);
-}
-
-SEXP do_sparsevctrs(SEXP sWhat) {
-  return R_new_altrep(sparsevctrs_real_class, sWhat, R_NilValue);
+  // ALTREAL
+  R_set_altreal_Elt_method(sparsevctrs_real_class, sparsevctrs_real_Elt);
+  R_set_altreal_Get_region_method(sparsevctrs_real_class, sparsevctrs_real_Get_region);
 }
