@@ -37,12 +37,16 @@ R_xlen_t altrep_sparse_real_Length(SEXP x) {
 
 static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
 
+  if (i > REAL(R_altrep_data2(x))[0]) {
+    return NA_REAL;
+  }
+
   SEXP data1 = PROTECT(R_altrep_data1(x));
   SEXP val = PROTECT(VECTOR_ELT(data1, 0));
   SEXP pos = PROTECT(VECTOR_ELT(data1, 1));
   
   const R_len_t n = Rf_length(val);
-  
+
   double out = 0;
 
   for (int j = 0; j < n; ++j) {
