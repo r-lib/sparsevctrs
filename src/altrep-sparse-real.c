@@ -108,10 +108,6 @@ static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
   return out;
 }
 
-static R_xlen_t altrep_sparse_real_Get_region(SEXP sx, R_xlen_t i, R_xlen_t n, double* buf) {
-  return n;
-}
-
 // -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
@@ -127,5 +123,4 @@ void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
 
   // ALTREAL
   R_set_altreal_Elt_method(altrep_sparse_real_class, altrep_sparse_real_Elt);
-  R_set_altreal_Get_region_method(altrep_sparse_real_class, altrep_sparse_real_Get_region);
 }
