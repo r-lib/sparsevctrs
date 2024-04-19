@@ -59,53 +59,6 @@ const void* altrep_sparse_real_Dataptr_or_null(SEXP vec) {
   }
 }
 
-// -----------------------------------------------------------------------------
-// ALTREP
-
-R_xlen_t altrep_sparse_real_Length(SEXP x) {
-  double out = Rf_asReal(VECTOR_ELT(R_altrep_data1(x),2));
-
-  return out;
-}
-
-// What gets printed when .Internal(inspect()) is used
-Rboolean altrep_sparse_real_Inspect(SEXP x,
-                                    int pre,
-                                    int deep,
-                                    int pvec,
-                                    void (*inspect_subtree)(SEXP, int, int, int)) {
-  Rprintf("sparsevctrs_altrep_sparse_real (materialized=%s)\n",
-          R_altrep_data2(x) != R_NilValue ? "T" : "F");
-  return TRUE;
-}
-
-// -----------------------------------------------------------------------------
-// ALTREAL
-
-static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
-
-  if (i > Rf_asReal(VECTOR_ELT(R_altrep_data1(x), 2))) {
-    return NA_REAL;
-  }
-
-  SEXP data1 = R_altrep_data1(x);
-  SEXP val = VECTOR_ELT(data1, 0);
-  SEXP pos = VECTOR_ELT(data1, 1);
-  
-  const R_len_t n = Rf_length(val);
-
-  double out = 0;
-
-  for (int j = 0; j < n; ++j) {
-    if (INTEGER_ELT(pos, j) == i + 1) {
-      out = REAL_ELT(val, j);
-      break;
-    }
-  }
-  
-  return out;
-}
-
 static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 
   SEXP data1 = R_altrep_data1(x);
@@ -158,6 +111,53 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 }
 
 // -----------------------------------------------------------------------------
+// ALTREP
+
+R_xlen_t altrep_sparse_real_Length(SEXP x) {
+  double out = Rf_asReal(VECTOR_ELT(R_altrep_data1(x),2));
+
+  return out;
+}
+
+// What gets printed when .Internal(inspect()) is used
+Rboolean altrep_sparse_real_Inspect(SEXP x,
+                                    int pre,
+                                    int deep,
+                                    int pvec,
+                                    void (*inspect_subtree)(SEXP, int, int, int)) {
+  Rprintf("sparsevctrs_altrep_sparse_real (materialized=%s)\n",
+          R_altrep_data2(x) != R_NilValue ? "T" : "F");
+  return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+// ALTREAL
+
+static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
+
+  if (i > Rf_asReal(VECTOR_ELT(R_altrep_data1(x), 2))) {
+    return NA_REAL;
+  }
+
+  SEXP data1 = R_altrep_data1(x);
+  SEXP val = VECTOR_ELT(data1, 0);
+  SEXP pos = VECTOR_ELT(data1, 1);
+  
+  const R_len_t n = Rf_length(val);
+
+  double out = 0;
+
+  for (int j = 0; j < n; ++j) {
+    if (INTEGER_ELT(pos, j) == i + 1) {
+      out = REAL_ELT(val, j);
+      break;
+    }
+  }
+  
+  return out;
+}
+
+// -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
   altrep_sparse_real_class =  R_make_altreal_class("altrep_sparse_real", "sparsevctrs", dll);
@@ -165,6 +165,7 @@ void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
   // ALTVEC
   R_set_altvec_Dataptr_method(altrep_sparse_real_class, altrep_sparse_real_Dataptr);
   R_set_altvec_Dataptr_or_null_method(altrep_sparse_real_class, altrep_sparse_real_Dataptr_or_null);
+  R_set_altvec_Extract_subset_method(altrep_sparse_real_class, altrep_sparse_real_Extract_subset);
 
   // ALTREP
   R_set_altrep_Length_method(altrep_sparse_real_class, altrep_sparse_real_Length);
@@ -172,5 +173,4 @@ void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
 
   // ALTREAL
   R_set_altreal_Elt_method(altrep_sparse_real_class, altrep_sparse_real_Elt);
-  R_set_altvec_Extract_subset_method(altrep_sparse_real_class, altrep_sparse_real_Extract_subset);
 }
