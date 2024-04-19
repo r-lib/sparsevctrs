@@ -22,9 +22,9 @@ SEXP alrep_sparse_real_Materialize(SEXP vec) {
   SEXP pos = PROTECT(VECTOR_ELT(data1, 1));
   SEXP len = PROTECT(VECTOR_ELT(data1, 2));
 
-  out = PROTECT(Rf_allocVector(REALSXP, Rf_asReal(len)));
+  out = PROTECT(Rf_allocVector(REALSXP, Rf_asInteger(len)));
   
-  int n = Rf_asReal(len);
+  int n = Rf_asInteger(len);
   
   for (int i = 0; i < n; ++i) {
     REAL(out)[i] = 0;
