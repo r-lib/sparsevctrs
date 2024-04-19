@@ -56,7 +56,7 @@ const void* altrep_sparse_real_Dataptr_or_null(SEXP vec) {
 // ALTREP
 
 R_xlen_t altrep_sparse_real_Length(SEXP x) {
-  double out = REAL(VECTOR_ELT(R_altrep_data1(x),2))[0];
+  double out = Rf_asReal(VECTOR_ELT(R_altrep_data1(x),2));
 
   return out;
 }
@@ -68,7 +68,7 @@ R_xlen_t altrep_sparse_real_Length(SEXP x) {
 
 static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
 
-  if (i > REAL(VECTOR_ELT(R_altrep_data1(x), 2))[0]) {
+  if (i > Rf_asReal(VECTOR_ELT(R_altrep_data1(x), 2))) {
     return NA_REAL;
   }
 
