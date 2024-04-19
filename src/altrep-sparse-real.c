@@ -45,8 +45,8 @@ SEXP alrep_sparse_real_Materialize(SEXP vec) {
 // -----------------------------------------------------------------------------
 // ALTVEC
 
-static void* altrep_sparse_real_Dataptr(SEXP x, Rboolean writeable) {
-  return alrep_sparse_real_Materialize(x);
+void* altrep_sparse_real_Dataptr(SEXP x, Rboolean writeable) {
+  return STDVEC_DATAPTR(alrep_sparse_real_Materialize(x));
 }
 
 const void* altrep_sparse_real_Dataptr_or_null(SEXP vec) {
