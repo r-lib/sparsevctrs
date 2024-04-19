@@ -27,13 +27,13 @@ SEXP alrep_sparse_real_Materialize(SEXP vec) {
   int n = Rf_asInteger(len);
   
   for (int i = 0; i < n; ++i) {
-    REAL(out)[i] = 0;
+    SET_REAL_ELT(out, i, 0);
   }
 
   int m = Rf_length(pos);
 
   for (int i = 0; i < m; ++i) {
-    REAL(out)[INTEGER(pos)[i] - 1] = REAL(val)[i];
+    SET_REAL_ELT(out, INTEGER_ELT(pos, i) - 1, REAL_ELT(val, i));
   }
 
   R_set_altrep_data2(vec, out);
@@ -97,8 +97,8 @@ static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
   double out = 0;
 
   for (int j = 0; j < n; ++j) {
-    if (INTEGER(pos)[j] == i + 1) {
-      out = REAL(val)[j];
+    if (INTEGER_ELT(pos, j) == i + 1) {
+      out = REAL_ELT(val, j);
       break;
     }
   }
@@ -116,7 +116,7 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   int n = 0;
 
   for (int i = 0; i < Rf_length(matches); ++i) { 
-    if (INTEGER(matches)[i] != R_NaInt) {
+    if (INTEGER_ELT(matches, i) != R_NaInt) {
       n++;
     }
   }
@@ -129,18 +129,18 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 
   for (int i = 0; i < Rf_length(matches); ++i) {
 
-    int match = INTEGER(matches)[i];
+    int match = INTEGER_ELT(matches, i);
     if (match != R_NaInt) {
-      REAL(val_new)[step] = REAL(val_old)[match - 1];
+      SET_REAL_ELT(val_new, step, REAL_ELT(val_old, match - 1));
 
       for (int j = 0; j < Rf_length(matches); ++j) {
-        if (INTEGER(indx)[j] == INTEGER(pos_old)[match - 1]) {
+        if (INTEGER_ELT(indx, j) == INTEGER_ELT(pos_old, match - 1)) {
           break;
         } else {
           what_pos++;
         }
       }
-      INTEGER(pos_new)[step] = what_pos;
+      SET_INTEGER_ELT(pos_new, step, what_pos);
       what_pos = 1;
       step++;
     }
