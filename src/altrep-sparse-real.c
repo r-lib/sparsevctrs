@@ -108,11 +108,10 @@ static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
 
 static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 
-  SEXP data1 = PROTECT(R_altrep_data1(x));
-  SEXP val_old = PROTECT(VECTOR_ELT(data1, 0));
-  SEXP pos_old = PROTECT(VECTOR_ELT(data1, 1));
-
-  SEXP matches = PROTECT(Rf_match(pos_old, indx, R_NaInt));
+  SEXP data1 = R_altrep_data1(x);
+  SEXP val_old = VECTOR_ELT(data1, 0);
+  SEXP pos_old = VECTOR_ELT(data1, 1);
+  SEXP matches = Rf_match(pos_old, indx, R_NaInt);
 
   int n = 0;
 
@@ -153,7 +152,7 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   SET_VECTOR_ELT(res, 1, pos_new);
   SET_VECTOR_ELT(res, 2, Rf_ScalarReal(Rf_length(matches)));
 
-  UNPROTECT(7);
+  UNPROTECT(3);
 
   return ffi_altrep_new_sparse_real(res);
 }
