@@ -29,3 +29,10 @@ test_that("subsetting works with new_sparse_real()", {
 
   expect_identical(x_sparse[11], NA_real_)
 })
+
+test_that("materialization works with new_sparse_real()", {
+  x_sparse <- new_sparse_real(value = c(10, 13, 20), position = c(1, 5, 8), 10)
+  x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
+
+  expect_identical(x_sparse[], x_dense)
+})

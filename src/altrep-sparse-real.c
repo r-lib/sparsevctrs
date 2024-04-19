@@ -33,7 +33,7 @@ SEXP alrep_sparse_real_Materialize(SEXP vec) {
   int m = Rf_length(pos);
 
   for (int i = 0; i < m; ++i) {
-    REAL(out)[INTEGER(pos)[i]] = REAL(val)[i];
+    REAL(out)[INTEGER(pos)[i] - 1] = REAL(val)[i];
   }
 
   R_set_altrep_data2(vec, out);
