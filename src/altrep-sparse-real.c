@@ -17,21 +17,28 @@ SEXP alrep_sparse_real_Materialize(SEXP vec) {
     return out;
   }
 
-  out = PROTECT(Rf_allocVector(REALSXP, 4));
-
   SEXP data1 = PROTECT(R_altrep_data1(vec));
   SEXP val = PROTECT(VECTOR_ELT(data1, 0));
   SEXP pos = PROTECT(VECTOR_ELT(data1, 1));
-  
-  const R_len_t n = Rf_length(val);
+  SEXP len = PROTECT(VECTOR_ELT(data1, 2));
 
+  out = PROTECT(Rf_allocVector(REALSXP, Rf_asReal(len)));
+  
+  int n = Rf_asReal(len);
+  
   for (int i = 0; i < n; ++i) {
+    REAL(out)[i] = 0;
+  }
+
+  int m = Rf_length(pos);
+
+  for (int i = 0; i < m; ++i) {
     REAL(out)[INTEGER(pos)[i]] = REAL(val)[i];
   }
 
   R_set_altrep_data2(vec, out);
 
-  UNPROTECT(4);
+  UNPROTECT(5);
   return out;
 }
 
@@ -61,7 +68,16 @@ R_xlen_t altrep_sparse_real_Length(SEXP x) {
   return out;
 }
 
-// TODO add altrep_sparse_real_Inspect
+// What gets printed when .Internal(inspect()) is used
+Rboolean altrep_sparse_real_Inspect(SEXP x,
+                                    int pre,
+                                    int deep,
+                                    int pvec,
+                                    void (*inspect_subtree)(SEXP, int, int, int)) {
+  Rprintf("sparsevctrs_altrep_sparse_real (materialized=%s)\n",
+          R_altrep_data2(x) != R_NilValue ? "T" : "F");
+  return TRUE;
+}
 
 // -----------------------------------------------------------------------------
 // ALTREAL
@@ -107,7 +123,7 @@ void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
 
   // ALTREP
   R_set_altrep_Length_method(altrep_sparse_real_class, altrep_sparse_real_Length);
-  // TODO add altrep_sparse_real_Inspect
+  R_set_altrep_Inspect_method(altrep_sparse_real_class, altrep_sparse_real_Inspect);
 
   // ALTREAL
   R_set_altreal_Elt_method(altrep_sparse_real_class, altrep_sparse_real_Elt);
