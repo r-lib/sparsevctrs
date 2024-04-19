@@ -106,6 +106,58 @@ static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
   return out;
 }
 
+static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
+
+  SEXP data1 = PROTECT(R_altrep_data1(x));
+  SEXP val_old = PROTECT(VECTOR_ELT(data1, 0));
+  SEXP pos_old = PROTECT(VECTOR_ELT(data1, 1));
+
+  SEXP matches = PROTECT(Rf_match(pos_old, indx, R_NaInt));
+
+  int n = 0;
+
+  for (int i = 0; i < Rf_length(matches); ++i) { 
+    if (INTEGER(matches)[i] != R_NaInt) {
+      n++;
+    }
+  }
+
+  SEXP val_new = PROTECT(Rf_allocVector(REALSXP, n));
+  SEXP pos_new = PROTECT(Rf_allocVector(INTSXP, n));
+ 
+  int step = 0;
+  int what_pos = 1;
+
+  for (int i = 0; i < Rf_length(matches); ++i) {
+
+    int match = INTEGER(matches)[i];
+    if (match != R_NaInt) {
+      REAL(val_new)[step] = REAL(val_old)[match - 1];
+
+      for (int j = 0; j < Rf_length(matches); ++j) {
+        if (INTEGER(indx)[j] == INTEGER(pos_old)[match - 1]) {
+          break;
+        } else {
+          what_pos++;
+        }
+      }
+      INTEGER(pos_new)[step] = what_pos;
+      what_pos = 1;
+      step++;
+    }
+  }
+
+  const char *names[] = {"val", "pos", "length", ""};
+  SEXP res = PROTECT(Rf_mkNamed(VECSXP, names)); 
+  SET_VECTOR_ELT(res, 0, val_new);
+  SET_VECTOR_ELT(res, 1, pos_new);
+  SET_VECTOR_ELT(res, 2, Rf_ScalarReal(Rf_length(matches)));
+
+  UNPROTECT(7);
+
+  return ffi_altrep_new_sparse_real(res);
+}
+
 // -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
@@ -121,4 +173,5 @@ void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
 
   // ALTREAL
   R_set_altreal_Elt_method(altrep_sparse_real_class, altrep_sparse_real_Elt);
+  R_set_altvec_Extract_subset_method(altrep_sparse_real_class, altrep_sparse_real_Extract_subset);
 }

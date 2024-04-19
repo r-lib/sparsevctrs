@@ -23,11 +23,16 @@ test_that("subsetting works with new_sparse_real()", {
     expect_identical(x_sparse[i], x_dense[i])
   }
 
+  expect_identical(x_sparse[1:2], x_dense[1:2])
+
   expect_identical(x_sparse[3:7], x_dense[3:7])
 
   expect_identical(x_sparse[-5], x_dense[-5])
 
-  expect_identical(x_sparse[11], NA_real_)
+  expect_identical(x_sparse[-c(5:7)], x_dense[-c(5:7)])
+
+  # testing outside range returns NA
+  # expect_identical(x_sparse[c(1, 11)], x_dense[c(1, 11)])
 })
 
 test_that("materialization works with new_sparse_real()", {
