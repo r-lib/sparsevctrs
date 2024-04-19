@@ -23,5 +23,9 @@ test_that("subsetting works with new_sparse_real()", {
     expect_identical(x_sparse[i], x_dense[i])
   }
 
+  expect_identical(x_sparse[3:7], x_dense[3:7])
+
+  expect_identical(x_sparse[-5], x_dense[-5])
+
   expect_identical(x_sparse[11], NA_real_)
 })
