@@ -6,7 +6,7 @@
 #'
 #' @export
 new_sparse_real <- function(value, position, length) {
-  x <- list(val = value, pos = as.integer(position))
+  x <- list(val = value, pos = as.integer(position), length = length)
 
-  .Call(ffi_altrep_new_sparse_real, x, length)
+  .Call(ffi_altrep_new_sparse_real, x)
 }

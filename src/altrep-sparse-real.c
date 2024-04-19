@@ -6,8 +6,8 @@
 // Initialised at load time
 R_altrep_class_t altrep_sparse_real_class;
 
-SEXP ffi_altrep_new_sparse_real(SEXP x, SEXP len) {
-  return R_new_altrep(altrep_sparse_real_class, x, len);
+SEXP ffi_altrep_new_sparse_real(SEXP x) {
+  return R_new_altrep(altrep_sparse_real_class, x, R_NilValue);
 }
 
 SEXP alrep_sparse_real_materialize(SEXP x) {
@@ -42,7 +42,7 @@ static const void* altrep_sparse_real_Dataptr_or_null(SEXP sx) {
 // ALTREP
 
 R_xlen_t altrep_sparse_real_Length(SEXP x) {
-  double out = REAL(R_altrep_data2(x))[0];
+  double out = REAL(VECTOR_ELT(R_altrep_data1(x),2))[0];
 
   return out;
 }
@@ -54,7 +54,7 @@ R_xlen_t altrep_sparse_real_Length(SEXP x) {
 
 static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
 
-  if (i > REAL(R_altrep_data2(x))[0]) {
+  if (i > REAL(VECTOR_ELT(R_altrep_data1(x), 2))[0]) {
     return NA_REAL;
   }
 
