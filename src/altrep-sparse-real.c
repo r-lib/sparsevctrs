@@ -10,6 +10,23 @@ SEXP ffi_altrep_new_sparse_real(SEXP x, SEXP len) {
   return R_new_altrep(altrep_sparse_real_class, x, len);
 }
 
+SEXP alrep_sparse_real_materialize(SEXP x) {
+  SEXP out = PROTECT(Rf_allocVector(REALSXP, 4));
+
+  SEXP data1 = PROTECT(R_altrep_data1(x));
+  SEXP val = PROTECT(VECTOR_ELT(data1, 0));
+  SEXP pos = PROTECT(VECTOR_ELT(data1, 1));
+  
+  const R_len_t n = Rf_length(val);
+
+  for (int i = 0; i < n; ++i) {
+    REAL(out)[INTEGER(pos)[i]] = REAL(val)[i];
+  }
+
+  UNPROTECT(4);
+  return out;
+}
+
 // -----------------------------------------------------------------------------
 // ALTVEC
 
