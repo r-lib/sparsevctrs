@@ -10,10 +10,16 @@ SEXP ffi_altrep_new_sparse_real(SEXP x) {
   return R_new_altrep(altrep_sparse_real_class, x, R_NilValue);
 }
 
-SEXP alrep_sparse_real_materialize(SEXP x) {
-  SEXP out = PROTECT(Rf_allocVector(REALSXP, 4));
+SEXP alrep_sparse_real_Materialize(SEXP vec) {
+  SEXP out = R_altrep_data2(vec);
 
-  SEXP data1 = PROTECT(R_altrep_data1(x));
+  if (out != R_NilValue) {
+    return out;
+  }
+
+  out = PROTECT(Rf_allocVector(REALSXP, 4));
+
+  SEXP data1 = PROTECT(R_altrep_data1(vec));
   SEXP val = PROTECT(VECTOR_ELT(data1, 0));
   SEXP pos = PROTECT(VECTOR_ELT(data1, 1));
   
@@ -23,6 +29,8 @@ SEXP alrep_sparse_real_materialize(SEXP x) {
     REAL(out)[INTEGER(pos)[i]] = REAL(val)[i];
   }
 
+  R_set_altrep_data2(vec, out);
+
   UNPROTECT(4);
   return out;
 }
@@ -30,12 +38,18 @@ SEXP alrep_sparse_real_materialize(SEXP x) {
 // -----------------------------------------------------------------------------
 // ALTVEC
 
-static void* altrep_sparse_real_Dataptr(SEXP sx, Rboolean writeable) {
-  return sx;
+static void* altrep_sparse_real_Dataptr(SEXP x, Rboolean writeable) {
+  return alrep_sparse_real_Materialize(x);
 }
 
-static const void* altrep_sparse_real_Dataptr_or_null(SEXP sx) {
-  return sx;
+const void* altrep_sparse_real_Dataptr_or_null(SEXP vec) {
+    SEXP out = R_altrep_data2(vec);
+
+  if (out == R_NilValue) {
+    return NULL;
+  } else {
+    return out;
+  }
 }
 
 // -----------------------------------------------------------------------------
