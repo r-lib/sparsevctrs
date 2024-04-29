@@ -63,10 +63,11 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   SEXP val_old = extract_val(x);
   SEXP pos_old = extract_pos(x);
   SEXP matches = PROTECT(Rf_match(pos_old, indx, R_NaInt));
+  R_xlen_t n_matches = Rf_xlength(matches);
 
   int n = 0;
 
-  for (int i = 0; i < Rf_length(matches); ++i) { 
+  for (R_xlen_t i = 0; i < n_matches; ++i) { 
     if (INTEGER_ELT(matches, i) != R_NaInt) {
       n++;
     }
@@ -78,13 +79,13 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   int step = 0;
   int what_pos = 1;
 
-  for (int i = 0; i < Rf_length(matches); ++i) {
+  for (R_xlen_t i = 0; i < n_matches; ++i) {
 
     int match = INTEGER_ELT(matches, i);
     if (match != R_NaInt) {
       SET_REAL_ELT(val_new, step, REAL_ELT(val_old, match - 1));
 
-      for (int j = 0; j < Rf_length(matches); ++j) {
+      for (R_xlen_t j = 0; j < n_matches; ++j) {
         if (INTEGER_ELT(indx, j) == INTEGER_ELT(pos_old, match - 1)) {
           break;
         } else {
@@ -144,7 +145,7 @@ static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
 
   double out = 0;
 
-  for (int j = 0; j < n; ++j) {
+  for (R_xlen_t j = 0; j < n; ++j) {
     if (INTEGER_ELT(pos, j) == i + 1) {
       out = REAL_ELT(val, j);
       break;
