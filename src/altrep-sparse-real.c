@@ -105,7 +105,7 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   SET_VECTOR_ELT(res, 1, pos_new);
   SET_VECTOR_ELT(res, 2, Rf_ScalarReal(Rf_length(matches)));
 
-  UNPROTECT(3);
+  UNPROTECT(4);
 
   return ffi_altrep_new_sparse_real(res);
 }
