@@ -103,7 +103,7 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   SEXP res = PROTECT(Rf_mkNamed(VECSXP, names)); 
   SET_VECTOR_ELT(res, 0, val_new);
   SET_VECTOR_ELT(res, 1, pos_new);
-  SET_VECTOR_ELT(res, 2, Rf_ScalarReal(Rf_length(matches)));
+  SET_VECTOR_ELT(res, 2, Rf_ScalarInteger(Rf_length(matches)));
 
   UNPROTECT(4);
 
