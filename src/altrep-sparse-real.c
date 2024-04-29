@@ -2,6 +2,7 @@
 #include "R.h"
 #include <Rinternals.h>
 #include <R_ext/Altrep.h>
+#include "altrep-sparse-utils.h"
 
 // Initialised at load time
 R_altrep_class_t altrep_sparse_real_class;
@@ -17,17 +18,14 @@ SEXP alrep_sparse_real_Materialize(SEXP vec) {
     return out;
   }
 
-  SEXP data1 = R_altrep_data1(vec);
-  SEXP val = VECTOR_ELT(data1, 0);
-  SEXP pos = VECTOR_ELT(data1, 1);
-  SEXP len = VECTOR_ELT(data1, 2);
+  SEXP val = extract_val(vec);
+  SEXP pos = extract_pos(vec);
+  R_xlen_t len = extract_len(vec);
 
-  R_xlen_t c_len = (R_xlen_t) INTEGER_ELT(len, 0);
-  
-  out = PROTECT(Rf_allocVector(REALSXP, c_len));
+  out = PROTECT(Rf_allocVector(REALSXP, len));
   
   // Reminder about performance
-  for (R_xlen_t i = 0; i < c_len; ++i) {
+  for (R_xlen_t i = 0; i < len; ++i) {
     SET_REAL_ELT(out, i, 0);
   }
 
@@ -62,10 +60,8 @@ const void* altrep_sparse_real_Dataptr_or_null(SEXP vec) {
 }
 
 static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
-
-  SEXP data1 = R_altrep_data1(x);
-  SEXP val_old = VECTOR_ELT(data1, 0);
-  SEXP pos_old = VECTOR_ELT(data1, 1);
+  SEXP val_old = extract_val(x);
+  SEXP pos_old = extract_pos(x);
   SEXP matches = PROTECT(Rf_match(pos_old, indx, R_NaInt));
 
   int n = 0;
@@ -116,9 +112,8 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 // ALTREP
 
 R_xlen_t altrep_sparse_real_Length(SEXP x) {
-  SEXP data = R_altrep_data1(x);
-  SEXP len = VECTOR_ELT(data, 2);
-  R_xlen_t out = (R_xlen_t) INTEGER_ELT(len, 0);
+  R_xlen_t out = extract_len(x);
+
   return out;
 }
 
@@ -137,13 +132,11 @@ Rboolean altrep_sparse_real_Inspect(SEXP x,
 // ALTREAL
 
 static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
-  SEXP data1 = R_altrep_data1(x);
-  SEXP val = VECTOR_ELT(data1, 0);
-  SEXP pos = VECTOR_ELT(data1, 1);
-  SEXP len = VECTOR_ELT(data1, 2);
-  R_xlen_t c_len = (R_xlen_t) INTEGER_ELT(len, 0);
+  SEXP val = extract_val(x);
+  SEXP pos = extract_pos(x);
+  R_xlen_t len = extract_len(x);
 
-  if (i > c_len) {
+  if (i > len) {
     return NA_REAL;
   }
   
