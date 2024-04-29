@@ -22,17 +22,17 @@ SEXP alrep_sparse_real_Materialize(SEXP vec) {
   SEXP pos = VECTOR_ELT(data1, 1);
   SEXP len = VECTOR_ELT(data1, 2);
 
-  out = PROTECT(Rf_allocVector(REALSXP, Rf_asInteger(len)));
+  R_xlen_t c_len = (R_xlen_t) INTEGER_ELT(len, 0);
   
-  int n = Rf_asInteger(len);
+  out = PROTECT(Rf_allocVector(REALSXP, c_len));
   
-  for (int i = 0; i < n; ++i) {
+  for (R_xlen_t i = 0; i < c_len; ++i) {
     SET_REAL_ELT(out, i, 0);
   }
 
-  int m = Rf_length(pos);
+  R_xlen_t n_positions = Rf_xlength(pos);
 
-  for (int i = 0; i < m; ++i) {
+  for (R_xlen_t i = 0; i < n_positions; ++i) {
     SET_REAL_ELT(out, INTEGER_ELT(pos, i) - 1, REAL_ELT(val, i));
   }
 
@@ -64,7 +64,7 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   SEXP data1 = R_altrep_data1(x);
   SEXP val_old = VECTOR_ELT(data1, 0);
   SEXP pos_old = VECTOR_ELT(data1, 1);
-  SEXP matches = Rf_match(pos_old, indx, R_NaInt);
+  SEXP matches = PROTECT(Rf_match(pos_old, indx, R_NaInt));
 
   int n = 0;
 
@@ -114,8 +114,9 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 // ALTREP
 
 R_xlen_t altrep_sparse_real_Length(SEXP x) {
-  double out = Rf_asReal(VECTOR_ELT(R_altrep_data1(x),2));
-
+  SEXP data = R_altrep_data1(x);
+  SEXP len = VECTOR_ELT(data, 2);
+  R_xlen_t out = (R_xlen_t) INTEGER_ELT(len, 0);
   return out;
 }
 
@@ -143,7 +144,7 @@ static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
   SEXP val = VECTOR_ELT(data1, 0);
   SEXP pos = VECTOR_ELT(data1, 1);
   
-  const R_len_t n = Rf_length(val);
+  const R_xlen_t n = Rf_xlength(val);
 
   double out = 0;
 
