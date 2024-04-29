@@ -137,14 +137,15 @@ Rboolean altrep_sparse_real_Inspect(SEXP x,
 // ALTREAL
 
 static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
-
-  if (i > Rf_asReal(VECTOR_ELT(R_altrep_data1(x), 2))) {
-    return NA_REAL;
-  }
-
   SEXP data1 = R_altrep_data1(x);
   SEXP val = VECTOR_ELT(data1, 0);
   SEXP pos = VECTOR_ELT(data1, 1);
+  SEXP len = VECTOR_ELT(data1, 2);
+  R_xlen_t c_len = (R_xlen_t) INTEGER_ELT(len, 0);
+
+  if (i > c_len) {
+    return NA_REAL;
+  }
   
   const R_xlen_t n = Rf_xlength(val);
 
