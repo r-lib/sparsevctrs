@@ -4,6 +4,7 @@
 #' Internal vctrs methods
 #'
 #' @import vctrs
+#' @import rlang
 #' @keywords internal
 #' @name sparsevctrs-vctrs
 NULL
