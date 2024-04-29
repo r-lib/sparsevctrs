@@ -1,0 +1,43 @@
+test_that("length() works with new_sparse_real()", {
+  expect_identical(
+    length(new_sparse_real(numeric(), integer(), 0)),
+    0L
+  )
+
+  expect_identical(
+    length(new_sparse_real(1, 1, 10)),
+    10L
+  )
+
+  expect_identical(
+    length(new_sparse_real(1, 1, 100)),
+    100L
+  )
+})
+
+test_that("subsetting works with new_sparse_real()", {
+  x_sparse <- new_sparse_real(value = c(10, 13, 20), position = c(1, 5, 8), 10)
+  x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
+
+  for (i in seq_len(10)) {
+    expect_identical(x_sparse[i], x_dense[i])
+  }
+
+  expect_identical(x_sparse[1:2], x_dense[1:2])
+
+  expect_identical(x_sparse[3:7], x_dense[3:7])
+
+  expect_identical(x_sparse[-5], x_dense[-5])
+
+  expect_identical(x_sparse[-c(5:7)], x_dense[-c(5:7)])
+
+  # testing outside range returns NA
+  # expect_identical(x_sparse[c(1, 11)], x_dense[c(1, 11)])
+})
+
+test_that("materialization works with new_sparse_real()", {
+  x_sparse <- new_sparse_real(value = c(10, 13, 20), position = c(1, 5, 8), 10)
+  x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
+
+  expect_identical(x_sparse[], x_dense)
+})
