@@ -3,10 +3,10 @@
 
 #include <Rinternals.h>
 
-SEXP extract_val(SEXP vec);
+SEXP extract_val(SEXP x);
 
-SEXP extract_pos(SEXP vec);
+SEXP extract_pos(SEXP x);
 
-R_xlen_t extract_len(SEXP vec);
+R_xlen_t extract_len(SEXP x);
 
 #endif
