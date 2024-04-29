@@ -26,12 +26,14 @@ SEXP alrep_sparse_real_Materialize(SEXP vec) {
   
   out = PROTECT(Rf_allocVector(REALSXP, c_len));
   
+  // Reminder about performance
   for (R_xlen_t i = 0; i < c_len; ++i) {
     SET_REAL_ELT(out, i, 0);
   }
 
   R_xlen_t n_positions = Rf_xlength(pos);
 
+  // Reminder about performance
   for (R_xlen_t i = 0; i < n_positions; ++i) {
     SET_REAL_ELT(out, INTEGER_ELT(pos, i) - 1, REAL_ELT(val, i));
   }
