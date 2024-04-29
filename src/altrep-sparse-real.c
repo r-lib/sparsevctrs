@@ -98,14 +98,14 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   }
 
   const char *names[] = {"val", "pos", "length", ""};
-  SEXP res = PROTECT(Rf_mkNamed(VECSXP, names)); 
-  SET_VECTOR_ELT(res, 0, val_new);
-  SET_VECTOR_ELT(res, 1, pos_new);
-  SET_VECTOR_ELT(res, 2, Rf_ScalarInteger(Rf_length(matches)));
+  SEXP out = PROTECT(Rf_mkNamed(VECSXP, names)); 
+  SET_VECTOR_ELT(out, 0, val_new);
+  SET_VECTOR_ELT(out, 1, pos_new);
+  SET_VECTOR_ELT(out, 2, Rf_ScalarInteger(Rf_length(matches)));
 
   UNPROTECT(4);
 
-  return ffi_altrep_new_sparse_real(res);
+  return ffi_altrep_new_sparse_real(out);
 }
 
 // -----------------------------------------------------------------------------
