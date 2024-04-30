@@ -186,3 +186,12 @@ test_that("materialization works with new_sparse_real()", {
 
   expect_identical(x_sparse[], x_dense)
 })
+
+
+test_that("is_sparse_vector works", {
+  expect_true(is_sparse_vector(new_sparse_real(1, 1, 1)))
+
+  expect_false(is_sparse_vector(c(1, 1, 1)))
+  expect_false(is_sparse_vector(1:10))
+  expect_false(is_sparse_vector(NULL))
+})
