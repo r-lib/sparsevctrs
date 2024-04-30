@@ -17,6 +17,31 @@
 ---
 
     Code
+      new_sparse_real(NA, 1, 1)
+    Condition
+      Error in `new_sparse_real()`:
+      ! `value` must be a numeric vector, not `NA`.
+
+---
+
+    Code
+      new_sparse_real(Inf, 1, 1)
+    Condition
+      Error in `new_sparse_real()`:
+      x `value` must not contain infinite values.
+      i Infinite values at index: 1.
+
+---
+
+    Code
+      new_sparse_real(NaN, 1, 1)
+    Condition
+      Error in `if (any(value == 0)) ...`:
+      ! missing value where TRUE/FALSE needed
+
+---
+
+    Code
       new_sparse_real(1, 1.5, 1)
     Condition
       Error in `new_sparse_real()`:
@@ -38,6 +63,31 @@
     Condition
       Error in `new_sparse_real()`:
       ! `position` must be a integer vector, not a number.
+
+---
+
+    Code
+      new_sparse_real(1, NA, 1)
+    Condition
+      Error in `new_sparse_real()`:
+      ! `position` must be a integer vector, not a number.
+
+---
+
+    Code
+      new_sparse_real(1, Inf, 1)
+    Condition
+      Error in `new_sparse_real()`:
+      x `position` must not contain infinite values.
+      i Infinite values at index: 1.
+
+---
+
+    Code
+      new_sparse_real(1, NaN, 1)
+    Condition
+      Error in `if (len_position > 0 && max(position) > length) ...`:
+      ! missing value where TRUE/FALSE needed
 
 ---
 
@@ -86,6 +136,14 @@
     Condition
       Error in `new_sparse_real()`:
       ! `length` must be a whole number, not `NULL`.
+
+---
+
+    Code
+      new_sparse_real(numeric(0), integer(0), NaN)
+    Condition
+      Error in `new_sparse_real()`:
+      ! `length` must be a whole number, not `NaN`.
 
 ---
 

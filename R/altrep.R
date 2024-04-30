@@ -17,6 +17,16 @@ new_sparse_real <- function(value, position, length) {
     )
   }
 
+  if (any(is.infinite(value))) {
+    offenders <- which(is.infinite(value))
+    cli::cli_abort(
+      c(
+        x = "{.arg value} must not contain infinite values.",
+        i = "Infinite values at index: {offenders}."
+      )
+    )
+  }
+
   if (is.integer(value)) {
     value <- as.double(value)
   }
@@ -25,6 +35,16 @@ new_sparse_real <- function(value, position, length) {
     cli::cli_abort(
       "{.arg position} must be a integer vector, \\
       not {.obj_type_friendly {value}}."
+    )
+  }
+
+  if (any(is.infinite(position))) {
+    offenders <- which(is.infinite(position))
+    cli::cli_abort(
+      c(
+        x = "{.arg position} must not contain infinite values.",
+        i = "Infinite values at index: {offenders}."
+      )
     )
   }
 

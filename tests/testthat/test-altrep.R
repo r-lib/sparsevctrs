@@ -13,6 +13,18 @@ test_that("input checking is done correctly", {
     error = TRUE,
     new_sparse_real(NULL, 1, 1)
   )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(NA, 1, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(Inf, 1, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(NaN, 1, 1)
+  )
 
   # position
   expect_snapshot(
@@ -26,6 +38,18 @@ test_that("input checking is done correctly", {
   expect_snapshot(
     error = TRUE,
     new_sparse_real(1, NULL, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, NA, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, Inf, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, NaN, 1)
   )
 
   # length
@@ -56,6 +80,11 @@ test_that("input checking is done correctly", {
     error = TRUE,
     new_sparse_real(numeric(0), integer(0), NULL)
   )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), NaN)
+  )
+
 
   # Length restriction
   expect_snapshot(
