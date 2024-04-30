@@ -11,4 +11,6 @@ R_xlen_t extract_len(SEXP x);
 
 SEXP is_altrep(SEXP x);
 
+SEXP ffi_extract_altrep_class(SEXP x);
+
 #endif

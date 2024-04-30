@@ -26,3 +26,11 @@ R_xlen_t extract_len(SEXP x) {
 SEXP is_altrep(SEXP x) {
   return Rf_ScalarLogical(ALTREP(x));
 }
+
+SEXP ffi_extract_altrep_class(SEXP x) {
+  if (!is_altrep(x)) {
+    return(R_NilValue);
+  }
+
+  return ALTREP_CLASS(x);
+}
