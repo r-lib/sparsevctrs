@@ -22,3 +22,7 @@ R_xlen_t extract_len(SEXP x) {
 
   return out;
 }
+
+SEXP is_altrep(SEXP x) {
+  return Rf_ScalarLogical(ALTREP(x));
+}
