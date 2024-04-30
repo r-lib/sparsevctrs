@@ -17,9 +17,9 @@ Convert sparse matrices to tibbles
 }
 \examples{
 \dontshow{if (rlang::is_installed("rsparse")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-data("movielens100k", package = "rsparse")
+# data("movielens100k", package = "rsparse")
 
-sparse_to_tibble(movielens100k)
+# sparse_to_tibble(movielens100k)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

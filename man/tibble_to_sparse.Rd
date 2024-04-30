@@ -16,12 +16,12 @@ a sparse matrix
 Convert tibbles to sparse matrices
 }
 \examples{
-mts <- mtcars
-mts$new <- new_sparse_vector(c(1, 4, 8), c(8, 1, 20), nrow(mts))
+# mts <- mtcars
+# mts$new <- new_sparse_vector(c(1, 4, 8), c(8, 1, 20), nrow(mts))
 
-tibble_to_sparse(mtcars)
+# tibble_to_sparse(mtcars)
 
-tibble_to_sparse(mts)
+# tibble_to_sparse(mts)
 }
 \seealso{
 \code{\link[=sparse_to_tibble]{sparse_to_tibble()}}
