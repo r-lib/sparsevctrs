@@ -16,3 +16,9 @@ new_sparse_real(value, position, length)
 \description{
 Create sparse numeric vector
 }
+\details{
+For developers:
+
+setting \code{options("sparsevctrs.verbose_materialize" = TRUE)} will print a
+message each time a sparse vector has been forced to materialize.
+}

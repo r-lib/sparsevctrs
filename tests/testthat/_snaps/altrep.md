@@ -241,3 +241,11 @@
       x `value` value must not be 0.
       i 0 values at index: 2, 4, 6, 8, and 10.
 
+# 
+
+    Code
+      new_sparse_real(1, 1, 1)[]
+    Output
+      sparsevctrs: Sparse vector materialized
+      [1] 1
+

@@ -12,6 +12,10 @@ SEXP ffi_altrep_new_sparse_real(SEXP x) {
 }
 
 SEXP alrep_sparse_real_Materialize(SEXP x) {
+  if (!Rf_isNull(Rf_GetOption1(Rf_install("sparsevctrs.verbose_materialize")))) {
+    Rprintf("sparsevctrs: Sparse vector materialized\n");
+  }
+
   SEXP out = R_altrep_data2(x);
 
   if (out != R_NilValue) {

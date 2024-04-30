@@ -3,6 +3,13 @@
 #' @param value Numeric vector, values of non-zero entries.
 #' @param position integer vector, indices of non-zero entries.
 #' @param length Integer, Length of vector.
+#' 
+#' @details
+#' 
+#' For developers: 
+#' 
+#' setting `options("sparsevctrs.verbose_materialize" = TRUE)` will print a 
+#' message each time a sparse vector has been forced to materialize.
 #'
 #' @export
 new_sparse_real <- function(value, position, length) {
