@@ -1,3 +1,148 @@
+test_that("input checking is done correctly", {
+  expect_identical(
+    new_sparse_real(1L, 1, 1),
+    new_sparse_real(1, 1, 1)
+  )
+
+  # value
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real("1", 1, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(NULL, 1, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(NA, 1, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(Inf, 1, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(NaN, 1, 1)
+  )
+
+  # position
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, 1.5, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, "1", 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, NULL, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, NA, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, Inf, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, NaN, 1)
+  )
+
+  # length
+  expect_no_error(
+    new_sparse_real(numeric(0), integer(0), 0)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), c(1, 10))
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), 1.5)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), "1")
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), NA)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), Inf)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), NULL)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), NaN)
+  )
+
+
+  # Length restriction
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1:4, 1:6, 10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, 1:6, 10)
+  )
+
+  # duplicates in position
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1:4, c(1, 1, 5, 6), 10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1:100, rep(1, 100), 100)
+  )
+  
+  # Ordered position
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(c(1, 2), c(3, 1), 5)
+  )
+
+  # Too large position values
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, 10, 5)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(rep(1, 50), seq(25, 74), 50)
+  )
+
+  # Too large position values
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, 0, 5)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(rep(1, 101), seq(-50, 50), 100)
+  )
+
+  # Too large position values
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(0, 1, 10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(rep(c(1, 0), 5), 1:10, 50)
+  )
+})
+
 test_that("length() works with new_sparse_real()", {
   expect_identical(
     length(new_sparse_real(numeric(), integer(), 0)),
