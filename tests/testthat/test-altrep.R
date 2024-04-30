@@ -1,3 +1,74 @@
+test_that("input checking is done correctly", {
+  expect_identical(
+    new_sparse_real(1L, 1, 1),
+    new_sparse_real(1, 1, 1)
+  )
+
+  # value
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real("1", 1, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(NULL, 1, 1)
+  )
+
+  # position
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, 1.5, 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, "1", 1)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, NULL, 1)
+  )
+
+  # length
+  expect_no_error(
+    new_sparse_real(numeric(0), integer(0), 0)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), c(1, 10))
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), 1.5)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), "1")
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), NA)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), Inf)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(numeric(0), integer(0), NULL)
+  )
+
+  # Length restriction
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1:4, 1:6, 10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, 1:6, 10)
+  )
+  
+})
+
 test_that("length() works with new_sparse_real()", {
   expect_identical(
     length(new_sparse_real(numeric(), integer(), 0)),
