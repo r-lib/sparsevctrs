@@ -22,3 +22,15 @@ R_xlen_t extract_len(SEXP x) {
 
   return out;
 }
+
+int is_altrep(SEXP x) {
+  return ALTREP(x);
+}
+
+SEXP ffi_extract_altrep_class(SEXP x) {
+  if (!is_altrep(x)) {
+    return(R_NilValue);
+  }
+
+  return ATTRIB(ALTREP_CLASS(x));
+}
