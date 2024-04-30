@@ -32,5 +32,5 @@ SEXP ffi_extract_altrep_class(SEXP x) {
     return(R_NilValue);
   }
 
-  return ALTREP_CLASS(x);
+  return ATTRIB(ALTREP_CLASS(x));
 }
