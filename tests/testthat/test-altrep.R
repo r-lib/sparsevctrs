@@ -66,7 +66,52 @@ test_that("input checking is done correctly", {
     error = TRUE,
     new_sparse_real(1, 1:6, 10)
   )
+
+  # duplicates in position
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1:4, c(1, 1, 5, 6), 10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1:100, rep(1, 100), 100)
+  )
   
+  # Ordered position
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(c(1, 2), c(3, 1), 5)
+  )
+
+  # Too large position values
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, 10, 5)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(rep(1, 50), seq(25, 74), 50)
+  )
+
+  # Too large position values
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(1, 0, 5)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(rep(1, 101), seq(-50, 50), 100)
+  )
+
+  # Too large position values
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(0, 1, 10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    new_sparse_real(rep(c(1, 0), 5), 1:10, 50)
+  )
 })
 
 test_that("length() works with new_sparse_real()", {
