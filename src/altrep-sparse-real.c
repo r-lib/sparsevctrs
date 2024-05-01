@@ -24,21 +24,25 @@ SEXP alrep_sparse_real_Materialize(SEXP x) {
   }
 
   SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+
   SEXP pos = extract_pos(x);
-  R_xlen_t len = extract_len(x);
+  const int* v_pos = INTEGER_RO(pos);
+
+  const R_xlen_t len = extract_len(x);
 
   out = PROTECT(Rf_allocVector(REALSXP, len));
+  double* v_out = REAL(out);
 
-  // Reminder about performance
   for (R_xlen_t i = 0; i < len; ++i) {
-    SET_REAL_ELT(out, i, 0);
+    v_out[i] = 0;
   }
 
-  R_xlen_t n_positions = Rf_xlength(pos);
+  const R_xlen_t n_positions = Rf_xlength(pos);
 
-  // Reminder about performance
   for (R_xlen_t i = 0; i < n_positions; ++i) {
-    SET_REAL_ELT(out, INTEGER_ELT(pos, i) - 1, REAL_ELT(val, i));
+    const int loc = v_pos[i] - 1;
+    v_out[loc] = v_val[i];
   }
 
   R_set_altrep_data2(x, out);
