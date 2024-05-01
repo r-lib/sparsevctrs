@@ -4,7 +4,7 @@
 \alias{sparse_vector}
 \title{Create new sparse vector}
 \usage{
-sparse_vector(values = double(), positions = double(), length = double())
+sparse_vector(values = double(), positions = integer(), length = integer())
 }
 \arguments{
 \item{values}{Vector of values}
