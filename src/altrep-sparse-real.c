@@ -147,25 +147,29 @@ Rboolean altrep_sparse_real_Inspect(
 
 static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
   SEXP val = extract_val(x);
+
   SEXP pos = extract_pos(x);
-  R_xlen_t len = extract_len(x);
+  const int* v_pos = INTEGER_RO(pos);
+  const R_xlen_t size = Rf_xlength(pos);
+
+  const R_xlen_t len = extract_len(x);
 
   if (i > len) {
+    // OOB of vector itself
     return NA_REAL;
   }
 
-  const R_xlen_t n = Rf_xlength(val);
+  // TODO: Add `r_xlen_t_to_int()`
+  const int needle = (int) i;
+  const R_xlen_t loc = binary_search(needle, v_pos, size);
 
-  double out = 0;
-
-  for (R_xlen_t j = 0; j < n; ++j) {
-    if (INTEGER_ELT(pos, j) == i + 1) {
-      out = REAL_ELT(val, j);
-      break;
-    }
+  if (loc == size) {
+    // Can't find it, must be the default value
+    return 0;
+  } else {
+    // Look it up in `val`
+    return REAL_ELT(val, loc);
   }
-
-  return out;
 }
 
 // -----------------------------------------------------------------------------
