@@ -167,6 +167,21 @@ test_that("single subsetting works with new_sparse_real()", {
   for (i in seq_len(10)) {
     expect_identical(x_sparse[i], x_dense[i])
   }
+
+  expect_identical(x_sparse[0], x_dense[0])
+
+  expect_identical(x_sparse[NULL], x_dense[NULL])
+  
+  expect_identical(x_sparse[NaN], x_dense[NaN])
+
+  expect_identical(x_sparse[100], x_dense[100])
+
+  expect_identical(x_sparse[Inf], x_dense[Inf])
+
+  expect_identical(x_sparse["not a number"], x_dense["not a number"])
+
+  expect_identical(x_sparse[1.6], x_dense[1.6])
+  expect_identical(x_sparse[2.6], x_dense[2.6])
 })
 
 test_that("multiple subsetting works with new_sparse_real()", {
@@ -177,12 +192,25 @@ test_that("multiple subsetting works with new_sparse_real()", {
 
   expect_identical(x_sparse[3:7], x_dense[3:7])
 
-  expect_identical(x_sparse[-5], x_dense[-5])
+  expect_identical(x_sparse[c(1, 5, 8)], x_dense[c(1, 5, 8)])
+
+  expect_identical(x_sparse[-1], x_dense[-1])
 
   expect_identical(x_sparse[-c(5:7)], x_dense[-c(5:7)])
 
-  # testing outside range returns NA
-  # expect_identical(x_sparse[c(1, 11)], x_dense[c(1, 11)])
+  expect_identical(x_sparse[FALSE], x_dense[FALSE])
+
+  expect_identical(x_sparse[TRUE], x_dense[TRUE])
+
+  expect_identical(x_sparse[NA], x_dense[NA])
+
+  expect_identical(x_sparse[c(1, NA, 4)], x_dense[c(1, NA, 4)])
+
+  expect_identical(x_sparse[c(1, 11)], x_dense[c(1, 11)])
+
+  expect_identical(x_sparse[c(1, Inf)], x_dense[c(1, Inf)])
+
+  expect_identical(x_sparse[c(1, NaN)], x_dense[c(1, NaN)])
 })
 
 test_that("materialization works with new_sparse_real()", {
