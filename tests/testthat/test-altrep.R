@@ -201,7 +201,7 @@ test_that("is_sparse_vector works", {
   expect_false(is_sparse_vector(NULL))
 })
 
-test_that("", {
+test_that("verbose testing", {
   withr::local_options("sparsevctrs.verbose_materialize" = TRUE)
 
   expect_snapshot(
