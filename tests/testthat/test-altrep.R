@@ -170,6 +170,8 @@ test_that("single subsetting works with new_sparse_real()", {
 
   expect_identical(x_sparse[0], x_dense[0])
 
+  expect_identical(x_sparse[NA_integer_], x_dense[NA_integer_])
+
   expect_identical(x_sparse[NULL], x_dense[NULL])
   
   expect_identical(x_sparse[NaN], x_dense[NaN])
@@ -192,7 +194,7 @@ test_that("multiple subsetting works with new_sparse_real()", {
 
   expect_identical(x_sparse[3:7], x_dense[3:7])
 
-  expect_identical(x_sparse[c(1, 5, 8)], x_dense[c(1, 5, 8)])
+  expect_identical(x_sparse[c(1, 5, 8, 1)], x_dense[c(1, 5, 8, 1)])
 
   expect_identical(x_sparse[-1], x_dense[-1])
 
@@ -205,6 +207,8 @@ test_that("multiple subsetting works with new_sparse_real()", {
   expect_identical(x_sparse[NA], x_dense[NA])
 
   expect_identical(x_sparse[c(1, NA, 4)], x_dense[c(1, NA, 4)])
+
+  expect_identical(x_sparse[c(1, NA, 0, 4, 0)], x_dense[c(1, NA, 0, 4, 0)])
 
   expect_identical(x_sparse[c(1, 11)], x_dense[c(1, 11)])
 

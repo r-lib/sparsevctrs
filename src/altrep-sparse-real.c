@@ -1,7 +1,7 @@
 #define R_NO_REMAP
-#include "R.h"
 #include <Rinternals.h>
 #include <R_ext/Altrep.h>
+
 #include "altrep-sparse-utils.h"
 
 // Initialised at load time
@@ -12,7 +12,8 @@ SEXP ffi_altrep_new_sparse_real(SEXP x) {
 }
 
 SEXP alrep_sparse_real_Materialize(SEXP x) {
-  if (!Rf_isNull(Rf_GetOption1(Rf_install("sparsevctrs.verbose_materialize")))) {
+  if (!Rf_isNull(Rf_GetOption1(Rf_install("sparsevctrs.verbose_materialize"))
+      )) {
     Rprintf("sparsevctrs: Sparse vector materialized\n");
   }
 
@@ -23,21 +24,25 @@ SEXP alrep_sparse_real_Materialize(SEXP x) {
   }
 
   SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+
   SEXP pos = extract_pos(x);
-  R_xlen_t len = extract_len(x);
+  const int* v_pos = INTEGER_RO(pos);
+
+  const R_xlen_t len = extract_len(x);
 
   out = PROTECT(Rf_allocVector(REALSXP, len));
-  
-  // Reminder about performance
+  double* v_out = REAL(out);
+
   for (R_xlen_t i = 0; i < len; ++i) {
-    SET_REAL_ELT(out, i, 0);
+    v_out[i] = 0;
   }
 
-  R_xlen_t n_positions = Rf_xlength(pos);
+  const R_xlen_t n_positions = Rf_xlength(pos);
 
-  // Reminder about performance
   for (R_xlen_t i = 0; i < n_positions; ++i) {
-    SET_REAL_ELT(out, INTEGER_ELT(pos, i) - 1, REAL_ELT(val, i));
+    const int loc = v_pos[i] - 1;
+    v_out[loc] = v_val[i];
   }
 
   R_set_altrep_data2(x, out);
@@ -54,7 +59,7 @@ void* altrep_sparse_real_Dataptr(SEXP x, Rboolean writeable) {
 }
 
 const void* altrep_sparse_real_Dataptr_or_null(SEXP x) {
-    SEXP out = R_altrep_data2(x);
+  SEXP out = R_altrep_data2(x);
 
   if (out == R_NilValue) {
     return NULL;
@@ -64,53 +69,104 @@ const void* altrep_sparse_real_Dataptr_or_null(SEXP x) {
 }
 
 static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
-  SEXP val_old = extract_val(x);
-  SEXP pos_old = extract_pos(x);
-  SEXP matches = PROTECT(Rf_match(pos_old, indx, R_NaInt));
-  R_xlen_t n_matches = Rf_xlength(matches);
-
-  int n = 0;
-
-  for (R_xlen_t i = 0; i < n_matches; ++i) { 
-    if (INTEGER_ELT(matches, i) != R_NaInt) {
-      n++;
-    }
+  if (!is_index_handleable(indx)) {
+    return NULL;
   }
 
-  SEXP val_new = PROTECT(Rf_allocVector(REALSXP, n));
-  SEXP pos_new = PROTECT(Rf_allocVector(INTSXP, n));
- 
-  int step = 0;
-  int what_pos = 1;
+  const R_xlen_t len = extract_len(x);
 
-  for (R_xlen_t i = 0; i < n_matches; ++i) {
+  SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
 
-    int match = INTEGER_ELT(matches, i);
-    if (match != R_NaInt) {
-      SET_REAL_ELT(val_new, step, REAL_ELT(val_old, match - 1));
+  SEXP pos = extract_pos(x);
+  const int* v_pos = INTEGER_RO(pos);
+  const R_xlen_t n_pos = Rf_xlength(pos);
 
-      for (R_xlen_t j = 0; j < n_matches; ++j) {
-        if (INTEGER_ELT(indx, j) == INTEGER_ELT(pos_old, match - 1)) {
-          break;
-        } else {
-          what_pos++;
-        }
-      }
-      SET_INTEGER_ELT(pos_new, step, what_pos);
-      what_pos = 1;
-      step++;
+  const int* v_indx = INTEGER_RO(indx);
+
+  const R_xlen_t size = Rf_xlength(indx);
+
+  R_xlen_t n_hits = 0;
+  SEXP matches = PROTECT(Rf_allocVector(INTSXP, size));
+  int* v_matches = INTEGER(matches);
+
+  for (R_xlen_t i = 0; i < size; ++i) {
+    // 1 indexed!
+    const int index = v_indx[i];
+
+    if (index == NA_INTEGER) {
+      v_matches[i] = NA_INTEGER;
+      ++n_hits;
+      continue;
     }
+
+    if (index > len) {
+      // (Uses `>` not `>=` because `index` is 1 indexed)
+      // OOB
+      v_matches[i] = NA_INTEGER;
+      ++n_hits;
+      continue;
+    }
+
+    const R_xlen_t loc = binary_search(index, v_pos, n_pos);
+
+    if (loc == n_pos) {
+      // Not in `pos`, gets default value
+      v_matches[i] = (int) n_pos;
+      continue;
+    }
+
+    // Did find in `pos`
+    v_matches[i] = (int) loc;
+    ++n_hits;
   }
 
-  const char *names[] = {"val", "pos", "length", ""};
-  SEXP out = PROTECT(Rf_mkNamed(VECSXP, names)); 
-  SET_VECTOR_ELT(out, 0, val_new);
-  SET_VECTOR_ELT(out, 1, pos_new);
-  SET_VECTOR_ELT(out, 2, Rf_ScalarInteger(Rf_length(matches)));
+  SEXP out = PROTECT(Rf_allocVector(VECSXP, 3));
 
-  UNPROTECT(4);
+  SEXP out_val = Rf_allocVector(REALSXP, n_hits);
+  SET_VECTOR_ELT(out, 0, out_val);
+  double* v_out_val = REAL(out_val);
 
-  return ffi_altrep_new_sparse_real(out);
+  SEXP out_pos = Rf_allocVector(INTSXP, n_hits);
+  SET_VECTOR_ELT(out, 1, out_pos);
+  int* v_out_pos = INTEGER(out_pos);
+
+  SEXP out_length = Rf_ScalarInteger((int) size);
+  SET_VECTOR_ELT(out, 2, out_length);
+
+  SEXP names = Rf_allocVector(STRSXP, 3);
+  Rf_setAttrib(out, R_NamesSymbol, names);
+  SET_STRING_ELT(names, 0, Rf_mkChar("val"));
+  SET_STRING_ELT(names, 1, Rf_mkChar("pos"));
+  SET_STRING_ELT(names, 2, Rf_mkChar("len"));
+
+  R_xlen_t i_out = 0;
+
+  for (R_xlen_t i = 0; i < size; ++i) {
+    const int match = v_matches[i];
+
+    if (match == (int) n_pos) {
+      // Default value case
+      continue;
+    }
+
+    if (match == NA_INTEGER) {
+      v_out_val[i_out] = NA_REAL;
+      v_out_pos[i_out] = (int) i + 1;
+      ++i_out;
+      continue;
+    }
+
+    // Otherwise we have a hit from `pos`
+    v_out_val[i_out] = v_val[match];
+    v_out_pos[i_out] = (int) i + 1;
+    ++i_out;
+  }
+
+  SEXP altrep = ffi_altrep_new_sparse_real(out);
+
+  UNPROTECT(2);
+  return altrep;
 }
 
 // -----------------------------------------------------------------------------
@@ -123,13 +179,18 @@ R_xlen_t altrep_sparse_real_Length(SEXP x) {
 }
 
 // What gets printed when .Internal(inspect()) is used
-Rboolean altrep_sparse_real_Inspect(SEXP x,
-                                    int pre,
-                                    int deep,
-                                    int pvec,
-                                    void (*inspect_subtree)(SEXP, int, int, int)) {
-  Rprintf("sparsevctrs_altrep_sparse_real (materialized=%s)\n",
-          R_altrep_data2(x) != R_NilValue ? "T" : "F");
+Rboolean altrep_sparse_real_Inspect(
+    SEXP x,
+    int pre,
+    int deep,
+    int pvec,
+    void (*inspect_subtree)(SEXP, int, int, int)
+) {
+  Rprintf(
+      "sparsevctrs_altrep_sparse_real (materialized=%s, length=%i)\n",
+      R_altrep_data2(x) != R_NilValue ? "T" : "F",
+      (int) extract_len(x)
+  );
   return TRUE;
 }
 
@@ -138,40 +199,55 @@ Rboolean altrep_sparse_real_Inspect(SEXP x,
 
 static double altrep_sparse_real_Elt(SEXP x, R_xlen_t i) {
   SEXP val = extract_val(x);
+
   SEXP pos = extract_pos(x);
-  R_xlen_t len = extract_len(x);
+  const int* v_pos = INTEGER_RO(pos);
+  const R_xlen_t size = Rf_xlength(pos);
+
+  const R_xlen_t len = extract_len(x);
 
   if (i > len) {
+    // OOB of vector itself
     return NA_REAL;
   }
-  
-  const R_xlen_t n = Rf_xlength(val);
 
-  double out = 0;
+  // TODO: Add `r_xlen_t_to_int()`
+  const int needle = (int) i + 1;
+  const R_xlen_t loc = binary_search(needle, v_pos, size);
 
-  for (R_xlen_t j = 0; j < n; ++j) {
-    if (INTEGER_ELT(pos, j) == i + 1) {
-      out = REAL_ELT(val, j);
-      break;
-    }
+  if (loc == size) {
+    // Can't find it, must be the default value
+    return 0;
+  } else {
+    // Look it up in `val`
+    return REAL_ELT(val, loc);
   }
-  
-  return out;
 }
 
 // -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_real(DllInfo* dll) {
-  altrep_sparse_real_class =  R_make_altreal_class("altrep_sparse_real", "sparsevctrs", dll);
+  altrep_sparse_real_class =
+      R_make_altreal_class("altrep_sparse_real", "sparsevctrs", dll);
 
   // ALTVEC
-  R_set_altvec_Dataptr_method(altrep_sparse_real_class, altrep_sparse_real_Dataptr);
-  R_set_altvec_Dataptr_or_null_method(altrep_sparse_real_class, altrep_sparse_real_Dataptr_or_null);
-  R_set_altvec_Extract_subset_method(altrep_sparse_real_class, altrep_sparse_real_Extract_subset);
+  R_set_altvec_Dataptr_method(
+      altrep_sparse_real_class, altrep_sparse_real_Dataptr
+  );
+  R_set_altvec_Dataptr_or_null_method(
+      altrep_sparse_real_class, altrep_sparse_real_Dataptr_or_null
+  );
+  R_set_altvec_Extract_subset_method(
+      altrep_sparse_real_class, altrep_sparse_real_Extract_subset
+  );
 
   // ALTREP
-  R_set_altrep_Length_method(altrep_sparse_real_class, altrep_sparse_real_Length);
-  R_set_altrep_Inspect_method(altrep_sparse_real_class, altrep_sparse_real_Inspect);
+  R_set_altrep_Length_method(
+      altrep_sparse_real_class, altrep_sparse_real_Length
+  );
+  R_set_altrep_Inspect_method(
+      altrep_sparse_real_class, altrep_sparse_real_Inspect
+  );
 
   // ALTREAL
   R_set_altreal_Elt_method(altrep_sparse_real_class, altrep_sparse_real_Elt);
