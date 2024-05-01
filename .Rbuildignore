@@ -13,4 +13,3 @@
 ^codecov\.yml$
 ^\.vscode$
 ^debug$
-^launch\.json$
