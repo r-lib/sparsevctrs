@@ -45,8 +45,8 @@
       new_sparse_real(1, 1.5, 1)
     Condition
       Error in `new_sparse_real()`:
-      ! Can't convert from `position` <double> to <integer> due to loss of precision.
-      * Locations: 1
+      x `position` must contain integer values.
+      i Non-integer values at index: 1.
 
 ---
 
@@ -86,7 +86,7 @@
     Code
       new_sparse_real(1, NaN, 1)
     Condition
-      Error in `if (len_position > 0 && max(position) > length) ...`:
+      Error in `if (any(round(position) != position)) ...`:
       ! missing value where TRUE/FALSE needed
 
 ---

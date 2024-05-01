@@ -13,12 +13,8 @@ Depends:
     R (>= 4.0.0)
 Imports: 
     cli (>= 3.4.0),
-    Matrix,
-    rlang (>= 1.1.0),
-    tibble,
-    vctrs
+    rlang (>= 1.1.0)
 Suggests: 
-    rsparse,
     testthat (>= 3.0.0),
     withr
 Config/Needs/website: rmarkdown
