@@ -56,7 +56,18 @@ new_sparse_real <- function(value, position, length) {
   }
 
   if (!is.integer(position)) {
-    position <- vec_cast(position, integer())
+    if (any(round(position) != position)) {
+      offenders <- which(round(position) != position)
+
+      cli::cli_abort(
+        c(
+          x = "{.arg position} must contain integer values.",
+          i = "Non-integer values at index: {offenders}."
+        )
+      )
+    }
+   
+    position <- as.integer(position)
   }
 
   len_value <- length(value)
