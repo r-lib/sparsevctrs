@@ -11,3 +11,6 @@
 .clang-format
 ^.cache$
 ^codecov\.yml$
+^\.vscode$
+^debug$
+^launch\.json$

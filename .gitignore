@@ -6,3 +6,5 @@
 docs
 compile_commands.json
 .cache
+launch.json
+debug.R
