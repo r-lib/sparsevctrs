@@ -6,6 +6,7 @@ ColumnLimit: 80
 AlignAfterOpenBracket: BlockIndent
 SpaceAfterCStyleCast: true
 IncludeBlocks: Regroup
+SortIncludes: Never
 AllowShortFunctionsOnASingleLine: Empty
 BinPackArguments: false
 BinPackParameters: false

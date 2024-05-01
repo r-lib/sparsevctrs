@@ -29,7 +29,7 @@ int is_altrep(SEXP x) {
 
 SEXP ffi_extract_altrep_class(SEXP x) {
   if (!is_altrep(x)) {
-    return(R_NilValue);
+    return (R_NilValue);
   }
 
   return ATTRIB(ALTREP_CLASS(x));
