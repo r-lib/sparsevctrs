@@ -44,7 +44,7 @@ R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size) {
   while (loc_lower_bound <= loc_upper_bound) {
     const R_xlen_t loc_middle_bound =
         midpoint(loc_lower_bound, loc_upper_bound);
-    const R_xlen_t haystack = v_haystack[loc_middle_bound] - 1;
+    const R_xlen_t haystack = v_haystack[loc_middle_bound];
 
     if (needle == haystack) {
       return loc_middle_bound;
@@ -57,4 +57,33 @@ R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size) {
   }
 
   return size;
+}
+
+bool is_index_handleable(SEXP x) {
+  if (TYPEOF(x) != INTSXP) {
+    // i.e. can't handle indexing for long vectors
+    return false;
+  }
+
+  R_xlen_t size = Rf_xlength(x);
+  const int* v_x = INTEGER_RO(x);
+
+  for (R_xlen_t i = 0; i < size; ++i) {
+    const int elt = v_x[i];
+
+    if (elt == NA_INTEGER) {
+      continue;
+    }
+    if (elt == 0) {
+      // `0` indices would create a result with a size `< length(indx)`, and we
+      // can't easily handle that right now
+      return false;
+    }
+    if (elt < 0) {
+      // Pathological case, should never happen
+      return false;
+    }
+  }
+
+  return true;
 }
