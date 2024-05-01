@@ -135,8 +135,9 @@ Rboolean altrep_sparse_real_Inspect(
     void (*inspect_subtree)(SEXP, int, int, int)
 ) {
   Rprintf(
-      "sparsevctrs_altrep_sparse_real (materialized=%s)\n",
-      R_altrep_data2(x) != R_NilValue ? "T" : "F"
+      "sparsevctrs_altrep_sparse_real (materialized=%s, length=%i)\n",
+      R_altrep_data2(x) != R_NilValue ? "T" : "F",
+      (int) extract_len(x)
   );
   return TRUE;
 }
