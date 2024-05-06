@@ -1,4 +1,4 @@
-#include "altrep-sparse-utils.h"
+#include "sparse-utils.h"
 
 SEXP extract_val(SEXP x) {
   SEXP data1 = R_altrep_data1(x);

@@ -2,7 +2,7 @@
 #include <Rinternals.h>
 #include <R_ext/Altrep.h>
 
-#include "altrep-sparse-utils.h"
+#include "sparse-utils.h"
 
 // Initialised at load time
 R_altrep_class_t altrep_sparse_real_class;
