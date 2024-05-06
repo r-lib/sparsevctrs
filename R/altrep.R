@@ -56,7 +56,7 @@ new_sparse_real <- function(value, position, length) {
   }
 
   if (!is.integer(position)) {
-    if (any(round(position) != position)) {
+    if (any(round(position) != position, na.rm = TRUE)) {
       offenders <- which(round(position) != position)
 
       cli::cli_abort(

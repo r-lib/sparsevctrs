@@ -86,7 +86,7 @@
     Code
       new_sparse_real(1, NaN, 1)
     Condition
-      Error in `if (any(round(position) != position)) ...`:
+      Error in `if (len_position > 0 && max(position) > length) ...`:
       ! missing value where TRUE/FALSE needed
 
 ---
