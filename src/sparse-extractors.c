@@ -1,7 +1,4 @@
-#define R_NO_REMAP
-#include <R.h>
-#include <Rinternals.h>
-#include "altrep-sparse-utils.h"
+#include "sparse-extractors.h"
 
 SEXP ffi_altrep_sparse_positions(SEXP x) {
   SEXP out = extract_pos(x);
