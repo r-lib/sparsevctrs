@@ -1,4 +1,4 @@
-test_that(".positions works with altrep_sparse_real", {
+test_that(".positions works with altrep_sparse_double", {
   expect_identical(
     .positions(new_sparse_double(1, 5, 10)),
     5L
@@ -22,7 +22,7 @@ test_that(".positions works with numeric vectors", {
   )
 })
 
-test_that(".values works with altrep_sparse_real", {
+test_that(".values works with altrep_sparse_double", {
   expect_identical(
     .values(new_sparse_double(1, 5, 10)),
     1

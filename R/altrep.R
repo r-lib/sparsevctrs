@@ -144,6 +144,6 @@ is_sparse_vector <- function(x) {
   
   res <- as.character(res[[1]])
 
-  res %in% c("altrep_sparse_real")
+  res %in% c("altrep_sparse_double")
  }
  
