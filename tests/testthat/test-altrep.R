@@ -1,167 +1,167 @@
 test_that("input checking is done correctly", {
   expect_identical(
-    new_sparse_double(1L, 1, 1),
-    new_sparse_double(1, 1, 1)
+    sparse_double(1L, 1, 1),
+    sparse_double(1, 1, 1)
   )
 
   # value
   expect_snapshot(
     error = TRUE,
-    new_sparse_double("1", 1, 1)
+    sparse_double("1", 1, 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(NULL, 1, 1)
+    sparse_double(NULL, 1, 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(NA, 1, 1)
+    sparse_double(NA, 1, 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(Inf, 1, 1)
+    sparse_double(Inf, 1, 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(NaN, 1, 1)
+    sparse_double(NaN, 1, 1)
   )
 
   # position
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1, 1.5, 1)
+    sparse_double(1, 1.5, 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1, "1", 1)
+    sparse_double(1, "1", 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1, NULL, 1)
+    sparse_double(1, NULL, 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1, NA, 1)
+    sparse_double(1, NA, 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1, Inf, 1)
+    sparse_double(1, Inf, 1)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1, NaN, 1)
+    sparse_double(1, NaN, 1)
   )
 
   # length
   expect_no_error(
-    new_sparse_double(numeric(0), integer(0), 0)
+    sparse_double(numeric(0), integer(0), 0)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(numeric(0), integer(0), c(1, 10))
+    sparse_double(numeric(0), integer(0), c(1, 10))
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(numeric(0), integer(0), 1.5)
+    sparse_double(numeric(0), integer(0), 1.5)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(numeric(0), integer(0), "1")
+    sparse_double(numeric(0), integer(0), "1")
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(numeric(0), integer(0), NA)
+    sparse_double(numeric(0), integer(0), NA)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(numeric(0), integer(0), Inf)
+    sparse_double(numeric(0), integer(0), Inf)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(numeric(0), integer(0), NULL)
+    sparse_double(numeric(0), integer(0), NULL)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(numeric(0), integer(0), NaN)
+    sparse_double(numeric(0), integer(0), NaN)
   )
 
 
   # Length restriction
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1:4, 1:6, 10)
+    sparse_double(1:4, 1:6, 10)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1, 1:6, 10)
+    sparse_double(1, 1:6, 10)
   )
 
   # duplicates in position
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1:4, c(1, 1, 5, 6), 10)
+    sparse_double(1:4, c(1, 1, 5, 6), 10)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1:100, rep(1, 100), 100)
+    sparse_double(1:100, rep(1, 100), 100)
   )
   
   # Ordered position
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(c(1, 2), c(3, 1), 5)
+    sparse_double(c(1, 2), c(3, 1), 5)
   )
 
   # Too large position values
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(1, 10, 5)
+    sparse_double(1, 10, 5)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(rep(1, 50), seq(25, 74), 50)
-  )
-
-  # Too large position values
-  expect_snapshot(
-    error = TRUE,
-    new_sparse_double(1, 0, 5)
-  )
-  expect_snapshot(
-    error = TRUE,
-    new_sparse_double(rep(1, 101), seq(-50, 50), 100)
+    sparse_double(rep(1, 50), seq(25, 74), 50)
   )
 
   # Too large position values
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(0, 1, 10)
+    sparse_double(1, 0, 5)
   )
   expect_snapshot(
     error = TRUE,
-    new_sparse_double(rep(c(1, 0), 5), 1:10, 50)
+    sparse_double(rep(1, 101), seq(-50, 50), 100)
+  )
+
+  # Too large position values
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(0, 1, 10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(rep(c(1, 0), 5), 1:10, 50)
   )
 })
 
-test_that("length() works with new_sparse_double()", {
+test_that("length() works with sparse_double()", {
   expect_identical(
-    length(new_sparse_double(numeric(), integer(), 0)),
+    length(sparse_double(numeric(), integer(), 0)),
     0L
   )
 
   expect_identical(
-    length(new_sparse_double(1, 1, 10)),
+    length(sparse_double(1, 1, 10)),
     10L
   )
 
   expect_identical(
-    length(new_sparse_double(1, 1, 100)),
+    length(sparse_double(1, 1, 100)),
     100L
   )
 })
 
-test_that("single subsetting works with new_sparse_double()", {
-  x_sparse <- new_sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
+test_that("single subsetting works with sparse_double()", {
+  x_sparse <- sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
   x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
 
   for (i in seq_len(10)) {
@@ -186,8 +186,8 @@ test_that("single subsetting works with new_sparse_double()", {
   expect_identical(x_sparse[2.6], x_dense[2.6])
 })
 
-test_that("multiple subsetting works with new_sparse_double()", {
-  x_sparse <- new_sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
+test_that("multiple subsetting works with sparse_double()", {
+  x_sparse <- sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
   x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
 
   expect_identical(x_sparse[1:2], x_dense[1:2])
@@ -217,8 +217,8 @@ test_that("multiple subsetting works with new_sparse_double()", {
   expect_identical(x_sparse[c(1, NaN)], x_dense[c(1, NaN)])
 })
 
-test_that("materialization works with new_sparse_double()", {
-  x_sparse <- new_sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
+test_that("materialization works with sparse_double()", {
+  x_sparse <- sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
   x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
 
   expect_identical(x_sparse[], x_dense)
@@ -226,7 +226,7 @@ test_that("materialization works with new_sparse_double()", {
 
 
 test_that("is_sparse_vector works", {
-  expect_true(is_sparse_vector(new_sparse_double(1, 1, 1)))
+  expect_true(is_sparse_vector(sparse_double(1, 1, 1)))
 
   expect_false(is_sparse_vector(c(1, 1, 1)))
   expect_false(is_sparse_vector(1:10))
@@ -237,6 +237,6 @@ test_that("verbose testing", {
   withr::local_options("sparsevctrs.verbose_materialize" = TRUE)
 
   expect_snapshot(
-    new_sparse_double(1, 1, 1)[]
+    sparse_double(1, 1, 1)[]
   )
 })
