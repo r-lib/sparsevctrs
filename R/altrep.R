@@ -1,4 +1,4 @@
-#' Create sparse numeric vector
+#' Create sparse double vector
 #' 
 #' @param value Numeric vector, values of non-zero entries.
 #' @param position integer vector, indices of non-zero entries.
@@ -11,8 +11,16 @@
 #' setting `options("sparsevctrs.verbose_materialize" = TRUE)` will print a 
 #' message each time a sparse vector has been forced to materialize.
 #'
+#' @examples
+#' sparse_double(numeric(), integer(), 10)
+#' 
+#' sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
+#' 
+#' str(
+#'   sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 1000000000)
+#' )
 #' @export
-new_sparse_double <- function(value, position, length) {
+sparse_double <- function(value, position, length) {
   check_number_whole(length, min = 0)
   if (!is.integer(length)) {
     length <- as.integer(length)
@@ -127,6 +135,10 @@ new_sparse_double <- function(value, position, length) {
     )
   }
 
+  new_sparse_double(value, position, length)
+}
+
+new_sparse_double <- function(value, position, length) {
   x <- list(
     val = value, 
     pos = position, 

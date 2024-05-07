@@ -28,17 +28,16 @@ remotes::install_github("emilhvitfeldt/sparsevctrs")
 ``` r
 library(sparsevctrs)
 
-x <- new_sparse_vector(4, 7, 10)
+x <- sparse_double(4, 7, 10)
 
 x
-#> <sparse_vector[10]>
 #>  [1] 0 0 0 0 0 0 4 0 0 0
 sum(x)
 #> [1] 4
 
-new_sparse_vector(4, 7, 10) + new_sparse_vector(3, 2, 10)
-#> <sparse_vector[10]>
-#>  [1] 0 3 0 0 0 0 4 0 0 0
+sparse_double(4, 7, 10) + sparse_double(3, 2, 10)
+#>  [1] 3.456532e-314 2.847320e-314 2.714492e-314 2.927164e-314 4.940656e-323
+#>  [6]  0.000000e+00  0.000000e+00  3.000000e+00  0.000000e+00  0.000000e+00
 ```
 
 This class is compatible with tibbles
@@ -46,18 +45,18 @@ This class is compatible with tibbles
 ``` r
 library(tibble)
 
-tibble(x = sample(1:10), y = new_sparse_vector(1, 7, 10))
+tibble(x = sample(1:10), y = sparse_double(1, 7, 10))
 #> # A tibble: 10 × 2
-#>        x       y
-#>    <int> <spvtr>
-#>  1    10       0
-#>  2     6       0
-#>  3     5       0
-#>  4     4       0
-#>  5     1       0
-#>  6     8       0
-#>  7     2       1
-#>  8     7       0
-#>  9     9       0
-#> 10     3       0
+#>        x     y
+#>    <int> <dbl>
+#>  1    10     0
+#>  2     6     0
+#>  3     5     0
+#>  4     4     0
+#>  5     1     0
+#>  6     8     0
+#>  7     2     1
+#>  8     7     0
+#>  9     9     0
+#> 10     3     0
 ```
