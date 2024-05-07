@@ -7,7 +7,7 @@
 // Initialised at load time
 R_altrep_class_t altrep_sparse_real_class;
 
-SEXP ffi_altrep_new_sparse_real(SEXP x) {
+SEXP ffi_altrep_new_sparse_double(SEXP x) {
   return R_new_altrep(altrep_sparse_real_class, x, R_NilValue);
 }
 
@@ -163,7 +163,7 @@ static SEXP altrep_sparse_real_Extract_subset(SEXP x, SEXP indx, SEXP call) {
     ++i_out;
   }
 
-  SEXP altrep = ffi_altrep_new_sparse_real(out);
+  SEXP altrep = ffi_altrep_new_sparse_double(out);
 
   UNPROTECT(2);
   return altrep;
