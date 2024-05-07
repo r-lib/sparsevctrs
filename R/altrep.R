@@ -12,7 +12,7 @@
 #' message each time a sparse vector has been forced to materialize.
 #'
 #' @export
-new_sparse_real <- function(value, position, length) {
+new_sparse_double <- function(value, position, length) {
   check_number_whole(length, min = 0)
   if (!is.integer(length)) {
     length <- as.integer(length)
@@ -133,7 +133,7 @@ new_sparse_real <- function(value, position, length) {
     len = length
   )
 
-  .Call(ffi_altrep_new_sparse_real, x)
+  .Call(ffi_altrep_new_sparse_double, x)
 }
 
 is_sparse_vector <- function(x) {
@@ -144,6 +144,6 @@ is_sparse_vector <- function(x) {
   
   res <- as.character(res[[1]])
 
-  res %in% c("altrep_sparse_real")
+  res %in% c("altrep_sparse_double")
  }
  
