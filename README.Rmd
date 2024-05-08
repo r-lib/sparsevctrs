@@ -21,9 +21,7 @@ set.seed(1234)
 [![Codecov test coverage](https://codecov.io/gh/EmilHvitfeldt/sparsevctrs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/EmilHvitfeldt/sparsevctrs?branch=main)
 <!-- badges: end -->
 
-THIS IS A PROTOTYPE. DO NOT USE
-
-The goal of sparsevctrs is to provide a sparse vector class that is compatible with tibbles.
+The goal of sparsevctrs is to provide a sparse vector [ALTREP](https://svn.r-project.org/R/branches/ALTREP/ALTREP.html) class. With this, you can have sparse data in the form of sparse columns in `data.frame` or [tibble](https://tibble.tidyverse.org/). Due to the nature of how ALTREP vectors work, these sparse vectors will behave like the normal dense vectors you are used you. The vectors will contain their sparseness as much as they can, and only materialize when they have to.
 
 ## Installation
 
@@ -33,24 +31,69 @@ You can install the development version of sparsevctrs like so:
 remotes::install_github("emilhvitfeldt/sparsevctrs")
 ```
 
-## Example
+## Examples
+
+A sparse vector, here specifically a sparse double vector, will be identical to its dense counterpart, often with a smaller memory footprint.
 
 ```{r}
 library(sparsevctrs)
+library(lobstr)
 
-x <- sparse_double(4, 7, 10)
+x_sparse <- sparse_double(value = c(3, 1, 10), position = c(2, 7, 15), length = 1000)
+x_dense <- numeric(1000)
+x_dense[2] <- 3
+x_dense[7] <- 1
+x_dense[15] <- 10
 
-x
-sum(x)
+obj_size(x_sparse)
+obj_size(x_dense)
 
-sparse_double(4, 7, 10) + sparse_double(3, 2, 10)
+identical(x_sparse, x_dense)
 ```
 
-This class is compatible with tibbles
+The memory of a sparse vector is proportional to the number of elements plus a constant. This means that increasing the length of a sparse vector doesn't increase how much memory it uses. Unlike dense vectors who has a much smaller constant, but increases according to the length of the values. 
+
+```{r}
+x_sparse_0 <- sparse_double(numeric(), integer(), length = 0)
+x_sparse_1000 <- sparse_double(numeric(), integer(), length = 1000)
+x_sparse_1000000 <- sparse_double(numeric(), integer(), length = 10000000)
+
+obj_size(x_sparse_0)
+obj_size(x_sparse_1000)
+obj_size(x_sparse_1000000)
+
+x_dense_0 <- numeric(0)
+x_dense_1000 <- numeric(1000)
+x_dense_1000000 <- numeric(10000000)
+
+obj_size(x_dense_0)
+obj_size(x_dense_1000)
+obj_size(x_dense_1000000)
+```
+
+These sparse vectors are compatible with tibbles and data frames.
 
 ```{r}
 library(tibble)
+set.seed(1234)
 
-tibble(x = sample(1:10), y = sparse_double(1, 7, 10))
+tibble(
+  x = sample(1:1000),
+  y = sparse_double(1, 7, 1000)
+)
 ```
+
+## Motivation
+
+Sparse data happens from ingestion and preprocessing calculations. text to counts, dummy variables etc etc
+
+There are computational tools for calculations using sparse matrices, specifically the Matrix package and some modeling packages (e.g., xgboost, glmnet, etc.). We want to utilize these tools as best we can without making redundant implementations.
+
+However, sparse matrices are not great for data in general, or at least not until the very end, when mathematical calculations occur. Converting everything to “numeric” is problematic for dates, factors, etc. There are good reasons why data frames were created in the first place. Matrices are efficient but primitive.
+
+The problem is that many tools, especially the tidyverse, rely on data frames since they are more expressive and accommodate different variable types. We need to merge and filter rows/columns, etc, in a flexible and user-friendly way. (joins, pivoting)
+
+Having a sparse representation of data that allows us to use modern data manipulation interfaces, keeps memory overhead low, and can be efficiently converted to a more primitive matrix format so that we can let Matrix and other packages do what they do best.
+
+This is achieved with this package, by providing sparse vectors that fit into a data frame. Along with converting tools between sparse matrices and data frames.
 
