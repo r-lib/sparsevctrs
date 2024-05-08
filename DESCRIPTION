@@ -15,6 +15,8 @@ Imports:
     cli (>= 3.4.0),
     rlang (>= 1.1.0)
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0),
     withr
 Config/Needs/website: rmarkdown
@@ -22,3 +24,4 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
+VignetteBuilder: knitr

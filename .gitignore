@@ -7,3 +7,4 @@ docs
 compile_commands.json
 .cache
 debug.R
+inst/doc

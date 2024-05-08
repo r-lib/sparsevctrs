@@ -1,0 +1,30 @@
+---
+title: "Design behind sparsevctrs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Design behind sparsevctrs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sparsevctrs)
+```
+
+The sparsevctrs package produces 3 things; ALTREP classes, matrix/data.frame converting functions, helper functions. This document outlines the rationale behind each of these and the decisions behind them.
+
+## Altrep Functions
+
+
+## Converting Functions
+
+
+## Helper Functions
+
