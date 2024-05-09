@@ -4,12 +4,12 @@
 \alias{sparse_double}
 \title{Create sparse double vector}
 \usage{
-sparse_double(value, position, length)
+sparse_double(values, positions, length)
 }
 \arguments{
-\item{value}{Numeric vector, values of non-zero entries.}
+\item{values}{Numeric vector, values of non-zero entries.}
 
-\item{position}{integer vector, indices of non-zero entries.}
+\item{positions}{integer vector, indices of non-zero entries.}
 
 \item{length}{Integer, Length of vector.}
 }
