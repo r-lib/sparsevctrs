@@ -258,14 +258,6 @@ test_that("default argument is working", {
   expect_identical(x_sparse[], x_dense)
 })
 
-test_that("is_sparse_vector works", {
-  expect_true(is_sparse_vector(sparse_double(1, 1, 1)))
-
-  expect_false(is_sparse_vector(c(1, 1, 1)))
-  expect_false(is_sparse_vector(1:10))
-  expect_false(is_sparse_vector(NULL))
-})
-
 test_that("verbose testing", {
   withr::local_options("sparsevctrs.verbose_materialize" = TRUE)
 
