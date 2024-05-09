@@ -38,6 +38,12 @@
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/design.html">Design behind sparsevctrs</a>
+  </div>
+</li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -62,8 +68,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>THIS IS A PROTOTYPE. DO NOT USE</p>
-<p>The goal of sparsevctrs is to provide a sparse vector class that is compatible with tibbles.</p>
+<p>The goal of sparsevctrs is to provide a sparse vector <a href="https://svn.r-project.org/R/branches/ALTREP/ALTREP.html" class="external-link">ALTREP</a> class. With this, you can have sparse data in the form of sparse columns in <code>data.frame</code> or <a href="https://tibble.tidyverse.org/" class="external-link">tibble</a>. Due to the nature of how ALTREP vectors work, these sparse vectors will behave like the normal dense vectors you are used you. The vectors will contain their sparseness as much as they can, and only materialize when they have to.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -72,39 +77,82 @@
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"emilhvitfeldt/sparsevctrs"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
+<p>A sparse vector, here specifically a sparse double vector, will be identical to its dense counterpart, often with a smaller memory footprint.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EmilHvitfeldt/sparsevctrs" class="external-link">sparsevctrs</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lobstr.r-lib.org/" class="external-link">lobstr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">x_sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">7</span>, <span class="fl">15</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">x_dense</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">x_dense</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="va">x_dense</span><span class="op">[</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">x_dense</span><span class="op">[</span><span class="fl">15</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span></span>
-<span><span class="va">x</span></span>
-<span><span class="co">#&gt;  [1] 0 0 0 0 0 0 4 0 0 0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4</span></span>
+<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_sparse</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 1.24 kB</span></span>
+<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_dense</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 8.05 kB</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 3.456532e-314 2.847320e-314 2.714492e-314 2.927164e-314 4.940656e-323</span></span>
-<span><span class="co">#&gt;  [6]  0.000000e+00  0.000000e+00  3.000000e+00  0.000000e+00  0.000000e+00</span></span></code></pre></div>
-<p>This class is compatible with tibbles</p>
+<span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">x_sparse</span>, <span class="va">x_dense</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>The memory of a sparse vector is proportional to the number of elements plus a constant. This means that increasing the length of a sparse vector doesn’t increase how much memory it uses. Unlike dense vectors who has a much smaller constant, but increases according to the length of the values.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">x_sparse_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">x_sparse_1000</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">x_sparse_1000000</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10000000</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 10 × 2</span></span>
+<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_sparse_0</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 1.19 kB</span></span>
+<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_sparse_1000</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 1.19 kB</span></span>
+<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_sparse_1000000</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 1.19 kB</span></span>
+<span></span>
+<span><span class="va">x_dense_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">x_dense_1000</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">x_dense_1000000</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">10000000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_dense_0</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 48 B</span></span>
+<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_dense_1000</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 8.05 kB</span></span>
+<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_dense_1000000</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 80.00 MB</span></span></code></pre></div>
+<p>These sparse vectors are compatible with tibbles and data frames.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span>, <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1,000 × 2</span></span>
 <span><span class="co">#&gt;        x     y</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1    10     0</span></span>
-<span><span class="co">#&gt;  2     6     0</span></span>
-<span><span class="co">#&gt;  3     5     0</span></span>
-<span><span class="co">#&gt;  4     4     0</span></span>
-<span><span class="co">#&gt;  5     1     0</span></span>
-<span><span class="co">#&gt;  6     8     0</span></span>
-<span><span class="co">#&gt;  7     2     1</span></span>
-<span><span class="co">#&gt;  8     7     0</span></span>
-<span><span class="co">#&gt;  9     9     0</span></span>
-<span><span class="co">#&gt; 10     3     0</span></span></code></pre></div>
+<span><span class="co">#&gt;  1   284     0</span></span>
+<span><span class="co">#&gt;  2   848     0</span></span>
+<span><span class="co">#&gt;  3   918     0</span></span>
+<span><span class="co">#&gt;  4   101     0</span></span>
+<span><span class="co">#&gt;  5   623     0</span></span>
+<span><span class="co">#&gt;  6   905     0</span></span>
+<span><span class="co">#&gt;  7   645     1</span></span>
+<span><span class="co">#&gt;  8   934     0</span></span>
+<span><span class="co">#&gt;  9   400     0</span></span>
+<span><span class="co">#&gt; 10   900     0</span></span>
+<span><span class="co">#&gt; # ℹ 990 more rows</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
+</h2>
+<p>Sparse data happens from ingestion and preprocessing calculations. text to counts, dummy variables etc etc</p>
+<p>There are computational tools for calculations using sparse matrices, specifically the Matrix package and some modeling packages (e.g., xgboost, glmnet, etc.). We want to utilize these tools as best we can without making redundant implementations.</p>
+<p>However, sparse matrices are not great for data in general, or at least not until the very end, when mathematical calculations occur. Converting everything to “numeric” is problematic for dates, factors, etc. There are good reasons why data frames were created in the first place. Matrices are efficient but primitive.</p>
+<p>The problem is that many tools, especially the tidyverse, rely on data frames since they are more expressive and accommodate different variable types. We need to merge and filter rows/columns, etc, in a flexible and user-friendly way. (joins, pivoting)</p>
+<p>Having a sparse representation of data that allows us to use modern data manipulation interfaces, keeps memory overhead low, and can be efficiently converted to a more primitive matrix format so that we can let Matrix and other packages do what they do best.</p>
+<p>This is achieved with this package, by providing sparse vectors that fit into a data frame. Along with converting tools between sparse matrices and data frames.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
