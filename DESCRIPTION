@@ -15,7 +15,10 @@ Imports:
     cli (>= 3.4.0),
     rlang (>= 1.1.0)
 Suggests: 
+    Matrix,
+    methods,
     testthat (>= 3.0.0),
+    tibble,
     withr
 Config/Needs/website: rmarkdown
 Config/testthat/edition: 3
