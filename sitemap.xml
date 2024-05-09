@@ -16,6 +16,15 @@
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/index.html</loc>
   </url>
   <url>
+    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce_to_sparse_data_frame.html</loc>
+  </url>
+  <url>
+    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce_to_sparse_matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce_to_sparse_tibble.html</loc>
+  </url>
+  <url>
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/extractors.html</loc>
   </url>
   <url>
