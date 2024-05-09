@@ -2,3 +2,12 @@ url: https://emilhvitfeldt.github.io/sparsevctrs/
 template:
   bootstrap: 5
 
+reference:
+  - title: Create Sparse Vectors
+    contents:
+    - sparse_double
+  
+  - title: Helper Functions
+    contents:
+    - type-predicates
+    - extractors
