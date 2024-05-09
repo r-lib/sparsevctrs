@@ -11,6 +11,10 @@
 #' 
 #' # Forced materialization
 #' is_sparse_vector(x_sparse[])
+#' @name type-predicates
+NULL
+
+#' @rdname type-predicates
 #' @export
 is_sparse_vector <- function(x) {
   res <- .Call(ffi_extract_altrep_class, x)
@@ -21,5 +25,17 @@ is_sparse_vector <- function(x) {
   res <- as.character(res[[1]])
 
   res %in% c("altrep_sparse_double")
- }
+}
  
+#' @rdname type-predicates
+#' @export
+is_sparse_double <- function(x) {
+  res <- .Call(ffi_extract_altrep_class, x)
+  if (is.null(res)) {
+    return(FALSE)
+  }
+  
+  res <- as.character(res[[1]])
+
+  res == "altrep_sparse_double"
+}
