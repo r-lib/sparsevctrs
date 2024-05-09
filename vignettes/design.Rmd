@@ -22,11 +22,12 @@ The sparsevctrs package produces 3 things; ALTREP classes, matrix/data.frame con
 
 ## Altrep Functions
 
-The functions `sparse_double()` and its relatives are used to construct sparse vectors of the noted type. To work they all need 3 pieces of information:
+The functions `sparse_double()` and its relatives are used to construct sparse vectors of the noted type. To work they all need 4 pieces of information:
 
-- values
-- positions
-- length
+- `values`
+- `positions`
+- `length`
+- `default` (defaults to 0)
 
 The values need to match the type of the function name or be easily coerced into the type (double -> integer). The positions should be integers or doubles that can losslessly be turned into integers. The length should be a single non-negative integer-like value.
 
@@ -40,15 +41,15 @@ The input of these functions mirrors the values stored in the ALTREP class that 
 
 3 functions fall into this category:
 
-- coerce_to_sparse_data_frame
-- coerce_to_sparse_tibble
-- coerce_to_sparse_matrix
+- `coerce_to_sparse_data_frame()`
+- `coerce_to_sparse_tibble()`
+- `coerce_to_sparse_matrix()`
 
 the first two take a sparse matrix from the Matrix package and produce a data.frame/tibble with sparse columns. The last one takes a data.frame/tibble with sparse columns and produces a sparse matrix using the Matrix package.
 
 These functions are expected to be inverse of each other, such that `coerce_to_sparse_matrix(coerce_to_sparse_data_frame(x))` returns `x` back. They are made to be highly performant both in terms of speed and memory consumption, Meaning that sparsity is applied when appropriate.
 
-These functions have quite strict input checking by choice, to allow the inner workings to be as efficient as possible.
+These functions have quite strict input checking by choice, to allow the inner workings to be as efficient as possible. It is in part why data.frames with sparse vectors with different can't be used with `coerce_to_sparse_matrix()` yet.
 
 ## Helper Functions
 
