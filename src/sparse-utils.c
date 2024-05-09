@@ -21,6 +21,13 @@ R_xlen_t extract_len(SEXP x) {
   return out;
 }
 
+SEXP extract_default(SEXP x) {
+  SEXP data1 = R_altrep_data1(x);
+  SEXP out = VECTOR_ELT(data1, 3);
+
+  return out;
+}
+
 bool is_altrep(SEXP x) {
   return (bool) ALTREP(x);
 }

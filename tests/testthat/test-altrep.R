@@ -220,7 +220,43 @@ test_that("materialization works with sparse_double()", {
   expect_identical(x_sparse[], x_dense)
 })
 
+test_that("default argument is working", {
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(1, 1, 10, default = 1:10)
+  )
+  
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(1, 1, 10, default = TRUE)
+  )
 
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(c(1, 1, 4), c(1, 4, 6), 10, default = 1)
+  )
+
+  x_sparse <- sparse_double(
+    value = c(10, NA, 20), 
+    position = c(1, 5, 8), 
+    length = 10, 
+    default = 4
+  )
+
+  x_dense <- c(10, 4, 4, 4, NA, 4, 4, 20, 4, 4)
+
+  for (i in seq_len(10)) {
+    expect_identical(x_sparse[i], x_dense[i])
+  }
+
+  expect_identical(x_sparse[1:2], x_dense[1:2])
+
+  expect_identical(x_sparse[3:7], x_dense[3:7])
+
+  expect_identical(x_sparse[c(1, 5, 8, 1)], x_dense[c(1, 5, 8, 1)])
+
+  expect_identical(x_sparse[], x_dense)
+})
 
 test_that("is_sparse_vector works", {
   expect_true(is_sparse_vector(sparse_double(1, 1, 1)))

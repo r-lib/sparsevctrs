@@ -32,11 +32,14 @@ SEXP alrep_sparse_double_Materialize(SEXP x) {
 
   const R_xlen_t len = extract_len(x);
 
+  SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
   out = PROTECT(Rf_allocVector(REALSXP, len));
   double* v_out = REAL(out);
 
   for (R_xlen_t i = 0; i < len; ++i) {
-    v_out[i] = 0;
+    v_out[i] = v_default_val;
   }
 
   const R_xlen_t n_positions = Rf_xlength(pos);
@@ -122,7 +125,7 @@ static SEXP altrep_sparse_double_Extract_subset(SEXP x, SEXP indx, SEXP call) {
     ++n_hits;
   }
 
-  SEXP out = PROTECT(Rf_allocVector(VECSXP, 3));
+  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
 
   SEXP out_val = Rf_allocVector(REALSXP, n_hits);
   SET_VECTOR_ELT(out, 0, out_val);
@@ -135,11 +138,15 @@ static SEXP altrep_sparse_double_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   SEXP out_length = Rf_ScalarInteger((int) size);
   SET_VECTOR_ELT(out, 2, out_length);
 
-  SEXP names = Rf_allocVector(STRSXP, 3);
+  SEXP out_default = extract_default(x);
+  SET_VECTOR_ELT(out, 3, out_default);
+
+  SEXP names = Rf_allocVector(STRSXP, 4);
   Rf_setAttrib(out, R_NamesSymbol, names);
   SET_STRING_ELT(names, 0, Rf_mkChar("val"));
   SET_STRING_ELT(names, 1, Rf_mkChar("pos"));
   SET_STRING_ELT(names, 2, Rf_mkChar("len"));
+  SET_STRING_ELT(names, 3, Rf_mkChar("default"));
 
   R_xlen_t i_out = 0;
 
@@ -207,6 +214,9 @@ static double altrep_sparse_double_Elt(SEXP x, R_xlen_t i) {
 
   const R_xlen_t len = extract_len(x);
 
+  SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
   if (i > len) {
     // OOB of vector itself
     return NA_REAL;
@@ -218,7 +228,7 @@ static double altrep_sparse_double_Elt(SEXP x, R_xlen_t i) {
 
   if (loc == size) {
     // Can't find it, must be the default value
-    return 0;
+    return v_default_val;
   } else {
     // Look it up in `val`
     return REAL_ELT(val, loc);

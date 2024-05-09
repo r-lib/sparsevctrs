@@ -1,8 +1,10 @@
 #' Create sparse double vector
 #' 
-#' @param values Numeric vector, values of non-zero entries.
+#' @param values double vector, values of non-zero entries.
 #' @param positions integer vector, indices of non-zero entries.
-#' @param length Integer, Length of vector.
+#' @param length integer, Length of vector.
+#' @param default double, value at indices not specified by `positions`. 
+#'   Defaults to `0`.
 #' 
 #' @details
 #' 
@@ -11,7 +13,8 @@
 #' 
 #' Allowed values for `value` is double and integer values. integer values will
 #' be coerced to doubles. Missing values such as `NA` and `NA_real_` are 
-#' allowed. Everything else is disallowed, This includes `Inf` and `NaN`.
+#' allowed. Everything else is disallowed, This includes `Inf` and `NaN`. The
+#' values are also not supposed to take the same value as `default`.
 #' 
 #' `positions` should be integers or integer-like doubles. Everything else is 
 #' not allowed. Positions should furthermore be positive (`0` not allowed),
@@ -32,11 +35,13 @@
 #'   sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 1000000000)
 #' )
 #' @export
-sparse_double <- function(values, positions, length) {
+sparse_double <- function(values, positions, length, default = 0) {
+  check_number_decimal(default)
   check_number_whole(length, min = 0)
   if (!is.integer(length)) {
     length <- as.integer(length)
   }
+
 
   if (identical(values, NA)) {
     values <- NA_real_
@@ -162,24 +167,25 @@ sparse_double <- function(values, positions, length) {
     )
   }
 
-  if (any(values == 0, na.rm = TRUE)) {
-    offenders <- which(values == 0)
+  if (any(values == default, na.rm = TRUE)) {
+    offenders <- which(values == default)
     cli::cli_abort(
       c(
-        x = "{.arg values} value must not be 0.",
-        i = "0 values at index: {offenders}."
+        x = "{.arg values} value must not be equal to the default {default}.",
+        i = "{default} values at index: {offenders}."
       )
     )
   }
 
-  new_sparse_double(values, positions, length)
+  new_sparse_double(values, positions, length, default)
 }
 
-new_sparse_double <- function(values, positions, length) {
+new_sparse_double <- function(values, positions, length, default) {
   x <- list(
-    val = values, 
-    pos = positions, 
-    len = length
+    val = values,
+    pos = positions,
+    len = length,
+    default = default
   )
 
   .Call(ffi_altrep_new_sparse_double, x)
