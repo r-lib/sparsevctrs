@@ -43,7 +43,7 @@ coerce_to_sparse_matrix <- function(x) {
 #' @param x sparse matrix. 
 #'
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_matrix()]
-#' @examplesIf rlang::is_installed("Matrix")
+#' @examplesIf rlang::is_installed("tibble")
 #' set.seed(1234)
 #' mat <- matrix(sample(0:1, 100, TRUE, c(0.9, 0.1)), nrow = 10)
 #' colnames(mat) <- letters[1:10]

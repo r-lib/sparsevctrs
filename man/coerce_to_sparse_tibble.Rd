@@ -13,7 +13,7 @@ coerce_to_sparse_tibble(x)
 Coerce sparse matrix to tibble with sparse columns
 }
 \examples{
-\dontshow{if (rlang::is_installed("Matrix")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("tibble")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 set.seed(1234)
 mat <- matrix(sample(0:1, 100, TRUE, c(0.9, 0.1)), nrow = 10)
 colnames(mat) <- letters[1:10]
