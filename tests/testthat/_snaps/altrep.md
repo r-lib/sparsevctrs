@@ -4,7 +4,7 @@
       sparse_double("1", 1, 1)
     Condition
       Error in `sparse_double()`:
-      ! `value` must be a numeric vector, not a string.
+      ! `values` must be a numeric vector, not a string.
 
 ---
 
@@ -12,7 +12,7 @@
       sparse_double(NULL, 1, 1)
     Condition
       Error in `sparse_double()`:
-      ! `value` must be a numeric vector, not NULL.
+      ! `values` must be a numeric vector, not NULL.
 
 ---
 
@@ -20,7 +20,7 @@
       sparse_double(NA, 1, 1)
     Condition
       Error in `sparse_double()`:
-      ! `value` must be a numeric vector, not `NA`.
+      ! `values` must be a numeric vector, not `NA`.
 
 ---
 
@@ -28,7 +28,7 @@
       sparse_double(Inf, 1, 1)
     Condition
       Error in `sparse_double()`:
-      x `value` must not contain infinite values.
+      x `values` must not contain infinite values.
       i Infinite values at index: 1.
 
 ---
@@ -36,8 +36,9 @@
     Code
       sparse_double(NaN, 1, 1)
     Condition
-      Error in `if (any(value == 0)) ...`:
-      ! missing value where TRUE/FALSE needed
+      Error in `sparse_double()`:
+      x `values` must not contain NaN values.
+      i NaN values at index: 1.
 
 ---
 
@@ -45,7 +46,7 @@
       sparse_double(1, 1.5, 1)
     Condition
       Error in `sparse_double()`:
-      x `position` must contain integer values.
+      x `positions` must contain integer values.
       i Non-integer values at index: 1.
 
 ---
@@ -54,7 +55,7 @@
       sparse_double(1, "1", 1)
     Condition
       Error in `sparse_double()`:
-      ! `position` must be a integer vector, not a number.
+      ! `positions` must be a integer vector, not a string.
 
 ---
 
@@ -62,7 +63,7 @@
       sparse_double(1, NULL, 1)
     Condition
       Error in `sparse_double()`:
-      ! `position` must be a integer vector, not a number.
+      ! `positions` must be a integer vector, not NULL.
 
 ---
 
@@ -70,7 +71,7 @@
       sparse_double(1, NA, 1)
     Condition
       Error in `sparse_double()`:
-      ! `position` must be a integer vector, not a number.
+      ! `positions` must be a integer vector, not `NA`.
 
 ---
 
@@ -78,7 +79,7 @@
       sparse_double(1, Inf, 1)
     Condition
       Error in `sparse_double()`:
-      x `position` must not contain infinite values.
+      x `positions` must not contain infinite values.
       i Infinite values at index: 1.
 
 ---
@@ -86,8 +87,9 @@
     Code
       sparse_double(1, NaN, 1)
     Condition
-      Error in `if (len_position > 0 && max(position) > length) ...`:
-      ! missing value where TRUE/FALSE needed
+      Error in `sparse_double()`:
+      x `positions` must not contain NaN values.
+      i NaN values at index: 1.
 
 ---
 
@@ -151,7 +153,7 @@
       sparse_double(1:4, 1:6, 10)
     Condition
       Error in `sparse_double()`:
-      ! `value` (4) and `position` (6) must have the same length.
+      ! `value` (4) and `positions` (6) must have the same length.
 
 ---
 
@@ -159,7 +161,7 @@
       sparse_double(1, 1:6, 10)
     Condition
       Error in `sparse_double()`:
-      ! `value` (1) and `position` (6) must have the same length.
+      ! `value` (1) and `positions` (6) must have the same length.
 
 ---
 
@@ -167,7 +169,7 @@
       sparse_double(1:4, c(1, 1, 5, 6), 10)
     Condition
       Error in `sparse_double()`:
-      x `position` must not contain any duplicate values.
+      x `positions` must not contain any duplicate values.
       i Duplicate values at index: 2.
 
 ---
@@ -176,7 +178,7 @@
       sparse_double(1:100, rep(1, 100), 100)
     Condition
       Error in `sparse_double()`:
-      x `position` must not contain any duplicate values.
+      x `positions` must not contain any duplicate values.
       i Duplicate values at index: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, ..., 99, and 100.
 
 ---
@@ -185,7 +187,7 @@
       sparse_double(c(1, 2), c(3, 1), 5)
     Condition
       Error in `sparse_double()`:
-      ! `position` must be sorted in increasing order.
+      ! `positions` must be sorted in increasing order.
 
 ---
 
@@ -193,7 +195,7 @@
       sparse_double(1, 10, 5)
     Condition
       Error in `sparse_double()`:
-      x `position` value must not be larger than `length`.
+      x `positions` value must not be larger than `length`.
       i Offending values at index: 1.
 
 ---
@@ -202,7 +204,7 @@
       sparse_double(rep(1, 50), seq(25, 74), 50)
     Condition
       Error in `sparse_double()`:
-      x `position` value must not be larger than `length`.
+      x `positions` value must not be larger than `length`.
       i Offending values at index: 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, ..., 49, and 50.
 
 ---
@@ -211,7 +213,7 @@
       sparse_double(1, 0, 5)
     Condition
       Error in `sparse_double()`:
-      x `position` value must positive.
+      x `positions` value must positive.
       i Non-positive values at index: 1.
 
 ---
@@ -220,7 +222,7 @@
       sparse_double(rep(1, 101), seq(-50, 50), 100)
     Condition
       Error in `sparse_double()`:
-      x `position` value must positive.
+      x `positions` value must positive.
       i Non-positive values at index: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, ..., 50, and 51.
 
 ---
@@ -229,7 +231,7 @@
       sparse_double(0, 1, 10)
     Condition
       Error in `sparse_double()`:
-      x `value` value must not be 0.
+      x `values` value must not be 0.
       i 0 values at index: 1.
 
 ---
@@ -238,7 +240,7 @@
       sparse_double(rep(c(1, 0), 5), 1:10, 50)
     Condition
       Error in `sparse_double()`:
-      x `value` value must not be 0.
+      x `values` value must not be 0.
       i 0 values at index: 2, 4, 6, 8, and 10.
 
 # verbose testing
