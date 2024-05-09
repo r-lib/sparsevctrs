@@ -73,7 +73,16 @@
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For developers:</p>
+    <p><code>values</code> and <code>positions</code> are expected to be the same length, and are allowed
+to both have zero length.</p>
+<p>Allowed values for <code>value</code> is double and integer values. integer values will
+be coerced to doubles. Missing values such as <code>NA</code> and <code>NA_real_</code> are
+allowed. Everything else is disallowed, This includes <code>Inf</code> and <code>NaN</code>.</p>
+<p><code>positions</code> should be integers or integer-like doubles. Everything else is
+not allowed. Positions should furthermore be positive (<code>0</code> not allowed),
+unique, and in increasing order. Lastly they should all be smaller that
+<code>length</code>.</p>
+<p>For developers:</p>
 <p>setting <code>options("sparsevctrs.verbose_materialize" = TRUE)</code> will print a
 message each time a sparse vector has been forced to materialize.</p>
     </div>
