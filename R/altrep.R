@@ -6,6 +6,18 @@
 #' 
 #' @details
 #' 
+#' `values` and `positions` are expected to be the same length, and are allowed
+#' to both have zero length.
+#' 
+#' Allowed values for `value` is double and integer values. integer values will
+#' be coerced to doubles. Missing values such as `NA` and `NA_real_` are 
+#' allowed. Everything else is disallowed, This includes `Inf` and `NaN`.
+#' 
+#' `positions` should be integers or integer-like doubles. Everything else is 
+#' not allowed. Positions should furthermore be positive (`0` not allowed),
+#' unique, and in increasing order. Lastly they should all be smaller that 
+#' `length`.
+#' 
 #' For developers: 
 #' 
 #' setting `options("sparsevctrs.verbose_materialize" = TRUE)` will print a 

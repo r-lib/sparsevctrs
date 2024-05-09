@@ -17,6 +17,18 @@ sparse_double(values, positions, length)
 Create sparse double vector
 }
 \details{
+\code{values} and \code{positions} are expected to be the same length, and are allowed
+to both have zero length.
+
+Allowed values for \code{value} is double and integer values. integer values will
+be coerced to doubles. Missing values such as \code{NA} and \code{NA_real_} are
+allowed. Everything else is disallowed, This includes \code{Inf} and \code{NaN}.
+
+\code{positions} should be integers or integer-like doubles. Everything else is
+not allowed. Positions should furthermore be positive (\code{0} not allowed),
+unique, and in increasing order. Lastly they should all be smaller that
+\code{length}.
+
 For developers:
 
 setting \code{options("sparsevctrs.verbose_materialize" = TRUE)} will print a
