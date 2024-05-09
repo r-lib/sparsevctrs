@@ -10,3 +10,4 @@ reference:
   - title: Helper Functions
     contents:
     - is_sparse_vector
+    - type-predicates

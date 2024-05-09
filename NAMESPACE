@@ -2,5 +2,7 @@
 
 export(is_sparse_vector)
 export(sparse_double)
+export(sparse_positions)
+export(sparse_values)
 import(rlang)
 useDynLib(sparsevctrs, .registration = TRUE)
