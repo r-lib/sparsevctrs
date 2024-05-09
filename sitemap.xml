@@ -16,6 +16,9 @@
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/index.html</loc>
   </url>
   <url>
+    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/extractors.html</loc>
+  </url>
+  <url>
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/index.html</loc>
   </url>
   <url>
@@ -23,5 +26,8 @@
   </url>
   <url>
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparsevctrs-package.html</loc>
+  </url>
+  <url>
+    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/type-predicates.html</loc>
   </url>
 </urlset>
