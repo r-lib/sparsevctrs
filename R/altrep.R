@@ -26,6 +26,10 @@ sparse_double <- function(values, positions, length) {
     length <- as.integer(length)
   }
 
+  if (identical(values, NA)) {
+    values <- NA_real_
+  }
+
   if (!is.numeric(values)) {
     cli::cli_abort(
       "{.arg values} must be a numeric vector, \\
@@ -146,7 +150,7 @@ sparse_double <- function(values, positions, length) {
     )
   }
 
-  if (any(values == 0)) {
+  if (any(values == 0, na.rm = TRUE)) {
     offenders <- which(values == 0)
     cli::cli_abort(
       c(
