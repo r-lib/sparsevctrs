@@ -7,6 +7,12 @@ reference:
     contents:
     - sparse_double
   
+  - title: Convertion functions
+    contents:
+    - coerce_to_sparse_data_frame
+    - coerce_to_sparse_matrix
+    - coerce_to_sparse_tibble
+
   - title: Helper Functions
     contents:
     - type-predicates

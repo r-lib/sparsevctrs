@@ -1,3 +1,18 @@
+#' Coerce sparse data frame to sparse matrix
+#' 
+#' @param x a data frame or tibble with sparse columns.
+#'
+#' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_tibble()]
+#' @examplesIf rlang::is_installed("Matrix")
+#' set.seed(1234)
+#' sparse_tbl <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
+#' names(sparse_tbl) <- letters[1:10]
+#' sparse_tbl <- as.data.frame(sparse_tbl)
+#' sparse_tbl
+#' 
+#' res <- coerce_to_sparse_matrix(sparse_tbl)
+#' res
+#' @export
 coerce_to_sparse_matrix <- function(x) {
   rlang::check_installed("Matrix")
 
@@ -23,6 +38,24 @@ coerce_to_sparse_matrix <- function(x) {
   res
 }
 
+#' Coerce sparse matrix to tibble with sparse columns
+#' 
+#' @param x sparse matrix. 
+#'
+#' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_matrix()]
+#' @examplesIf rlang::is_installed("Matrix")
+#' set.seed(1234)
+#' mat <- matrix(sample(0:1, 100, TRUE, c(0.9, 0.1)), nrow = 10)
+#' colnames(mat) <- letters[1:10]
+#' sparse_mat <- Matrix::Matrix(mat, sparse = TRUE)
+#' sparse_mat
+#' 
+#' res <- coerce_to_sparse_tibble(sparse_mat)
+#' res
+#' 
+#' # All columns are sparse
+#' vapply(res, is_sparse_vector, logical(1))
+#' @export
 coerce_to_sparse_tibble <- function(x) {
   rlang::check_installed("tibble")
 
@@ -38,12 +71,29 @@ coerce_to_sparse_tibble <- function(x) {
     )
   }
 
-  res <- .sparse_matrix_to_list(res)
+  res <- .sparse_matrix_to_list(x)
   res <- tibble::as_tibble(res)
   res
 }
 
-
+#' Coerce sparse matrix to data frame with sparse columns
+#' 
+#' @param x sparse matrix. 
+#'
+#' @seealso [coerce_to_sparse_tibble()] [coerce_to_sparse_matrix()]
+#' @examplesIf rlang::is_installed("Matrix")
+#' set.seed(1234)
+#' mat <- matrix(sample(0:1, 100, TRUE, c(0.9, 0.1)), nrow = 10)
+#' colnames(mat) <- letters[1:10]
+#' sparse_mat <- Matrix::Matrix(mat, sparse = TRUE)
+#' sparse_mat
+#' 
+#' res <- coerce_to_sparse_data_frame(sparse_mat)
+#' res
+#' 
+#' # All columns are sparse
+#' vapply(res, is_sparse_vector, logical(1))
+#' @export
 coerce_to_sparse_data_frame <- function(x) {
   if (!any(methods::is(x) == "sparseMatrix")) {
     cli::cli_abort(
@@ -57,7 +107,7 @@ coerce_to_sparse_data_frame <- function(x) {
     )
   }
 
-  res <- .sparse_matrix_to_list(res)
+  res <- .sparse_matrix_to_list(x)
   res <- as.data.frame(res)
   res
 }
