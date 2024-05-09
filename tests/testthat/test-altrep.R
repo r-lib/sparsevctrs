@@ -15,10 +15,6 @@ test_that("input checking is done correctly", {
   )
   expect_snapshot(
     error = TRUE,
-    sparse_double(NA, 1, 1)
-  )
-  expect_snapshot(
-    error = TRUE,
     sparse_double(Inf, 1, 1)
   )
   expect_snapshot(
@@ -161,8 +157,8 @@ test_that("length() works with sparse_double()", {
 })
 
 test_that("single subsetting works with sparse_double()", {
-  x_sparse <- sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
-  x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
+  x_sparse <- sparse_double(value = c(10, NA, 20), position = c(1, 5, 8), 10)
+  x_dense <- c(10, 0, 0, 0, NA, 0, 0, 20, 0, 0)
 
   for (i in seq_len(10)) {
     expect_identical(x_sparse[i], x_dense[i])
@@ -187,8 +183,8 @@ test_that("single subsetting works with sparse_double()", {
 })
 
 test_that("multiple subsetting works with sparse_double()", {
-  x_sparse <- sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
-  x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
+  x_sparse <- sparse_double(value = c(10, NA, 20), position = c(1, 5, 8), 10)
+  x_dense <- c(10, 0, 0, 0, NA, 0, 0, 20, 0, 0)
 
   expect_identical(x_sparse[1:2], x_dense[1:2])
 
@@ -218,11 +214,12 @@ test_that("multiple subsetting works with sparse_double()", {
 })
 
 test_that("materialization works with sparse_double()", {
-  x_sparse <- sparse_double(value = c(10, 13, 20), position = c(1, 5, 8), 10)
-  x_dense <- c(10, 0, 0, 0, 13, 0, 0, 20, 0, 0)
+  x_sparse <- sparse_double(value = c(10, NA, 20), position = c(1, 5, 8), 10)
+  x_dense <- c(10, 0, 0, 0, NA, 0, 0, 20, 0, 0)
 
   expect_identical(x_sparse[], x_dense)
 })
+
 
 
 test_that("is_sparse_vector works", {

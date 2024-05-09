@@ -17,14 +17,6 @@
 ---
 
     Code
-      sparse_double(NA, 1, 1)
-    Condition
-      Error in `sparse_double()`:
-      ! `values` must be a numeric vector, not `NA`.
-
----
-
-    Code
       sparse_double(Inf, 1, 1)
     Condition
       Error in `sparse_double()`:
