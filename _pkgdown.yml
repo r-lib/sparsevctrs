@@ -6,3 +6,7 @@ reference:
   - title: Create Sparse Vectors
     contents:
     - sparse_double
+  
+  - title: Helper Functions
+    contents:
+    - is_sparse_vector

@@ -148,15 +148,3 @@ new_sparse_double <- function(values, positions, length) {
 
   .Call(ffi_altrep_new_sparse_double, x)
 }
-
-is_sparse_vector <- function(x) {
-  res <- .Call(ffi_extract_altrep_class, x)
-  if (is.null(res)) {
-    return(FALSE)
-  }
-  
-  res <- as.character(res[[1]])
-
-  res %in% c("altrep_sparse_double")
- }
- 
