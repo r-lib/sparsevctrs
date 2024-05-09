@@ -172,7 +172,7 @@ sparse_double <- function(values, positions, length, default = 0) {
     cli::cli_abort(
       c(
         x = "{.arg values} value must not be equal to the default {default}.",
-        i = "0 values at index: {offenders}."
+        i = "{default} values at index: {offenders}."
       )
     )
   }

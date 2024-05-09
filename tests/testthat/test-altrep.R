@@ -156,6 +156,23 @@ test_that("length() works with sparse_double()", {
   )
 })
 
+test_that("default argument is working", {
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(1, 1, 10, default = 1:10)
+  )
+  
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(1, 1, 10, default = TRUE)
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(c(1, 1, 4), c(1, 4, 6), 10, default = 1)
+  )
+})
+
 test_that("single subsetting works with sparse_double()", {
   x_sparse <- sparse_double(value = c(10, NA, 20), position = c(1, 5, 8), 10)
   x_dense <- c(10, 0, 0, 0, NA, 0, 0, 20, 0, 0)
@@ -219,8 +236,6 @@ test_that("materialization works with sparse_double()", {
 
   expect_identical(x_sparse[], x_dense)
 })
-
-
 
 test_that("is_sparse_vector works", {
   expect_true(is_sparse_vector(sparse_double(1, 1, 1)))

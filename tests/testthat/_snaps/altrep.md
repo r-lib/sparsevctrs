@@ -235,6 +235,31 @@
       x `values` value must not be equal to the default 0.
       i 0 values at index: 2, 4, 6, 8, and 10.
 
+# default argument is working
+
+    Code
+      sparse_double(1, 1, 10, default = 1:10)
+    Condition
+      Error in `sparse_double()`:
+      ! `default` must be a number, not an integer vector.
+
+---
+
+    Code
+      sparse_double(1, 1, 10, default = TRUE)
+    Condition
+      Error in `sparse_double()`:
+      ! `default` must be a number, not `TRUE`.
+
+---
+
+    Code
+      sparse_double(c(1, 1, 4), c(1, 4, 6), 10, default = 1)
+    Condition
+      Error in `sparse_double()`:
+      x `values` value must not be equal to the default 1.
+      i 1 values at index: 1 and 2.
+
 # verbose testing
 
     Code
