@@ -15,6 +15,8 @@ Imports:
     cli (>= 3.4.0),
     rlang (>= 1.1.0)
 Suggests: 
+    knitr,
+    rmarkdown,
     Matrix,
     methods,
     testthat (>= 3.0.0),
@@ -25,3 +27,4 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1.9000
+VignetteBuilder: knitr
