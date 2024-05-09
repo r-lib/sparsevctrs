@@ -223,7 +223,7 @@
       sparse_double(0, 1, 10)
     Condition
       Error in `sparse_double()`:
-      x `values` value must not be 0.
+      x `values` value must not be equal to the default 0.
       i 0 values at index: 1.
 
 ---
@@ -232,7 +232,7 @@
       sparse_double(rep(c(1, 0), 5), 1:10, 50)
     Condition
       Error in `sparse_double()`:
-      x `values` value must not be 0.
+      x `values` value must not be equal to the default 0.
       i 0 values at index: 2, 4, 6, 8, and 10.
 
 # verbose testing
