@@ -87,12 +87,14 @@ them.</p>
 <h2 id="altrep-functions">Altrep Functions<a class="anchor" aria-label="anchor" href="#altrep-functions"></a>
 </h2>
 <p>The functions <code><a href="../reference/sparse_double.html">sparse_double()</a></code> and its relatives are used
-to construct sparse vectors of the noted type. To work they all need 3
+to construct sparse vectors of the noted type. To work they all need 4
 pieces of information:</p>
 <ul>
-<li>values</li>
-<li>positions</li>
-<li>length</li>
+<li><code>values</code></li>
+<li><code>positions</code></li>
+<li><code>length</code></li>
+<li>
+<code>default</code> (defaults to 0)</li>
 </ul>
 <p>The values need to match the type of the function name or be easily
 coerced into the type (double -&gt; integer). The positions should be
@@ -112,9 +114,9 @@ class that they produce.</p>
 </h2>
 <p>3 functions fall into this category:</p>
 <ul>
-<li>coerce_to_sparse_data_frame</li>
-<li>coerce_to_sparse_tibble</li>
-<li>coerce_to_sparse_matrix</li>
+<li><code><a href="../reference/coerce_to_sparse_data_frame.html">coerce_to_sparse_data_frame()</a></code></li>
+<li><code><a href="../reference/coerce_to_sparse_tibble.html">coerce_to_sparse_tibble()</a></code></li>
+<li><code><a href="../reference/coerce_to_sparse_matrix.html">coerce_to_sparse_matrix()</a></code></li>
 </ul>
 <p>the first two take a sparse matrix from the Matrix package and
 produce a data.frame/tibble with sparse columns. The last one takes a
@@ -126,7 +128,9 @@ returns <code>x</code> back. They are made to be highly performant both
 in terms of speed and memory consumption, Meaning that sparsity is
 applied when appropriate.</p>
 <p>These functions have quite strict input checking by choice, to allow
-the inner workings to be as efficient as possible.</p>
+the inner workings to be as efficient as possible. It is in part why
+data.frames with sparse vectors with different can’t be used with
+<code><a href="../reference/coerce_to_sparse_matrix.html">coerce_to_sparse_matrix()</a></code> yet.</p>
 </div>
 <div class="section level2">
 <h2 id="helper-functions">Helper Functions<a class="anchor" aria-label="anchor" href="#helper-functions"></a>
