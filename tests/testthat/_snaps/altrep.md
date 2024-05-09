@@ -36,8 +36,9 @@
     Code
       sparse_double(NaN, 1, 1)
     Condition
-      Error in `if (any(values == 0)) ...`:
-      ! missing value where TRUE/FALSE needed
+      Error in `sparse_double()`:
+      x `values` must not contain NaN values.
+      i NaN values at index: 1.
 
 ---
 
@@ -86,8 +87,9 @@
     Code
       sparse_double(1, NaN, 1)
     Condition
-      Error in `if (len_positions > 0 && max(positions) > length) ...`:
-      ! missing value where TRUE/FALSE needed
+      Error in `sparse_double()`:
+      x `positions` must not contain NaN values.
+      i NaN values at index: 1.
 
 ---
 

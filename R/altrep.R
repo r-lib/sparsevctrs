@@ -43,6 +43,16 @@ sparse_double <- function(values, positions, length) {
     )
   }
 
+  if (any(is.nan(values))) {
+    offenders <- which(is.nan(values))
+    cli::cli_abort(
+      c(
+        x = "{.arg values} must not contain NaN values.",
+        i = "NaN values at index: {offenders}."
+      )
+    )
+  }
+
   if (is.integer(values)) {
     values <- as.double(values)
   }
@@ -60,6 +70,16 @@ sparse_double <- function(values, positions, length) {
       c(
         x = "{.arg positions} must not contain infinite values.",
         i = "Infinite values at index: {offenders}."
+      )
+    )
+  }
+
+  if (any(is.nan(positions))) {
+    offenders <- which(is.nan(positions))
+    cli::cli_abort(
+      c(
+        x = "{.arg positions} must not contain NaN values.",
+        i = "NaN values at index: {offenders}."
       )
     )
   }
