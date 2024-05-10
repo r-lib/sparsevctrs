@@ -128,6 +128,4 @@ validate_values_double <- function(values, call = rlang::caller_env()) {
       call = call
     )
   }
-
-
 }

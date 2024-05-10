@@ -9,7 +9,10 @@ as_sparse_double(x, default = 0)
 \arguments{
 \item{x}{a numeric vector.}
 
-\item{default}{default value to use. Defaults to \code{0}.}
+\item{default}{default value to use. Defaults to \code{0}.
+
+The values of \code{x} must be double or integer. It must not contain any \code{Inf} or
+\code{NaN} values.}
 }
 \description{
 Coerce numeric vector to sparse double
