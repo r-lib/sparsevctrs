@@ -135,3 +135,4 @@ coerce_to_sparse_data_frame <- function(x) {
   names(res) <- colnames(x)
   res
 }
+
