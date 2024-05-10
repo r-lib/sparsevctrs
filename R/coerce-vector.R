@@ -22,7 +22,7 @@ as_sparse_double <- function(x, default = 0) {
 
   check_number_decimal(default)
 
-  index <- which(x != default)
+  index <- which(x != default | is.na(x))
 
   sparse_double(
     values = x[index],
