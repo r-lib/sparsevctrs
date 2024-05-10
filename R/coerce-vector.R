@@ -2,6 +2,9 @@
 #' 
 #' @param x a numeric vector.
 #' @param default default value to use. Defaults to `0`.
+#' 
+#' The values of `x` must be double or integer. It must not contain any `Inf` or
+#' `NaN` values.
 #'
 #' @examples
 #' x_dense <- c(3, 0, 2, 0, 0, 0, 4, 0, 0, 0)
@@ -15,15 +18,11 @@ as_sparse_double <- function(x, default = 0) {
     return(x)
   }
 
-  if ((!is.numeric(x)) || (!is.vector(x))) {
-    cli::cli_abort(
-      "{.arg x} must be numeric vector, not {.obj_type_friendly {x}}."
-    )
-  }
+  validate_values_double(x)
 
   check_number_decimal(default)
 
-  index <- which(x != default)
+  index <- which(x != default | is.na(x))
 
   sparse_double(
     values = x[index],
