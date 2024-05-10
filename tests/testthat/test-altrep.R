@@ -220,6 +220,35 @@ test_that("materialization works with sparse_double()", {
   expect_identical(x_sparse[], x_dense)
 })
 
+test_that("sorting works with sparse_double()", {
+  x_sparse <- sparse_double(numeric(), integer(), 10)
+
+  expect_true(is_sparse_double(sort(x_sparse)))
+
+  x_sparse <- sparse_double(NA, 4, 10)
+
+  expect_identical(
+    sort(x_sparse),
+    rep(0, 9)
+  )
+
+  x_sparse <- sparse_double(numeric(), integer(), 10)
+
+  expect_true(is_sparse_double(sort(x_sparse)))
+
+  x_sparse <- sparse_double(c(1, 4, 5), c(1, 4, 7), 7)
+
+  expect_false(is_sparse_double(sort(x_sparse)))
+
+  x_sparse <- sparse_double(c(1, 5), c(1, 7), 7)
+
+  expect_false(is_sparse_double(sort(x_sparse)))
+
+  x_sparse <- sparse_double(c(-1, 5), c(1, 7), 7)
+
+  expect_true(is_sparse_double(sort(x_sparse)))
+})
+
 test_that("default argument is working", {
   expect_snapshot(
     error = TRUE,
@@ -265,3 +294,4 @@ test_that("verbose testing", {
     sparse_double(1, 1, 1)[]
   )
 })
+

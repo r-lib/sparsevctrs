@@ -235,6 +235,69 @@ static double altrep_sparse_double_Elt(SEXP x, R_xlen_t i) {
   }
 }
 
+int altrep_sparse_double_Is_sorted(SEXP x) {
+  SEXP pos = extract_pos(x);
+  const int* v_pos = INTEGER_RO(pos);
+
+  const R_xlen_t pos_len = Rf_xlength(pos);
+
+  SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+
+  SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
+  // zero length vector are by def sorted
+  if (pos_len == 0) {
+    return TRUE;
+  }
+
+  // 1 length vector are by def sorted
+  if (pos_len == 1) {
+    if (R_IsNA(v_val[0])) {
+      // unless equal to NA
+      return FALSE;
+    } else {
+      return TRUE;
+    }
+  }
+
+  double current_value;
+
+  if (v_pos[0] == 1) {
+    current_value = v_val[0];
+  } else {
+    current_value = v_default_val;
+  }
+
+  for (R_xlen_t i = 0; i < pos_len; i++) {
+    if (R_IsNA(v_val[i])) {
+      return FALSE;
+    }
+
+    if (v_val[i] < current_value) {
+      return FALSE;
+    }
+
+    current_value = v_val[i];
+
+    if (i + 1 == pos_len) {
+      break;
+    }
+
+    // If there is a gap between values check against default
+    if ((v_pos[i + 1] - v_pos[i]) > 1) {
+      if (v_default_val < current_value) {
+        return FALSE;
+      }
+
+      current_value = v_default_val;
+    }
+  }
+
+  return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
@@ -263,5 +326,8 @@ void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
   // ALTREAL
   R_set_altreal_Elt_method(
       altrep_sparse_double_class, altrep_sparse_double_Elt
+  );
+  R_set_altreal_Is_sorted_method(
+      altrep_sparse_double_class, altrep_sparse_double_Is_sorted
   );
 }
