@@ -1,7 +1,12 @@
 #' Information extraction from sparse vectors
 #' 
-#' Extract positions and values from sparse vectors without the need to 
-#' materialize vector.
+#' Extract positions, values, and default from sparse vectors without the need 
+#' to materialize vector.
+#' 
+#' @details
+#' 
+#' `sparse_default()` returns `NA` when applied to non-sparse vectors. This is
+#' done to have an indicator of non-sparsity.
 #' 
 #' @param x vector to be extracted from.
 #'
@@ -14,9 +19,14 @@
 #' 
 #' sparse_positions(x_sparse)
 #' sparse_values(x_sparse)
+#' sparse_default(x_sparse)
 #' 
 #' sparse_positions(x_dense)
 #' sparse_values(x_dense)
+#' sparse_default(x_dense)
+#' 
+#' x_sparse_3 <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10, default = 3)
+#' sparse_default(x_sparse_3)
 #' @name extractors
 NULL
 
@@ -38,4 +48,15 @@ sparse_values <- function(x) {
   }
 
   .Call(ffi_altrep_sparse_values, x)
+}
+
+
+#' @rdname extractors
+#' @export
+sparse_default <- function(x) {
+  if (!is_sparse_vector(x)) {
+    return(NA)
+  }
+
+  .Call(ffi_altrep_sparse_default, x)
 }

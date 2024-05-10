@@ -45,3 +45,22 @@ test_that("sparse_values works with numeric vectors", {
     101:200
   )
 })
+
+test_that("sparse_default works with altrep_sparse_double", {
+  expect_identical(
+    sparse_default(sparse_double(1, 5, 10)),
+    0
+  )
+
+  expect_identical(
+    sparse_default(sparse_double(1, 5, 10, default = 11)),
+    11
+  )
+})
+
+test_that("sparse_values works with numeric vectors", {
+  expect_identical(
+    sparse_default(c(1, 6, 4, 2)),
+    NA
+  )
+})
