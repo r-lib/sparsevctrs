@@ -13,6 +13,8 @@ R_xlen_t extract_len(SEXP x);
 
 SEXP extract_default(SEXP x);
 
+double extract_default_double(SEXP x);
+
 bool is_altrep(SEXP x);
 
 SEXP ffi_extract_altrep_class(SEXP x);
