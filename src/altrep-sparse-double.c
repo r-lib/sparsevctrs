@@ -298,7 +298,7 @@ int altrep_sparse_double_Is_sorted(SEXP x) {
   return TRUE;
 }
 
-static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean writable) {
+static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean na_rm) {
   double min = R_PosInf;
 
   if (extract_len(x) == 0) {
@@ -321,7 +321,7 @@ static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean writable) {
   }
 
   for (R_xlen_t i = 0; i < val_len; i++) {
-    if (R_IsNA(v_val[i])) {
+    if (R_IsNA(v_val[i]) && !na_rm) {
       return Rf_ScalarReal(NA_REAL);
     }
 
@@ -332,7 +332,7 @@ static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean writable) {
   return Rf_ScalarReal(min);
 }
 
-static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean writable) {
+static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean na_rm) {
   double max = R_NegInf;
 
   if (extract_len(x) == 0) {
@@ -355,7 +355,7 @@ static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean writable) {
   }
 
   for (R_xlen_t i = 0; i < val_len; i++) {
-    if (R_IsNA(v_val[i])) {
+    if (R_IsNA(v_val[i]) && !na_rm) {
       return Rf_ScalarReal(NA_REAL);
     }
 

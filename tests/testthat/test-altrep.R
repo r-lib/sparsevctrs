@@ -284,6 +284,16 @@ test_that("min method works with sparse_double()", {
     min(sparse_double(c(11:19, NA), 11:20, 1000000000)),
     NA_real_
   )
+
+  expect_identical(
+    min(sparse_double(NA, 10, 1000000000), na.rm = TRUE),
+    0
+  )
+
+  expect_identical(
+    min(sparse_double(c(-10, 11:19, NA), 10:20, 1000000000), na.rm = TRUE),
+    -10
+  )
 })
 
 test_that("max method works with sparse_double()", {
@@ -320,6 +330,16 @@ test_that("max method works with sparse_double()", {
   expect_identical(
     max(sparse_double(c(11:19, NA), 11:20, 1000000000)),
     NA_real_
+  )
+
+  expect_identical(
+    max(sparse_double(NA, 10, 1000000000), na.rm = TRUE),
+    0
+  )
+
+  expect_identical(
+    max(sparse_double(c(-10, 11:19, NA), 10:20, 1000000000), na.rm = TRUE),
+    19
   )
 })
 
