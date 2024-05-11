@@ -202,6 +202,18 @@ Rboolean altrep_sparse_double_Inspect(
   return TRUE;
 }
 
+SEXP altrep_sparse_double_Duplicate(SEXP x, Rboolean deep) {
+  SEXP data1 = R_altrep_data1(x);
+  SEXP data2 = R_altrep_data2(x);
+
+  /* If deep or already materialized, do the default behavior */
+  if (deep || data2 != R_NilValue) {
+    return NULL;
+  }
+
+  return ffi_altrep_new_sparse_double(data1);
+}
+
 // -----------------------------------------------------------------------------
 // ALTREAL
 
@@ -437,6 +449,9 @@ void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
   );
   R_set_altrep_Inspect_method(
       altrep_sparse_double_class, altrep_sparse_double_Inspect
+  );
+  R_set_altrep_Duplicate_method(
+      altrep_sparse_double_class, altrep_sparse_double_Duplicate
   );
 
   // ALTREAL
