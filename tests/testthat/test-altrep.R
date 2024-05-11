@@ -361,6 +361,43 @@ test_that("anyNA method works with sparse_double", {
   )
 })
 
+test_that("sum method works with sparse_double", {
+  expect_identical(
+    sum(sparse_double(numeric(), integer(), 0)),
+    0
+  )
+
+  expect_identical(
+    sum(sparse_double(numeric(), integer(), 1000000000)),
+    0
+  )
+
+  expect_identical(
+    sum(sparse_double(numeric(), integer(), 1000000000, default = 0.0001)),
+    100000
+  )
+
+  expect_identical(
+    sum(sparse_double(c(1, 5.4, 10), c(1, 5, 10), 10)),
+    16.4
+  )
+
+  expect_identical(
+    sum(sparse_double(c(1, 5.4, 10), c(1, 5, 10), 10, default = -1)),
+    16.4 - 7
+  )
+
+  expect_identical(
+    sum(sparse_double(c(1, 5.4, NA), c(1, 5, 10), 10)),
+    NA_real_
+  )
+
+  expect_identical(
+    sum(sparse_double(c(1, 5.4, NA), c(1, 5, 10), 10), na.rm = TRUE),
+    6.4
+  )
+})
+
 test_that("default argument is working", {
   expect_snapshot(
     error = TRUE,

@@ -380,6 +380,40 @@ static int altrep_sparse_double_No_NA_method(SEXP x) {
   return TRUE;
 }
 
+static SEXP altrep_sparse_double_Sum_method(SEXP x, Rboolean na_rm) {
+  const SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+  const R_xlen_t val_len = Rf_xlength(val);
+  const R_xlen_t len = extract_len(x);
+
+  double sum = 0;
+
+  if (len == 0) {
+    return Rf_ScalarReal(sum);
+  }
+
+  for (R_xlen_t i = 0; i < val_len; i++) {
+    if (R_IsNA(v_val[i])) {
+      if (na_rm) {
+        continue;
+      } else {
+        return Rf_ScalarReal(NA_REAL);
+      }
+    }
+    sum = sum + v_val[i];
+  }
+
+  // default can be non-zero
+  const SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
+  if (default_val != 0) {
+    sum = sum + (len - val_len) * v_default_val;
+  }
+
+  return Rf_ScalarReal(sum);
+}
+
 // -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
@@ -420,5 +454,8 @@ void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
   );
   R_set_altreal_No_NA_method(
       altrep_sparse_double_class, altrep_sparse_double_No_NA_method
+  );
+  R_set_altreal_Sum_method(
+      altrep_sparse_double_class, altrep_sparse_double_Sum_method
   );
 }
