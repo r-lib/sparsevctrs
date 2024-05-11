@@ -298,6 +298,74 @@ int altrep_sparse_double_Is_sorted(SEXP x) {
   return TRUE;
 }
 
+static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean writable) {
+  double min = R_PosInf;
+
+  if (extract_len(x) == 0) {
+    return Rf_ScalarReal(min);
+  }
+
+  const SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+  const R_xlen_t val_len = Rf_xlength(val);
+
+  const SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
+  if (val_len == 0) {
+    min = v_default_val;
+  }
+
+  if (v_default_val < min) {
+    min = v_default_val;
+  }
+
+  for (R_xlen_t i = 0; i < val_len; i++) {
+    if (R_IsNA(v_val[i])) {
+      return Rf_ScalarReal(NA_REAL);
+    }
+
+    if (v_val[i] < min) {
+      min = v_val[i];
+    }
+  }
+  return Rf_ScalarReal(min);
+}
+
+static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean writable) {
+  double max = R_NegInf;
+
+  if (extract_len(x) == 0) {
+    return Rf_ScalarReal(max);
+  }
+
+  const SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+  const R_xlen_t val_len = Rf_xlength(val);
+
+  const SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
+  if (val_len == 0) {
+    max = v_default_val;
+  }
+
+  if (v_default_val > max) {
+    max = v_default_val;
+  }
+
+  for (R_xlen_t i = 0; i < val_len; i++) {
+    if (R_IsNA(v_val[i])) {
+      return Rf_ScalarReal(NA_REAL);
+    }
+
+    if (v_val[i] > max) {
+      max = v_val[i];
+    }
+  }
+  return Rf_ScalarReal(max);
+}
+
 // -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
@@ -329,5 +397,11 @@ void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
   );
   R_set_altreal_Is_sorted_method(
       altrep_sparse_double_class, altrep_sparse_double_Is_sorted
+  );
+  R_set_altreal_Min_method(
+      altrep_sparse_double_class, altrep_sparse_double_Min_method
+  );
+  R_set_altreal_Max_method(
+      altrep_sparse_double_class, altrep_sparse_double_Max_method
   );
 }

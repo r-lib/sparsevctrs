@@ -249,6 +249,80 @@ test_that("sorting works with sparse_double()", {
   expect_true(is_sparse_double(sort(x_sparse)))
 })
 
+test_that("min method works with sparse_double()", {
+  expect_identical(
+    min(sparse_double(numeric(), integer(), 0)),
+    Inf
+  )
+
+  expect_identical(
+    min(sparse_double(numeric(), integer(), 1000000000)),
+    0
+  )
+
+  expect_identical(
+    min(sparse_double(-10, 10, 1000000000)),
+    -10
+  )
+
+  expect_identical(
+    min(sparse_double(-10, 10, 1000000000, default = -100)),
+    -100
+  )
+
+  expect_identical(
+    min(sparse_double(11:20, 11:20, 1000000000, default = 15.5)),
+    11
+  )
+
+  expect_identical(
+    min(sparse_double(NA, 10, 1000000000)),
+    NA_real_
+  )
+
+  expect_identical(
+    min(sparse_double(c(11:19, NA), 11:20, 1000000000)),
+    NA_real_
+  )
+})
+
+test_that("max method works with sparse_double()", {
+  expect_identical(
+    max(sparse_double(numeric(), integer(), 0)),
+    -Inf
+  )
+
+  expect_identical(
+    max(sparse_double(numeric(), integer(), 1000000000)),
+    0
+  )
+
+  expect_identical(
+    max(sparse_double(10, 10, 1000000000)),
+    10
+  )
+
+  expect_identical(
+    max(sparse_double(10, 10, 1000000000, default = 100)),
+    100
+  )
+
+  expect_identical(
+    max(sparse_double(11:20, 11:20, 1000000000, default = 15.5)),
+    20
+  )
+
+  expect_identical(
+    max(sparse_double(NA, 10, 1000000000)),
+    NA_real_
+  )
+
+  expect_identical(
+    max(sparse_double(c(11:19, NA), 11:20, 1000000000)),
+    NA_real_
+  )
+})
+
 test_that("default argument is working", {
   expect_snapshot(
     error = TRUE,
