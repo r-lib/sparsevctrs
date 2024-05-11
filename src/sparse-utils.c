@@ -28,6 +28,13 @@ SEXP extract_default(SEXP x) {
   return out;
 }
 
+double extract_default_double(SEXP x) {
+  SEXP default_val = extract_default(x);
+  double out = REAL_ELT(default_val, 0);
+
+  return out;
+}
+
 bool is_altrep(SEXP x) {
   return (bool) ALTREP(x);
 }

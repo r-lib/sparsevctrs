@@ -32,8 +32,7 @@ SEXP alrep_sparse_double_Materialize(SEXP x) {
 
   const R_xlen_t len = extract_len(x);
 
-  SEXP default_val = extract_default(x);
-  const double v_default_val = REAL_ELT(default_val, 0);
+  const double v_default_val = extract_default_double(x);
 
   out = PROTECT(Rf_allocVector(REALSXP, len));
   double* v_out = REAL(out);
@@ -226,8 +225,7 @@ static double altrep_sparse_double_Elt(SEXP x, R_xlen_t i) {
 
   const R_xlen_t len = extract_len(x);
 
-  SEXP default_val = extract_default(x);
-  const double v_default_val = REAL_ELT(default_val, 0);
+  const double v_default_val = extract_default_double(x);
 
   if (i > len) {
     // OOB of vector itself
@@ -256,8 +254,7 @@ int altrep_sparse_double_Is_sorted(SEXP x) {
   SEXP val = extract_val(x);
   const double* v_val = REAL_RO(val);
 
-  SEXP default_val = extract_default(x);
-  const double v_default_val = REAL_ELT(default_val, 0);
+  const double v_default_val = extract_default_double(x);
 
   // zero length vector are by def sorted
   if (pos_len == 0) {
@@ -321,8 +318,7 @@ static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean na_rm) {
   const double* v_val = REAL_RO(val);
   const R_xlen_t val_len = Rf_xlength(val);
 
-  const SEXP default_val = extract_default(x);
-  const double v_default_val = REAL_ELT(default_val, 0);
+  const double v_default_val = extract_default_double(x);
 
   if (val_len == 0) {
     min = v_default_val;
@@ -355,8 +351,7 @@ static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean na_rm) {
   const double* v_val = REAL_RO(val);
   const R_xlen_t val_len = Rf_xlength(val);
 
-  const SEXP default_val = extract_default(x);
-  const double v_default_val = REAL_ELT(default_val, 0);
+  const double v_default_val = extract_default_double(x);
 
   if (val_len == 0) {
     max = v_default_val;
@@ -416,10 +411,9 @@ static SEXP altrep_sparse_double_Sum_method(SEXP x, Rboolean na_rm) {
   }
 
   // default can be non-zero
-  const SEXP default_val = extract_default(x);
-  const double v_default_val = REAL_ELT(default_val, 0);
+  const double v_default_val = extract_default_double(x);
 
-  if (default_val != 0) {
+  if (v_default_val != 0) {
     sum = sum + (len - val_len) * v_default_val;
   }
 
