@@ -366,6 +366,20 @@ static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean na_rm) {
   return Rf_ScalarReal(max);
 }
 
+static int altrep_sparse_double_No_NA_method(SEXP x) {
+  const SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+  const R_xlen_t val_len = Rf_xlength(val);
+
+  for (R_xlen_t i = 0; i < val_len; i++) {
+    if (R_IsNA(v_val[i])) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
@@ -403,5 +417,8 @@ void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
   );
   R_set_altreal_Max_method(
       altrep_sparse_double_class, altrep_sparse_double_Max_method
+  );
+  R_set_altreal_No_NA_method(
+      altrep_sparse_double_class, altrep_sparse_double_No_NA_method
   );
 }

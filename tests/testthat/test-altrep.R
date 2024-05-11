@@ -343,6 +343,24 @@ test_that("max method works with sparse_double()", {
   )
 })
 
+test_that("anyNA method works with sparse_double", {
+  expect_false(
+    anyNA(sparse_double(numeric(), integer(), 1000000000))
+  )
+
+  expect_false(
+    anyNA(sparse_double(1, 1, 1000000000))
+  )
+
+  expect_true(
+    anyNA(sparse_double(NA, 1, 1000000000))
+  )
+
+  expect_true(
+    anyNA(sparse_double(c(-10, 11:19, NA), 10:20, 1000000000))
+  )
+})
+
 test_that("default argument is working", {
   expect_snapshot(
     error = TRUE,
