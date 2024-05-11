@@ -220,6 +220,184 @@ test_that("materialization works with sparse_double()", {
   expect_identical(x_sparse[], x_dense)
 })
 
+test_that("sorting works with sparse_double()", {
+  x_sparse <- sparse_double(numeric(), integer(), 10)
+
+  expect_true(is_sparse_double(sort(x_sparse)))
+
+  x_sparse <- sparse_double(NA, 4, 10)
+
+  expect_identical(
+    sort(x_sparse),
+    rep(0, 9)
+  )
+
+  x_sparse <- sparse_double(numeric(), integer(), 10)
+
+  expect_true(is_sparse_double(sort(x_sparse)))
+
+  x_sparse <- sparse_double(c(1, 4, 5), c(1, 4, 7), 7)
+
+  expect_false(is_sparse_double(sort(x_sparse)))
+
+  x_sparse <- sparse_double(c(1, 5), c(1, 7), 7)
+
+  expect_false(is_sparse_double(sort(x_sparse)))
+
+  x_sparse <- sparse_double(c(-1, 5), c(1, 7), 7)
+
+  expect_true(is_sparse_double(sort(x_sparse)))
+})
+
+test_that("min method works with sparse_double()", {
+  expect_identical(
+    min(sparse_double(numeric(), integer(), 0)),
+    Inf
+  )
+
+  expect_identical(
+    min(sparse_double(numeric(), integer(), 1000000000)),
+    0
+  )
+
+  expect_identical(
+    min(sparse_double(-10, 10, 1000000000)),
+    -10
+  )
+
+  expect_identical(
+    min(sparse_double(-10, 10, 1000000000, default = -100)),
+    -100
+  )
+
+  expect_identical(
+    min(sparse_double(11:20, 11:20, 1000000000, default = 15.5)),
+    11
+  )
+
+  expect_identical(
+    min(sparse_double(NA, 10, 1000000000)),
+    NA_real_
+  )
+
+  expect_identical(
+    min(sparse_double(c(11:19, NA), 11:20, 1000000000)),
+    NA_real_
+  )
+
+  expect_identical(
+    min(sparse_double(NA, 10, 1000000000), na.rm = TRUE),
+    0
+  )
+
+  expect_identical(
+    min(sparse_double(c(-10, 11:19, NA), 10:20, 1000000000), na.rm = TRUE),
+    -10
+  )
+})
+
+test_that("max method works with sparse_double()", {
+  expect_identical(
+    max(sparse_double(numeric(), integer(), 0)),
+    -Inf
+  )
+
+  expect_identical(
+    max(sparse_double(numeric(), integer(), 1000000000)),
+    0
+  )
+
+  expect_identical(
+    max(sparse_double(10, 10, 1000000000)),
+    10
+  )
+
+  expect_identical(
+    max(sparse_double(10, 10, 1000000000, default = 100)),
+    100
+  )
+
+  expect_identical(
+    max(sparse_double(11:20, 11:20, 1000000000, default = 15.5)),
+    20
+  )
+
+  expect_identical(
+    max(sparse_double(NA, 10, 1000000000)),
+    NA_real_
+  )
+
+  expect_identical(
+    max(sparse_double(c(11:19, NA), 11:20, 1000000000)),
+    NA_real_
+  )
+
+  expect_identical(
+    max(sparse_double(NA, 10, 1000000000), na.rm = TRUE),
+    0
+  )
+
+  expect_identical(
+    max(sparse_double(c(-10, 11:19, NA), 10:20, 1000000000), na.rm = TRUE),
+    19
+  )
+})
+
+test_that("anyNA method works with sparse_double", {
+  expect_false(
+    anyNA(sparse_double(numeric(), integer(), 1000000000))
+  )
+
+  expect_false(
+    anyNA(sparse_double(1, 1, 1000000000))
+  )
+
+  expect_true(
+    anyNA(sparse_double(NA, 1, 1000000000))
+  )
+
+  expect_true(
+    anyNA(sparse_double(c(-10, 11:19, NA), 10:20, 1000000000))
+  )
+})
+
+test_that("sum method works with sparse_double", {
+  expect_identical(
+    sum(sparse_double(numeric(), integer(), 0)),
+    0
+  )
+
+  expect_identical(
+    sum(sparse_double(numeric(), integer(), 1000000000)),
+    0
+  )
+
+  expect_identical(
+    sum(sparse_double(numeric(), integer(), 1000000000, default = 0.0001)),
+    100000
+  )
+
+  expect_identical(
+    sum(sparse_double(c(1, 5.4, 10), c(1, 5, 10), 10)),
+    16.4
+  )
+
+  expect_identical(
+    sum(sparse_double(c(1, 5.4, 10), c(1, 5, 10), 10, default = -1)),
+    16.4 - 7
+  )
+
+  expect_identical(
+    sum(sparse_double(c(1, 5.4, NA), c(1, 5, 10), 10)),
+    NA_real_
+  )
+
+  expect_identical(
+    sum(sparse_double(c(1, 5.4, NA), c(1, 5, 10), 10), na.rm = TRUE),
+    6.4
+  )
+})
+
 test_that("default argument is working", {
   expect_snapshot(
     error = TRUE,
@@ -265,3 +443,4 @@ test_that("verbose testing", {
     sparse_double(1, 1, 1)[]
   )
 })
+

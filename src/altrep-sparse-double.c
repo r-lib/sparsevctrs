@@ -202,6 +202,18 @@ Rboolean altrep_sparse_double_Inspect(
   return TRUE;
 }
 
+SEXP altrep_sparse_double_Duplicate(SEXP x, Rboolean deep) {
+  SEXP data1 = R_altrep_data1(x);
+  SEXP data2 = R_altrep_data2(x);
+
+  /* If deep or already materialized, do the default behavior */
+  if (deep || data2 != R_NilValue) {
+    return NULL;
+  }
+
+  return ffi_altrep_new_sparse_double(data1);
+}
+
 // -----------------------------------------------------------------------------
 // ALTREAL
 
@@ -235,6 +247,185 @@ static double altrep_sparse_double_Elt(SEXP x, R_xlen_t i) {
   }
 }
 
+int altrep_sparse_double_Is_sorted(SEXP x) {
+  SEXP pos = extract_pos(x);
+  const int* v_pos = INTEGER_RO(pos);
+
+  const R_xlen_t pos_len = Rf_xlength(pos);
+
+  SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+
+  SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
+  // zero length vector are by def sorted
+  if (pos_len == 0) {
+    return TRUE;
+  }
+
+  // 1 length vector are by def sorted
+  if (pos_len == 1) {
+    if (R_IsNA(v_val[0])) {
+      // unless equal to NA
+      return FALSE;
+    } else {
+      return TRUE;
+    }
+  }
+
+  double current_value;
+
+  if (v_pos[0] == 1) {
+    current_value = v_val[0];
+  } else {
+    current_value = v_default_val;
+  }
+
+  for (R_xlen_t i = 0; i < pos_len; i++) {
+    if (R_IsNA(v_val[i])) {
+      return FALSE;
+    }
+
+    if (v_val[i] < current_value) {
+      return FALSE;
+    }
+
+    current_value = v_val[i];
+
+    if (i + 1 == pos_len) {
+      break;
+    }
+
+    // If there is a gap between values check against default
+    if ((v_pos[i + 1] - v_pos[i]) > 1) {
+      if (v_default_val < current_value) {
+        return FALSE;
+      }
+
+      current_value = v_default_val;
+    }
+  }
+
+  return TRUE;
+}
+
+static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean na_rm) {
+  double min = R_PosInf;
+
+  if (extract_len(x) == 0) {
+    return Rf_ScalarReal(min);
+  }
+
+  const SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+  const R_xlen_t val_len = Rf_xlength(val);
+
+  const SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
+  if (val_len == 0) {
+    min = v_default_val;
+  }
+
+  if (v_default_val < min) {
+    min = v_default_val;
+  }
+
+  for (R_xlen_t i = 0; i < val_len; i++) {
+    if (R_IsNA(v_val[i]) && !na_rm) {
+      return Rf_ScalarReal(NA_REAL);
+    }
+
+    if (v_val[i] < min) {
+      min = v_val[i];
+    }
+  }
+  return Rf_ScalarReal(min);
+}
+
+static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean na_rm) {
+  double max = R_NegInf;
+
+  if (extract_len(x) == 0) {
+    return Rf_ScalarReal(max);
+  }
+
+  const SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+  const R_xlen_t val_len = Rf_xlength(val);
+
+  const SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
+  if (val_len == 0) {
+    max = v_default_val;
+  }
+
+  if (v_default_val > max) {
+    max = v_default_val;
+  }
+
+  for (R_xlen_t i = 0; i < val_len; i++) {
+    if (R_IsNA(v_val[i]) && !na_rm) {
+      return Rf_ScalarReal(NA_REAL);
+    }
+
+    if (v_val[i] > max) {
+      max = v_val[i];
+    }
+  }
+  return Rf_ScalarReal(max);
+}
+
+static int altrep_sparse_double_No_NA_method(SEXP x) {
+  const SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+  const R_xlen_t val_len = Rf_xlength(val);
+
+  for (R_xlen_t i = 0; i < val_len; i++) {
+    if (R_IsNA(v_val[i])) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
+}
+
+static SEXP altrep_sparse_double_Sum_method(SEXP x, Rboolean na_rm) {
+  const SEXP val = extract_val(x);
+  const double* v_val = REAL_RO(val);
+  const R_xlen_t val_len = Rf_xlength(val);
+  const R_xlen_t len = extract_len(x);
+
+  double sum = 0;
+
+  if (len == 0) {
+    return Rf_ScalarReal(sum);
+  }
+
+  for (R_xlen_t i = 0; i < val_len; i++) {
+    if (R_IsNA(v_val[i])) {
+      if (na_rm) {
+        continue;
+      } else {
+        return Rf_ScalarReal(NA_REAL);
+      }
+    }
+    sum = sum + v_val[i];
+  }
+
+  // default can be non-zero
+  const SEXP default_val = extract_default(x);
+  const double v_default_val = REAL_ELT(default_val, 0);
+
+  if (default_val != 0) {
+    sum = sum + (len - val_len) * v_default_val;
+  }
+
+  return Rf_ScalarReal(sum);
+}
+
 // -----------------------------------------------------------------------------
 
 void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
@@ -259,9 +450,27 @@ void sparsevctrs_init_altrep_sparse_double(DllInfo* dll) {
   R_set_altrep_Inspect_method(
       altrep_sparse_double_class, altrep_sparse_double_Inspect
   );
+  R_set_altrep_Duplicate_method(
+      altrep_sparse_double_class, altrep_sparse_double_Duplicate
+  );
 
   // ALTREAL
   R_set_altreal_Elt_method(
       altrep_sparse_double_class, altrep_sparse_double_Elt
+  );
+  R_set_altreal_Is_sorted_method(
+      altrep_sparse_double_class, altrep_sparse_double_Is_sorted
+  );
+  R_set_altreal_Min_method(
+      altrep_sparse_double_class, altrep_sparse_double_Min_method
+  );
+  R_set_altreal_Max_method(
+      altrep_sparse_double_class, altrep_sparse_double_Max_method
+  );
+  R_set_altreal_No_NA_method(
+      altrep_sparse_double_class, altrep_sparse_double_No_NA_method
+  );
+  R_set_altreal_Sum_method(
+      altrep_sparse_double_class, altrep_sparse_double_Sum_method
   );
 }
