@@ -67,7 +67,7 @@ const void* altrep_sparse_double_Dataptr_or_null(SEXP x) {
   if (out == R_NilValue) {
     return NULL;
   } else {
-    return out;
+    return STDVEC_DATAPTR(out);
   }
 }
 
