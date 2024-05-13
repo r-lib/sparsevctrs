@@ -83,6 +83,13 @@
 matrix/data.frame converting functions, helper functions. This document
 outlines the rationale behind each of these and the decisions behind
 them.</p>
+<p>The primary objective of this package is to provide tools to work
+with sparse data in data.frames/tibbles. The next highest priority is
+execution speed. This means that algorithms and methods in this package
+are written to minimize memory allocations whenever possible, once that
+is done, running the code as fast as we can. These choices are made
+because this package was written to deal with tasks that were otherwise
+not possible due to memory constraints.</p>
 <div class="section level2">
 <h2 id="altrep-functions">Altrep Functions<a class="anchor" aria-label="anchor" href="#altrep-functions"></a>
 </h2>
@@ -173,6 +180,13 @@ users not be alerted to these vectors as they are expected to be used
 internally in packages and rarely by the end user. Furthermore having
 these sparse vectors produce the same result as dense vectors with
 <code><a href="https://rdrr.io/r/base/class.html" class="external-link">class()</a></code> is a big plus.</p>
+<blockquote>
+<p>Will this package try to replace the {Matrix} package?</p>
+</blockquote>
+<p>Not at all. The sparse vector types provided in this package mimic
+those created with <code><a href="https://rdrr.io/pkg/Matrix/man/sparseVector.html" class="external-link">Matrix::sparseVector()</a></code>. They work with
+different types and allow for different defaults. None of the matrix
+operations will be reimplemented here.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
