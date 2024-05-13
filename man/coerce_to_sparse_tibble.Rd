@@ -10,7 +10,10 @@ coerce_to_sparse_tibble(x)
 \item{x}{sparse matrix.}
 }
 \description{
-Coerce sparse matrix to tibble with sparse columns
+Turning a sparse matrix into a tibble.
+}
+\details{
+The only requirement from the sparse matrix is that it contains column names.
 }
 \examples{
 \dontshow{if (rlang::is_installed("tibble")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

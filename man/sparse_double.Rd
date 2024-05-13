@@ -11,13 +11,14 @@ sparse_double(values, positions, length, default = 0)
 
 \item{positions}{integer vector, indices of non-zero entries.}
 
-\item{length}{integer, Length of vector.}
+\item{length}{integer value, Length of vector.}
 
-\item{default}{double, value at indices not specified by \code{positions}.
-Defaults to \code{0}.}
+\item{default}{double value, value at indices not specified by \code{positions}.
+Defaults to \code{0}. Cannot be \code{NA}.}
 }
 \description{
-Create sparse double vector
+Construction of vectors where only values and positions are recorded. The
+Length and default values determine all other information.
 }
 \details{
 \code{values} and \code{positions} are expected to be the same length, and are allowed
@@ -26,7 +27,7 @@ to both have zero length.
 Allowed values for \code{value} is double and integer values. integer values will
 be coerced to doubles. Missing values such as \code{NA} and \code{NA_real_} are
 allowed. Everything else is disallowed, This includes \code{Inf} and \code{NaN}. The
-values are also not supposed to take the same value as \code{default}.
+values are also not allowed to take the same value as \code{default}.
 
 \code{positions} should be integers or integer-like doubles. Everything else is
 not allowed. Positions should furthermore be positive (\code{0} not allowed),

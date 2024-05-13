@@ -1,5 +1,8 @@
 #' Coerce numeric vector to sparse double
 #' 
+#' Takes a numeric vector, integer or double, and turn it into a sparse double
+#' vector.
+#' 
 #' @param x a numeric vector.
 #' @param default default value to use. Defaults to `0`.
 #' 

@@ -10,7 +10,13 @@ coerce_to_sparse_matrix(x)
 \item{x}{a data frame or tibble with sparse columns.}
 }
 \description{
-Coerce sparse data frame to sparse matrix
+Turning data frame with sparse columns into sparse matrix using
+\code{\link[Matrix:sparseMatrix]{Matrix::sparseMatrix()}}.
+}
+\details{
+No checking is currently do to \code{x} to determine whether it contains sparse
+columns or not. Thus it works with any data frame. Needless to say, creating
+a sparse matrix out of a dense data frame is not ideal.
 }
 \examples{
 \dontshow{if (rlang::is_installed("Matrix")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
