@@ -20,6 +20,8 @@ library(sparsevctrs)
 
 The sparsevctrs package produces 3 things; ALTREP classes, matrix/data.frame converting functions, helper functions. This document outlines the rationale behind each of these and the decisions behind them.
 
+The primary objective of this package is to provide tools to work with sparse data in data.frames/tibbles. The next highest priority is execution speed. This means that algorithms and methods in this package are written to minimize memory allocations whenever possible, once that is done, running the code as fast as we can. These choices are made because this package was written to deal with tasks that were otherwise not possible due to memory constraints.
+
 ## Altrep Functions
 
 The functions `sparse_double()` and its relatives are used to construct sparse vectors of the noted type. To work they all need 4 pieces of information:
@@ -70,3 +72,7 @@ These functions, all starting with the name prefix `sparse_*`, are made to work 
 > Why aren't the results returned as {vctrs} classes?
 
 As it stands right now, it is viewed to be beneficial to have the users not be alerted to these vectors as they are expected to be used internally in packages and rarely by the end user. Furthermore having these sparse vectors produce the same result as dense vectors with `class()` is a big plus.
+
+> Will this package try to replace the {Matrix} package?
+
+Not at all. The sparse vector types provided in this package mimic those created with `Matrix::sparseVector()`. They work with different types and allow for different defaults. None of the matrix operations will be reimplemented here.
