@@ -268,3 +268,11 @@
       sparsevctrs: Sparse vector materialized
       [1] 1
 
+# printing works #48
+
+    Code
+      sparse_double(1, 1, 10) + 1
+    Output
+       [1] 3.448243e-314 2.449439e-314 2.296551e-314 2.296550e-314 4.940656e-323
+       [6]  0.000000e+00  2.000000e+00  1.000000e+00  1.000000e+00  1.000000e+00
+

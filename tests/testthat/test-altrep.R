@@ -444,3 +444,9 @@ test_that("verbose testing", {
   )
 })
 
+test_that("printing works #48", {
+  expect_snapshot(
+    sparse_double(1, 1, 10) + 1
+  )
+})
+
