@@ -1,7 +1,15 @@
 #' Coerce sparse data frame to sparse matrix
 #' 
+#' Turning data frame with sparse columns into sparse matrix using 
+#' [Matrix::sparseMatrix()].
+#' 
 #' @param x a data frame or tibble with sparse columns.
 #'
+#' @details
+#' No checking is currently do to `x` to determine whether it contains sparse
+#' columns or not. Thus it works with any data frame. Needless to say, creating
+#' a sparse matrix out of a dense data frame is not ideal.
+#' 
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_tibble()]
 #' @examplesIf rlang::is_installed("Matrix")
 #' set.seed(1234)
@@ -40,8 +48,13 @@ coerce_to_sparse_matrix <- function(x) {
 
 #' Coerce sparse matrix to tibble with sparse columns
 #' 
+#' Turning a sparse matrix into a tibble.
+#' 
 #' @param x sparse matrix. 
-#'
+#' 
+#' @details
+#' The only requirement from the sparse matrix is that it contains column names.
+#' 
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_matrix()]
 #' @examplesIf rlang::is_installed("tibble")
 #' set.seed(1234)
@@ -78,8 +91,13 @@ coerce_to_sparse_tibble <- function(x) {
 
 #' Coerce sparse matrix to data frame with sparse columns
 #' 
+#' Turning a sparse matrix into a data frame
+#' 
 #' @param x sparse matrix. 
-#'
+#' 
+#' @details
+#' The only requirement from the sparse matrix is that it contains column names.
+#' 
 #' @seealso [coerce_to_sparse_tibble()] [coerce_to_sparse_matrix()]
 #' @examplesIf rlang::is_installed("Matrix")
 #' set.seed(1234)

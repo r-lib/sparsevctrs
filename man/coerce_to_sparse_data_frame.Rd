@@ -10,7 +10,10 @@ coerce_to_sparse_data_frame(x)
 \item{x}{sparse matrix.}
 }
 \description{
-Coerce sparse matrix to data frame with sparse columns
+Turning a sparse matrix into a data frame
+}
+\details{
+The only requirement from the sparse matrix is that it contains column names.
 }
 \examples{
 \dontshow{if (rlang::is_installed("Matrix")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

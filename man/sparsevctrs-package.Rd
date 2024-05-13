@@ -4,9 +4,9 @@
 \name{sparsevctrs-package}
 \alias{sparsevctrs}
 \alias{sparsevctrs-package}
-\title{sparsevctrs: What the Package Does (One Line, Title Case)}
+\title{sparsevctrs: Sparse Vectors For Use in Data Frames}
 \description{
-What the package does (one paragraph).
+Provides sparse vectors powered by ALTREP that behave like regular vectors, and can thus be used in data frames. Also provides tools to convert between sparse matrices and data frames with sparse columns and functions to interact with sparse vectors.
 }
 \seealso{
 Useful links:

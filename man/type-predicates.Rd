@@ -14,7 +14,12 @@ is_sparse_double(x)
 \item{x}{value to be checked.}
 }
 \description{
-Sparse vector type checkers
+Helper functions to determine whether an vector is a sparse vector or not.
+}
+\details{
+\code{is_sparse_vector()} is a general function that detects any type of sparse
+vector created with this package. \code{is_sparse_double()} is one of the more
+specific functions that only detects sparse double vectors.
 }
 \examples{
 x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
@@ -22,6 +27,9 @@ x_dense <- c(0, pi, 0, 0, 0.5, 0, 0, 0, 0, 0.1)
 
 is_sparse_vector(x_sparse)
 is_sparse_vector(x_dense)
+
+is_sparse_double(x_sparse)
+is_sparse_double(x_dense)
 
 # Forced materialization
 is_sparse_vector(x_sparse[])

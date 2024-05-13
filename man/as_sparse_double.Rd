@@ -15,7 +15,8 @@ The values of \code{x} must be double or integer. It must not contain any \code{
 \code{NaN} values.}
 }
 \description{
-Coerce numeric vector to sparse double
+Takes a numeric vector, integer or double, and turn it into a sparse double
+vector.
 }
 \examples{
 x_dense <- c(3, 0, 2, 0, 0, 0, 4, 0, 0, 0)
