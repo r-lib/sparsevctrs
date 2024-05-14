@@ -6,6 +6,7 @@ reference:
   - title: Create Sparse Vectors
     contents:
     - sparse_double
+    - sparse_integer
   
   - title: Convertion functions
     contents:
