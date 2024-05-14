@@ -48,6 +48,16 @@ sparse_integer <- function(values, positions, length, default = 0) {
     length <- as.integer(length)
   }
 
+  if (any(is.nan(values))) {
+    offenders <- which(is.nan(values))
+    cli::cli_abort(
+      c(
+        x = "{.arg values} must not contain NaN values.",
+        i = "NaN values at index: {offenders}."
+      )
+    )
+  }
+
   values <- vctrs::vec_cast(values, integer())
   
   validate_positions(positions, length, len_values = length(values))
