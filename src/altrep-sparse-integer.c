@@ -334,7 +334,7 @@ static SEXP altrep_sparse_integer_Min_method(SEXP x, Rboolean na_rm) {
       if (na_rm) {
         continue;
       } else {
-        return Rf_ScalarInteger(NA_INTEGER);
+        return Rf_ScalarInteger(6);
       }
     }
 
