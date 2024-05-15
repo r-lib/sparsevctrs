@@ -303,19 +303,6 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
   return TRUE;
 }
 
-static int altrep_sparse_string_No_NA_method(SEXP x) {
-  const SEXP val = extract_val(x);
-  const R_xlen_t val_len = Rf_xlength(val);
-
-  for (R_xlen_t i = 0; i < val_len; i++) {
-    if (STRING_ELT(val, i) == NA_STRING) {
-      return FALSE;
-    }
-  }
-
-  return TRUE;
-}
-
 void altrep_sparse_string_Set_elt(SEXP x, R_xlen_t i, SEXP value) {
   SEXP out = R_altrep_data2(x);
 
@@ -360,9 +347,6 @@ void sparsevctrs_init_altrep_sparse_string(DllInfo* dll) {
   );
   R_set_altstring_Is_sorted_method(
       altrep_sparse_string_class, altrep_sparse_string_Is_sorted
-  );
-  R_set_altstring_No_NA_method(
-      altrep_sparse_string_class, altrep_sparse_string_No_NA_method
   );
   R_set_altstring_Set_elt_method(
       altrep_sparse_string_class, altrep_sparse_string_Set_elt
