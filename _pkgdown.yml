@@ -13,7 +13,7 @@ reference:
     - coerce_to_sparse_data_frame
     - coerce_to_sparse_matrix
     - coerce_to_sparse_tibble
-    - as_sparse_double
+    - coerce-vector
 
   - title: Helper Functions
     contents:
