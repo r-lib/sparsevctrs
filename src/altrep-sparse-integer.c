@@ -308,7 +308,7 @@ int altrep_sparse_integer_Is_sorted(SEXP x) {
 }
 
 static SEXP altrep_sparse_integer_Min_method(SEXP x, Rboolean na_rm) {
-  int min = R_PosInf;
+  int min = INT_MAX;
 
   if (extract_len(x) == 0) {
     Rf_warning("no non-missing arguments to min; returning Inf");
@@ -334,7 +334,7 @@ static SEXP altrep_sparse_integer_Min_method(SEXP x, Rboolean na_rm) {
       if (na_rm) {
         continue;
       } else {
-        return Rf_ScalarInteger(6);
+        return Rf_ScalarInteger(NA_INTEGER);
       }
     }
 
@@ -346,7 +346,7 @@ static SEXP altrep_sparse_integer_Min_method(SEXP x, Rboolean na_rm) {
 }
 
 static SEXP altrep_sparse_integer_Max_method(SEXP x, Rboolean na_rm) {
-  int max = R_NegInf;
+  int max = INT_MIN;
 
   if (extract_len(x) == 0) {
     Rf_warning("no non-missing arguments to max; returning -Inf");
