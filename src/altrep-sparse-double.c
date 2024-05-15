@@ -311,6 +311,7 @@ static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean na_rm) {
   double min = R_PosInf;
 
   if (extract_len(x) == 0) {
+    Rf_warning("no non-missing arguments to min; returning Inf");
     return Rf_ScalarReal(min);
   }
 
@@ -344,6 +345,7 @@ static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean na_rm) {
   double max = R_NegInf;
 
   if (extract_len(x) == 0) {
+    Rf_warning("no non-missing arguments to max; returning -Inf");
     return Rf_ScalarReal(max);
   }
 

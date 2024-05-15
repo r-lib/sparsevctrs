@@ -250,10 +250,10 @@ test_that("sorting works with sparse_double()", {
 })
 
 test_that("min method works with sparse_double()", {
-  expect_identical(
-    min(sparse_double(numeric(), integer(), 0)),
-    Inf
+  expect_snapshot(
+    res <- min(sparse_double(integer(), integer(), 0))
   )
+  expect_identical(res, Inf)
 
   expect_identical(
     min(sparse_double(numeric(), integer(), 1000000000)),
@@ -297,9 +297,8 @@ test_that("min method works with sparse_double()", {
 })
 
 test_that("max method works with sparse_double()", {
-  expect_identical(
-    max(sparse_double(numeric(), integer(), 0)),
-    -Inf
+  expect_snapshot(
+    res <- max(sparse_double(integer(), integer(), 0))
   )
 
   expect_identical(
