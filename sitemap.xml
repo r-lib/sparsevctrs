@@ -22,7 +22,7 @@
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/index.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/as_sparse_double.html</loc>
+    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce-vector.html</loc>
   </url>
   <url>
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce_to_sparse_data_frame.html</loc>
@@ -41,6 +41,9 @@
   </url>
   <url>
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparse_double.html</loc>
+  </url>
+  <url>
+    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparse_integer.html</loc>
   </url>
   <url>
     <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparsevctrs-package.html</loc>
