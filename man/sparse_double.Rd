@@ -49,5 +49,5 @@ str(
 )
 }
 \seealso{
-\code{\link[=sparse_integer]{sparse_integer()}}
+\code{\link[=sparse_integer]{sparse_integer()}} \code{\link[=sparse_character]{sparse_character()}}
 }
