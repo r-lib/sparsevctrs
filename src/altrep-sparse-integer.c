@@ -263,7 +263,7 @@ int altrep_sparse_integer_Is_sorted(SEXP x) {
 
   // 1 length vector are by def sorted
   if (pos_len == 1) {
-    if (R_IsNA(v_val[0])) {
+    if (v_val[0] == R_NaInt) {
       // unless equal to NA
       return FALSE;
     } else {
@@ -280,7 +280,7 @@ int altrep_sparse_integer_Is_sorted(SEXP x) {
   }
 
   for (R_xlen_t i = 0; i < pos_len; i++) {
-    if (R_IsNA(v_val[i])) {
+    if (v_val[i] == R_NaInt) {
       return FALSE;
     }
 
@@ -329,7 +329,7 @@ static SEXP altrep_sparse_integer_Min_method(SEXP x, Rboolean na_rm) {
   }
 
   for (R_xlen_t i = 0; i < val_len; i++) {
-    if (R_IsNA(v_val[i]) && !na_rm) {
+    if (v_val[i] == R_NaInt && !na_rm) {
       return Rf_ScalarInteger(NA_INTEGER);
     }
 
@@ -362,7 +362,7 @@ static SEXP altrep_sparse_integer_Max_method(SEXP x, Rboolean na_rm) {
   }
 
   for (R_xlen_t i = 0; i < val_len; i++) {
-    if (R_IsNA(v_val[i]) && !na_rm) {
+    if (v_val[i] == R_NaInt && !na_rm) {
       return Rf_ScalarInteger(NA_INTEGER);
     }
 
@@ -379,7 +379,7 @@ static int altrep_sparse_integer_No_NA_method(SEXP x) {
   const R_xlen_t val_len = Rf_xlength(val);
 
   for (R_xlen_t i = 0; i < val_len; i++) {
-    if (R_IsNA(v_val[i])) {
+    if (v_val[i] == R_NaInt) {
       return FALSE;
     }
   }
@@ -400,7 +400,7 @@ static SEXP altrep_sparse_integer_Sum_method(SEXP x, Rboolean na_rm) {
   }
 
   for (R_xlen_t i = 0; i < val_len; i++) {
-    if (R_IsNA(v_val[i])) {
+    if (v_val[i] == R_NaInt) {
       if (na_rm) {
         continue;
       } else {
