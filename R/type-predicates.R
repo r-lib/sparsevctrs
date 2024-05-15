@@ -6,8 +6,8 @@
 #' 
 #' @details
 #' `is_sparse_vector()` is a general function that detects any type of sparse 
-#' vector created with this package. `is_sparse_double()` is one of the more
-#' specific functions that only detects sparse double vectors.
+#' vector created with this package. `is_sparse_double()` and 
+#' `is_sparse_integer()` are more specific functions that only detects the type.
 #'
 #' @examples
 #' x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
@@ -34,7 +34,7 @@ is_sparse_vector <- function(x) {
   
   res <- as.character(res[[1]])
 
-  res %in% c("altrep_sparse_double")
+  res %in% c("altrep_sparse_double", "altrep_sparse_integer")
 }
  
 #' @rdname type-predicates
@@ -48,4 +48,17 @@ is_sparse_double <- function(x) {
   res <- as.character(res[[1]])
 
   res == "altrep_sparse_double"
+}
+
+#' @rdname type-predicates
+#' @export
+is_sparse_integer <- function(x) {
+  res <- .Call(ffi_extract_altrep_class, x)
+  if (is.null(res)) {
+    return(FALSE)
+  }
+  
+  res <- as.character(res[[1]])
+
+  res == "altrep_sparse_integer"
 }

@@ -35,6 +35,13 @@ double extract_default_double(SEXP x) {
   return out;
 }
 
+int extract_default_integer(SEXP x) {
+  SEXP default_val = extract_default(x);
+  int out = INTEGER_ELT(default_val, 0);
+
+  return out;
+}
+
 bool is_altrep(SEXP x) {
   return (bool) ALTREP(x);
 }

@@ -129,3 +129,15 @@ validate_values_double <- function(values, call = rlang::caller_env()) {
     )
   }
 }
+
+validate_values_integer <- function(values, call = rlang::caller_env()) {
+  values <- vctrs::vec_cast(values, integer())
+
+  if (!is.integer(values)) {
+    cli::cli_abort(
+      "{.arg values} must be a integer vector, \\
+      not {.obj_type_friendly {values}}.",
+      call = call
+    )
+  }
+}

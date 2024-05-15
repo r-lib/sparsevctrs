@@ -15,6 +15,10 @@
 #' x_sparse
 #' 
 #' is_sparse_double(x_sparse) 
+#' @name coerce-vector
+NULL
+
+#' @rdname coerce-vector
 #' @export
 as_sparse_double <- function(x, default = 0) {
   if (is_sparse_double(x)) {
@@ -28,6 +32,29 @@ as_sparse_double <- function(x, default = 0) {
   index <- which(x != default | is.na(x))
 
   sparse_double(
+    values = x[index],
+    positions = index,
+    length = length(x),
+    default = default
+  )
+}
+
+#' @rdname coerce-vector
+#' @export
+as_sparse_integer <- function(x, default = 0) {
+  if (is_sparse_integer(x)) {
+    return(x)
+  }
+
+  validate_values_integer(x)
+  check_number_whole(default)
+
+  values <- vctrs::vec_cast(x, integer())
+  default <- vctrs::vec_cast(default, integer())
+
+  index <- which(x != default | is.na(x))
+
+  sparse_integer(
     values = x[index],
     positions = index,
     length = length(x),

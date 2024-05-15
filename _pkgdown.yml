@@ -6,13 +6,14 @@ reference:
   - title: Create Sparse Vectors
     contents:
     - sparse_double
+    - sparse_integer
   
   - title: Convertion functions
     contents:
     - coerce_to_sparse_data_frame
     - coerce_to_sparse_matrix
     - coerce_to_sparse_tibble
-    - as_sparse_double
+    - coerce-vector
 
   - title: Helper Functions
     contents:

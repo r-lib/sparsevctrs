@@ -2,13 +2,20 @@
 #include "sparse-extractors.h"
 #include "sparse-utils.h"
 
-// Defined in altrep-sparse-real.c
+// Defined in altrep-sparse-double.c
 extern SEXP ffi_altrep_new_sparse_double(SEXP);
 extern void sparsevctrs_init_altrep_sparse_double(DllInfo*);
+
+// Defined in altrep-sparse-integer.c
+extern SEXP ffi_altrep_new_sparse_integer(SEXP);
+extern void sparsevctrs_init_altrep_sparse_integer(DllInfo*);
 
 static const R_CallMethodDef CallEntries[] = {
     {"ffi_altrep_new_sparse_double",
      (DL_FUNC) &ffi_altrep_new_sparse_double,
+     1},
+    {"ffi_altrep_new_sparse_integer",
+     (DL_FUNC) &ffi_altrep_new_sparse_integer,
      1},
     {"ffi_altrep_sparse_positions", (DL_FUNC) &ffi_altrep_sparse_positions, 1},
     {"ffi_altrep_sparse_values", (DL_FUNC) &ffi_altrep_sparse_values, 1},
@@ -22,4 +29,5 @@ void R_init_sparsevctrs(DllInfo* dll) {
 
   // altrep classes
   sparsevctrs_init_altrep_sparse_double(dll);
+  sparsevctrs_init_altrep_sparse_integer(dll);
 }
