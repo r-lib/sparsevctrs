@@ -25,3 +25,10 @@ test_that("as_sparse_integer works", {
   expect_true(is_sparse_integer(x_sparse))
   expect_identical(x_sparse, x_dense)
 })
+
+test_that("as_sparse_integer works", {
+  x_dense <- c("A", "", "B", "", "", "", "C", "", "", NA)
+  x_sparse <- as_sparse_character(x_dense)
+
+  expect_true(is_sparse_character(x_sparse))
+})

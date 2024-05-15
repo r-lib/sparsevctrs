@@ -243,6 +243,7 @@ static SEXP altrep_sparse_string_Elt(SEXP x, R_xlen_t i) {
 }
 
 int altrep_sparse_string_Is_sorted(SEXP x) {
+  Rprintf("const char *, ...");
   SEXP pos = extract_pos(x);
   const int* v_pos = INTEGER_RO(pos);
 

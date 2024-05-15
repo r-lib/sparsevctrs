@@ -4,11 +4,14 @@
 \alias{coerce-vector}
 \alias{as_sparse_double}
 \alias{as_sparse_integer}
+\alias{as_sparse_character}
 \title{Coerce numeric vector to sparse double}
 \usage{
 as_sparse_double(x, default = 0)
 
-as_sparse_integer(x, default = 0)
+as_sparse_integer(x, default = 0L)
+
+as_sparse_character(x, default = "")
 }
 \arguments{
 \item{x}{a numeric vector.}

@@ -22,3 +22,11 @@ test_that("is_sparse_integer works", {
   expect_false(is_sparse_integer(1:10))
   expect_false(is_sparse_integer(NULL))
 })
+
+test_that("is_sparse_character works", {
+  expect_true(is_sparse_character(sparse_character("A", 1, 1)))
+
+  expect_false(is_sparse_character(c(1, 1, 1)))
+  expect_false(is_sparse_character(1:10))
+  expect_false(is_sparse_character(NULL))
+})

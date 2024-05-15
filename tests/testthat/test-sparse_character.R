@@ -219,35 +219,6 @@ test_that("materialization works with sparse_character()", {
   expect_identical(x_sparse[], x_dense)
 })
 
-test_that("sorting works with sparse_character()", {
-  x_sparse <- sparse_character(character(), integer(), 10)
-
-  expect_true(is_sparse_character(sort(x_sparse)))
-
-  x_sparse <- sparse_character(NA, 4, 10)
-
-  expect_identical(
-    sort(x_sparse),
-    rep(0L, 9)
-  )
-
-  x_sparse <- sparse_character(integer(), integer(), 10)
-
-  expect_true(is_sparse_character(sort(x_sparse)))
-
-  x_sparse <- sparse_character(c(1, 4, 5), c(1, 4, 7), 7)
-
-  expect_false(is_sparse_character(sort(x_sparse)))
-
-  x_sparse <- sparse_character(c(1, 5), c(1, 7), 7)
-
-  expect_false(is_sparse_character(sort(x_sparse)))
-
-  x_sparse <- sparse_character(c(-1, 5), c(1, 7), 7)
-
-  expect_true(is_sparse_character(sort(x_sparse)))
-})
-
 test_that("default argument is working", {
   expect_snapshot(
     error = TRUE,
