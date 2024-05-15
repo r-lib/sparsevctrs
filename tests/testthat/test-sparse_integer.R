@@ -254,96 +254,97 @@ test_that("sorting works with sparse_integer()", {
 })
 
 test_that("min method works with sparse_integer()", {
-  expect_identical(
-    min(sparse_integer(integer(), integer(), 0)),
-    Inf
+
+  expect_snapshot(
+    res <- min(sparse_integer(integer(), integer(), 0))
   )
+  expect_identical(res, Inf)
 
   expect_identical(
     min(sparse_integer(integer(), integer(), 1000000000)),
-    0
+    0L
   )
 
   expect_identical(
     min(sparse_integer(-10, 10, 1000000000)),
-    -10
+    -10L
   )
 
   expect_identical(
     min(sparse_integer(-10, 10, 1000000000, default = -100)),
-    -100
+    -100L
   )
 
   expect_identical(
-    min(sparse_integer(11:20, 11:20, 1000000000, default = 15.5)),
-    11
+    min(sparse_integer(c(10:14, 16:20), 11:20, 1000000000, default = 15L)),
+    10L
   )
 
   expect_identical(
     min(sparse_integer(NA, 10, 1000000000)),
-    NA_real_
+    NA_integer_
   )
 
   expect_identical(
     min(sparse_integer(c(11:19, NA), 11:20, 1000000000)),
-    NA_real_
+    NA_integer_
   )
 
   expect_identical(
     min(sparse_integer(NA, 10, 1000000000), na.rm = TRUE),
-    0
+    0L
   )
 
   expect_identical(
     min(sparse_integer(c(-10, 11:19, NA), 10:20, 1000000000), na.rm = TRUE),
-    -10
+    -10L
   )
 })
 
 test_that("max method works with sparse_integer()", {
-  expect_identical(
-    max(sparse_integer(integer(), integer(), 0)),
-    -Inf
+  expect_snapshot(
+    res <- max(sparse_integer(integer(), integer(), 0))
   )
+  expect_identical(res, -Inf)
 
   expect_identical(
     max(sparse_integer(integer(), integer(), 1000000000)),
-    0
+    0L
   )
 
   expect_identical(
     max(sparse_integer(10, 10, 1000000000)),
-    10
+    10L
   )
 
   expect_identical(
     max(sparse_integer(10, 10, 1000000000, default = 100)),
-    100
+    100L
   )
 
   expect_identical(
-    max(sparse_integer(11:20, 11:20, 1000000000, default = 15.5)),
-    20
+    max(sparse_integer(c(10:14, 16:20), 11:20, 1000000000, default = 15)),
+    20L
   )
 
   expect_identical(
     max(sparse_integer(NA, 10, 1000000000)),
-    NA_real_
+    NA_integer_
   )
 
   expect_identical(
     max(sparse_integer(c(11:19, NA), 11:20, 1000000000)),
-    NA_real_
+    NA_integer_
   )
 
   expect_identical(
     max(sparse_integer(NA, 10, 1000000000), na.rm = TRUE),
-    0
+    0L
   )
 
   expect_identical(
     max(sparse_integer(c(-10, 11:19, NA), 10:20, 1000000000), na.rm = TRUE),
-    19
+    19L
   )
 })
 
@@ -368,37 +369,37 @@ test_that("anyNA method works with sparse_integer", {
 test_that("sum method works with sparse_integer", {
   expect_identical(
     sum(sparse_integer(integer(), integer(), 0)),
-    0
+    0L
   )
 
   expect_identical(
     sum(sparse_integer(integer(), integer(), 1000000000)),
-    0
+    0L
   )
 
   expect_identical(
-    sum(sparse_integer(integer(), integer(), 1000000000, default = 0.0001)),
-    100000
+    sum(sparse_integer(integer(), integer(), 1000000000, default = 2)),
+    2000000000L
   )
 
   expect_identical(
-    sum(sparse_integer(c(1, 5.4, 10), c(1, 5, 10), 10)),
-    16.4
+    sum(sparse_integer(c(1, 54, 10), c(1, 5, 10), 10)),
+    65L
   )
 
   expect_identical(
-    sum(sparse_integer(c(1, 5.4, 10), c(1, 5, 10), 10, default = -1)),
-    16.4 - 7
+    sum(sparse_integer(c(1, 54, 10), c(1, 5, 10), 10, default = -1)),
+    58L
   )
 
   expect_identical(
-    sum(sparse_integer(c(1, 5.4, NA), c(1, 5, 10), 10)),
-    NA_real_
+    sum(sparse_integer(c(1, 54, NA), c(1, 5, 10), 10)),
+    NA_integer_
   )
 
   expect_identical(
-    sum(sparse_integer(c(1, 5.4, NA), c(1, 5, 10), 10), na.rm = TRUE),
-    6.4
+    sum(sparse_integer(c(1, 54, NA), c(1, 5, 10), 10), na.rm = TRUE),
+    55L
   )
 })
 

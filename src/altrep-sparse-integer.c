@@ -311,7 +311,8 @@ static SEXP altrep_sparse_integer_Min_method(SEXP x, Rboolean na_rm) {
   int min = R_PosInf;
 
   if (extract_len(x) == 0) {
-    return Rf_ScalarInteger(min);
+    Rf_warning("no non-missing arguments to min; returning Inf");
+    return Rf_ScalarReal(R_PosInf);
   }
 
   const SEXP val = extract_val(x);
@@ -329,8 +330,12 @@ static SEXP altrep_sparse_integer_Min_method(SEXP x, Rboolean na_rm) {
   }
 
   for (R_xlen_t i = 0; i < val_len; i++) {
-    if (v_val[i] == R_NaInt && !na_rm) {
-      return Rf_ScalarInteger(NA_INTEGER);
+    if (v_val[i] == R_NaInt) {
+      if (na_rm) {
+        continue;
+      } else {
+        return Rf_ScalarInteger(NA_INTEGER);
+      }
     }
 
     if (v_val[i] < min) {
@@ -344,7 +349,8 @@ static SEXP altrep_sparse_integer_Max_method(SEXP x, Rboolean na_rm) {
   int max = R_NegInf;
 
   if (extract_len(x) == 0) {
-    return Rf_ScalarInteger(max);
+    Rf_warning("no non-missing arguments to max; returning -Inf");
+    return Rf_ScalarReal(R_NegInf);
   }
 
   const SEXP val = extract_val(x);
@@ -362,8 +368,12 @@ static SEXP altrep_sparse_integer_Max_method(SEXP x, Rboolean na_rm) {
   }
 
   for (R_xlen_t i = 0; i < val_len; i++) {
-    if (v_val[i] == R_NaInt && !na_rm) {
-      return Rf_ScalarInteger(NA_INTEGER);
+    if (v_val[i] == R_NaInt) {
+      if (na_rm) {
+        continue;
+      } else {
+        return Rf_ScalarInteger(NA_INTEGER);
+      }
     }
 
     if (v_val[i] > max) {

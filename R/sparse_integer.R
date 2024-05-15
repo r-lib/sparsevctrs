@@ -59,6 +59,7 @@ sparse_integer <- function(values, positions, length, default = 0) {
   }
 
   values <- vctrs::vec_cast(values, integer())
+  default <- vctrs::vec_cast(default, integer())
   
   validate_positions(positions, length, len_values = length(values))
   positions <- as.integer(positions)

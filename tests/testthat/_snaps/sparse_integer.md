@@ -244,6 +244,22 @@
       x `values` value must not be equal to the default 0.
       i 0 values at index: 2, 4, 6, 8, and 10.
 
+# min method works with sparse_integer()
+
+    Code
+      res <- min(sparse_integer(integer(), integer(), 0))
+    Condition
+      Warning:
+      no non-missing arguments to min; returning Inf
+
+# max method works with sparse_integer()
+
+    Code
+      res <- max(sparse_integer(integer(), integer(), 0))
+    Condition
+      Warning:
+      no non-missing arguments to max; returning -Inf
+
 # default argument is working
 
     Code
