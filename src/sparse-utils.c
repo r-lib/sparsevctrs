@@ -49,6 +49,13 @@ SEXP extract_default_string(SEXP x) {
   return out;
 }
 
+Rboolean extract_default_logical(SEXP x) {
+  SEXP default_val = extract_default(x);
+  Rboolean out = LOGICAL_ELT(default_val, 0);
+
+  return out;
+}
+
 bool is_altrep(SEXP x) {
   return (bool) ALTREP(x);
 }

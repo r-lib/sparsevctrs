@@ -19,6 +19,8 @@ int extract_default_integer(SEXP x);
 
 SEXP extract_default_string(SEXP x);
 
+Rboolean extract_default_logical(SEXP x);
+
 bool is_altrep(SEXP x);
 
 SEXP ffi_extract_altrep_class(SEXP x);
