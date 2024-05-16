@@ -32,7 +32,7 @@ SEXP alrep_sparse_logical_Materialize(SEXP x) {
 
   const R_xlen_t len = extract_len(x);
 
-  const double v_default_val = extract_default_double(x);
+  const int v_default_val = extract_default_logical(x);
 
   out = PROTECT(Rf_allocVector(LGLSXP, len));
   int* v_out = LOGICAL(out);
@@ -225,7 +225,7 @@ static int altrep_sparse_logical_Elt(SEXP x, R_xlen_t i) {
 
   const R_xlen_t len = extract_len(x);
 
-  const double v_default_val = extract_default_double(x);
+  const int v_default_val = extract_default_logical(x);
 
   if (i > len) {
     // OOB of vector itself
@@ -254,7 +254,7 @@ int altrep_sparse_logical_Is_sorted(SEXP x) {
   SEXP val = extract_val(x);
   const int* v_val = LOGICAL_RO(val);
 
-  const double v_default_val = extract_default_double(x);
+  const int v_default_val = extract_default_logical(x);
 
   // zero length vector are by def sorted
   if (pos_len == 0) {
@@ -271,7 +271,7 @@ int altrep_sparse_logical_Is_sorted(SEXP x) {
     }
   }
 
-  double current_value;
+  int current_value;
 
   if (v_pos[0] == 1) {
     current_value = v_val[0];
@@ -322,13 +322,12 @@ static int altrep_sparse_logical_No_NA_method(SEXP x) {
 }
 
 static SEXP altrep_sparse_logical_Sum_method(SEXP x, Rboolean na_rm) {
-  Rprintf("const char *, ...");
   const SEXP val = extract_val(x);
   const int* v_val = LOGICAL_RO(val);
   const R_xlen_t val_len = Rf_xlength(val);
   const R_xlen_t len = extract_len(x);
 
-  double sum = 0;
+  int sum = 0;
 
   if (len == 0) {
     return Rf_ScalarLogical(sum);
@@ -346,7 +345,7 @@ static SEXP altrep_sparse_logical_Sum_method(SEXP x, Rboolean na_rm) {
   }
 
   // default can be non-zero
-  const double v_default_val = extract_default_double(x);
+  const int v_default_val = extract_default_integer(x);
 
   if (v_default_val != 0) {
     sum = sum + (len - val_len) * v_default_val;
