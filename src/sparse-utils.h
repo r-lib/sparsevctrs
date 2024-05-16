@@ -17,6 +17,8 @@ double extract_default_double(SEXP x);
 
 int extract_default_integer(SEXP x);
 
+SEXP extract_default_string(SEXP x);
+
 bool is_altrep(SEXP x);
 
 SEXP ffi_extract_altrep_class(SEXP x);

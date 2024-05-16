@@ -1,4 +1,4 @@
-#' Create sparse integer vector
+#' Create sparse character vector
 #' 
 #' Construction of vectors where only values and positions are recorded. The 
 #' Length and default values determine all other information.
@@ -7,18 +7,17 @@
 #' @param positions integer vector, indices of non-zero entries.
 #' @param length integer value, Length of vector.
 #' @param default integer value, value at indices not specified by `positions`. 
-#'   Defaults to `0L`. Cannot be `NA`.
+#'   Defaults to `""`. Cannot be `NA`.
 #' 
 #' @details
 #' 
 #' `values` and `positions` are expected to be the same length, and are allowed
 #' to both have zero length.
 #' 
-#' Allowed values for `value` is integer values. This means that the double 
-#' vector `c(1, 5, 4)` is accepted as it can be losslessly converted to the
-#' integer vector `c(1L, 5L, 4L)`. Missing values such as `NA` and `NA_real_` 
-#' are allowed. Everything else is disallowed, This includes `Inf` and `NaN`. 
-#' The values are also not allowed to take the same value as `default`.
+#' Allowed values for `value` are character values. Missing values such as `NA` 
+#' and `NA_real_` are allowed as they are turned into `NA_character_`. 
+#' Everything else is disallowed. The values are also not allowed to take the 
+#' same value as `default`.
 #' 
 #' `positions` should be integers or integer-like doubles. Everything else is 
 #' not allowed. Positions should furthermore be positive (`0` not allowed),
@@ -30,36 +29,26 @@
 #' setting `options("sparsevctrs.verbose_materialize" = TRUE)` will print a 
 #' message each time a sparse vector has been forced to materialize.
 #'
-#' @seealso [sparse_double()] [sparse_character()]
+#' @seealso [sparse_double()] [sparse_integer()]
 #' 
 #' @examples
-#' sparse_integer(integer(), integer(), 10)
+#' sparse_character(character(), integer(), 10)
 #' 
-#' sparse_integer(c(4, 5, 7), c(2, 5, 10), 10)
+#' sparse_character(c("A", "C", "E"), c(2, 5, 10), 10)
 #' 
 #' str(
-#'   sparse_integer(c(4, 5, 7), c(2, 5, 10), 1000000000)
+#'   sparse_character(c("A", "C", "E"), c(2, 5, 10), 1000000000)
 #' )
 #' @export
-sparse_integer <- function(values, positions, length, default = 0L) {
-  check_number_whole(default)
+sparse_character <- function(values, positions, length, default = "") {
+  check_string(default)
   check_number_whole(length, min = 0)
   if (!is.integer(length)) {
     length <- as.integer(length)
   }
 
-  if (any(is.nan(values))) {
-    offenders <- which(is.nan(values))
-    cli::cli_abort(
-      c(
-        x = "{.arg values} must not contain NaN values.",
-        i = "NaN values at index: {offenders}."
-      )
-    )
-  }
-
-  values <- vctrs::vec_cast(values, integer())
-  default <- vctrs::vec_cast(default, integer())
+  values <- vctrs::vec_cast(values, character())
+  default <- vctrs::vec_cast(default, character())
   
   validate_positions(positions, length, len_values = length(values))
   positions <- as.integer(positions)
@@ -74,10 +63,10 @@ sparse_integer <- function(values, positions, length, default = 0L) {
     )
   }
 
-  new_sparse_integer(values, positions, length, default)
+  new_sparse_character(values, positions, length, default)
 }
 
-new_sparse_integer <- function(values, positions, length, default) {
+new_sparse_character <- function(values, positions, length, default) {
   x <- list(
     val = values,
     pos = positions,
@@ -85,5 +74,5 @@ new_sparse_integer <- function(values, positions, length, default) {
     default = default
   )
 
-  .Call(ffi_altrep_new_sparse_integer, x)
+  .Call(ffi_altrep_new_sparse_string, x)
 }
