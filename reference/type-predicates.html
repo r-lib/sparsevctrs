@@ -58,7 +58,9 @@
 <span></span>
 <span><span class="fu">is_sparse_double</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">is_sparse_integer</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">is_sparse_integer</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">is_sparse_character</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,8 +72,9 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>is_sparse_vector()</code> is a general function that detects any type of sparse
-vector created with this package. <code>is_sparse_double()</code> and
-<code>is_sparse_integer()</code> are more specific functions that only detects the type.</p>
+vector created with this package. <code>is_sparse_double()</code>,
+<code>is_sparse_integer()</code>, and <code>is_sparse_character()</code> are more specific
+functions that only detects the type.</p>
     </div>
 
     <div class="section level2">
@@ -87,6 +90,11 @@ vector created with this package. <code>is_sparse_double()</code> and
 <span class="r-in"><span><span class="fu">is_sparse_double</span><span class="op">(</span><span class="va">x_sparse</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu">is_sparse_double</span><span class="op">(</span><span class="va">x_dense</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">is_sparse_character</span><span class="op">(</span><span class="va">x_sparse</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-in"><span><span class="fu">is_sparse_character</span><span class="op">(</span><span class="va">x_dense</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Forced materialization</span></span></span>
