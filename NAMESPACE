@@ -3,6 +3,7 @@
 export(as_sparse_character)
 export(as_sparse_double)
 export(as_sparse_integer)
+export(as_sparse_logical)
 export(coerce_to_sparse_data_frame)
 export(coerce_to_sparse_matrix)
 export(coerce_to_sparse_tibble)

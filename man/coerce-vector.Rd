@@ -5,6 +5,7 @@
 \alias{as_sparse_double}
 \alias{as_sparse_integer}
 \alias{as_sparse_character}
+\alias{as_sparse_logical}
 \title{Coerce numeric vector to sparse double}
 \usage{
 as_sparse_double(x, default = 0)
@@ -12,6 +13,8 @@ as_sparse_double(x, default = 0)
 as_sparse_integer(x, default = 0L)
 
 as_sparse_character(x, default = "")
+
+as_sparse_logical(x, default = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector.}
