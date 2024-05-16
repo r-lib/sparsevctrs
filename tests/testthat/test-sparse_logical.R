@@ -255,7 +255,7 @@ test_that("default argument is working", {
     default = TRUE
   )
 
-  x_dense <- c(FALSE, FALSE, FALSE, FALSE, NA, FALSE, FALSE, FALSE, FALSE, FALSE)
+  x_dense <- c(FALSE, TRUE, TRUE, TRUE, NA, TRUE, TRUE, FALSE, TRUE, TRUE)
 
   for (i in seq_len(10)) {
     expect_identical(x_sparse[i], x_dense[i])
