@@ -46,10 +46,6 @@ sparse_logical <- function(values, positions, length, default = FALSE) {
     length <- as.integer(length)
   }
 
-  if (identical(values, NA)) {
-    values <- NA_real_
-  }
-
   validate_values_logical(values)
   
   validate_positions(positions, length, len_values = length(values))

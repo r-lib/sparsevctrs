@@ -322,6 +322,7 @@ static int altrep_sparse_logical_No_NA_method(SEXP x) {
 }
 
 static SEXP altrep_sparse_logical_Sum_method(SEXP x, Rboolean na_rm) {
+  Rprintf("const char *, ...");
   const SEXP val = extract_val(x);
   const int* v_val = LOGICAL_RO(val);
   const R_xlen_t val_len = Rf_xlength(val);

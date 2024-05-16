@@ -6,6 +6,7 @@
 \alias{is_sparse_double}
 \alias{is_sparse_integer}
 \alias{is_sparse_character}
+\alias{is_sparse_logical}
 \title{Sparse vector type checkers}
 \usage{
 is_sparse_vector(x)
@@ -15,6 +16,8 @@ is_sparse_double(x)
 is_sparse_integer(x)
 
 is_sparse_character(x)
+
+is_sparse_logical(x)
 }
 \arguments{
 \item{x}{value to be checked.}
