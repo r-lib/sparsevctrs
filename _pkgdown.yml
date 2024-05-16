@@ -8,6 +8,7 @@ reference:
     - sparse_double
     - sparse_integer
     - sparse_character
+    - sparse_logical
   
   - title: Convertion functions
     contents:

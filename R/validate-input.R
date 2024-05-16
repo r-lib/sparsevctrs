@@ -141,3 +141,13 @@ validate_values_integer <- function(values, call = rlang::caller_env()) {
     )
   }
 }
+
+validate_values_logical <- function(values, call = rlang::caller_env()) {
+  if (!is.logical(values)) {
+    cli::cli_abort(
+      "{.arg values} must be a logical vector, \\
+      not {.obj_type_friendly {values}}.",
+      call = call
+    )
+  }
+}

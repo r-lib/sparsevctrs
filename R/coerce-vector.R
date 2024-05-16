@@ -83,3 +83,22 @@ as_sparse_character <- function(x, default = "") {
     default = default
   )
 }
+
+#' @rdname coerce-vector
+#' @export
+as_sparse_logical <- function(x, default = FALSE) {
+  if (is_sparse_logical(x)) {
+    return(x)
+  }
+
+  check_bool(default)
+
+  index <- which(x != default | is.na(x))
+
+  sparse_logical(
+    values = x[index],
+    positions = index,
+    length = length(x),
+    default = default
+  )
+}
