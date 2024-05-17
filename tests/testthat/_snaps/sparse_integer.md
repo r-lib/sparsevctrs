@@ -95,6 +95,22 @@
 ---
 
     Code
+      sparse_integer(numeric(0), integer(0), -10)
+    Condition
+      Error in `sparse_integer()`:
+      ! `length` must be a whole number larger than or equal to 0, not the number -10.
+
+---
+
+    Code
+      sparse_integer(numeric(0), integer(0), 1e+10)
+    Condition
+      Error in `sparse_integer()`:
+      ! `length` must be less than 2147483647, not 1e+10.
+
+---
+
+    Code
       sparse_integer(integer(0), integer(0), c(1, 10))
     Condition
       Error in `sparse_integer()`:

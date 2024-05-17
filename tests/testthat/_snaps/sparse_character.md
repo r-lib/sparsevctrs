@@ -92,6 +92,22 @@
 ---
 
     Code
+      sparse_character(numeric(0), integer(0), -10)
+    Condition
+      Error in `sparse_character()`:
+      ! `length` must be a whole number larger than or equal to 0, not the number -10.
+
+---
+
+    Code
+      sparse_character(numeric(0), integer(0), 1e+10)
+    Condition
+      Error in `sparse_character()`:
+      ! `length` must be less than 2147483647, not 1e+10.
+
+---
+
+    Code
       sparse_character(character(0), integer(0), c(1, 10))
     Condition
       Error in `sparse_character()`:

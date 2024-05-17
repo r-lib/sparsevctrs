@@ -54,6 +54,14 @@ test_that("input checking is done correctly", {
   )
   expect_snapshot(
     error = TRUE,
+    sparse_double(numeric(0), integer(0), -10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(numeric(0), integer(0), 10000000000)
+  )
+  expect_snapshot(
+    error = TRUE,
     sparse_double(numeric(0), integer(0), c(1, 10))
   )
   expect_snapshot(

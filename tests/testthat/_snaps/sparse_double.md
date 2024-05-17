@@ -86,6 +86,22 @@
 ---
 
     Code
+      sparse_double(numeric(0), integer(0), -10)
+    Condition
+      Error in `sparse_double()`:
+      ! `length` must be a whole number larger than or equal to 0, not the number -10.
+
+---
+
+    Code
+      sparse_double(numeric(0), integer(0), 1e+10)
+    Condition
+      Error in `sparse_double()`:
+      ! `length` must be less than 2147483647, not 1e+10.
+
+---
+
+    Code
       sparse_double(numeric(0), integer(0), c(1, 10))
     Condition
       Error in `sparse_double()`:
