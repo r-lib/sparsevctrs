@@ -41,7 +41,8 @@
 #' @export
 sparse_logical <- function(values, positions, length, default = FALSE) {
   check_bool(default)
-  check_number_whole(length, min = 0)
+  validate_length(length)
+  
   if (!is.integer(length)) {
     length <- as.integer(length)
   }

@@ -43,7 +43,8 @@
 #' @export
 sparse_integer <- function(values, positions, length, default = 0L) {
   check_number_whole(default)
-  check_number_whole(length, min = 0)
+  validate_length(length)
+  
   if (!is.integer(length)) {
     length <- as.integer(length)
   }

@@ -151,3 +151,13 @@ validate_values_logical <- function(values, call = rlang::caller_env()) {
     )
   }
 }
+
+validate_length <- function(length, call = rlang::caller_env()) {
+  check_number_whole(length, min = 0, call = call)
+  if (length > .Machine$integer.max) {
+     cli::cli_abort(
+      "{.arg length} must be less than {(.Machine$integer.max)}, not {length}.",
+      call = call
+     )
+  }
+}

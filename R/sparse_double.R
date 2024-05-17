@@ -42,7 +42,8 @@
 #' @export
 sparse_double <- function(values, positions, length, default = 0) {
   check_number_decimal(default)
-  check_number_whole(length, min = 0)
+  validate_length(length)
+
   if (!is.integer(length)) {
     length <- as.integer(length)
   }

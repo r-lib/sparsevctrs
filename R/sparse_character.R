@@ -42,7 +42,8 @@
 #' @export
 sparse_character <- function(values, positions, length, default = "") {
   check_string(default)
-  check_number_whole(length, min = 0)
+  validate_length(length)
+  
   if (!is.integer(length)) {
     length <- as.integer(length)
   }
