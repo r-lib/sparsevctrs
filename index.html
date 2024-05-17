@@ -42,6 +42,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/design.html">Design behind sparsevctrs</a>
+    <a class="dropdown-item" href="articles/when-to-use.html">When to use sparse vectors</a>
   </div>
 </li>
       </ul>
@@ -90,9 +91,9 @@
 <span><span class="va">x_dense</span><span class="op">[</span><span class="fl">7</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">x_dense</span><span class="op">[</span><span class="fl">15</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span></span>
-<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_sparse</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_sparse</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 1.24 kB</span></span>
-<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_dense</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_dense</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 8.05 kB</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">x_sparse</span>, <span class="va">x_dense</span><span class="op">)</span></span>
@@ -103,22 +104,22 @@
 <span><span class="va">x_sparse_1000</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">x_sparse_1000000</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10000000</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_sparse_0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_sparse_0</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 1.19 kB</span></span>
-<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_sparse_1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_sparse_1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 1.19 kB</span></span>
-<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_sparse_1000000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_sparse_1000000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 1.19 kB</span></span>
 <span></span>
 <span><span class="va">x_dense_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">x_dense_1000</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">x_dense_1000000</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">10000000</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_dense_0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_dense_0</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 48 B</span></span>
-<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_dense_1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_dense_1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 8.05 kB</span></span>
-<span><span class="fu">obj_size</span><span class="op">(</span><span class="va">x_dense_1000000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_dense_1000000</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 80.00 MB</span></span></code></pre></div>
 <p>These sparse vectors are compatible with tibbles and data frames.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">

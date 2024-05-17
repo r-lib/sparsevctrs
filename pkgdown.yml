@@ -3,7 +3,8 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   design: design.html
-last_built: 2024-05-16T02:41Z
+  when-to-use: when-to-use.html
+last_built: 2024-05-17T23:58Z
 urls:
   reference: https://emilhvitfeldt.github.io/sparsevctrs/reference
   article: https://emilhvitfeldt.github.io/sparsevctrs/articles
