@@ -1,9 +1,11 @@
 Package: sparsevctrs
-Title: Sparse Vectors For Use in Data Frames
+Title: Sparse Vectors for Use in Data Frames
 Version: 0.0.0.9000
-Authors@R: 
-    person("Emil", "Hvitfeldt", , "emilhhvitfeldt@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-0679-1945"))
+Authors@R: c(
+    person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0679-1945")),
+    person("Posit Software, PBC", role = c("cph", "fnd"))
+  )
 Description: Provides sparse vectors powered by ALTREP that behave like regular
     vectors, and can thus be used in data frames. Also provides tools to
     convert between sparse matrices and data frames with sparse columns and
