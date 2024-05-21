@@ -4,7 +4,7 @@
 \name{sparsevctrs-package}
 \alias{sparsevctrs}
 \alias{sparsevctrs-package}
-\title{sparsevctrs: Sparse Vectors For Use in Data Frames}
+\title{sparsevctrs: Sparse Vectors for Use in Data Frames}
 \description{
 Provides sparse vectors powered by ALTREP that behave like regular vectors, and can thus be used in data frames. Also provides tools to convert between sparse matrices and data frames with sparse columns and functions to interact with sparse vectors.
 }
@@ -18,7 +18,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Emil Hvitfeldt \email{emilhhvitfeldt@gmail.com} (\href{https://orcid.org/0000-0002-0679-1945}{ORCID})
+\strong{Maintainer}: Emil Hvitfeldt \email{emil.hvitfeldt@posit.co} (\href{https://orcid.org/0000-0002-0679-1945}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Posit Software, PBC [copyright holder, funder]
+}
 
 }
 \keyword{internal}
