@@ -12,7 +12,6 @@
 #' 
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_tibble()]
 #' @examplesIf rlang::is_installed("Matrix")
-#' set.seed(1234)
 #' sparse_tbl <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
 #' names(sparse_tbl) <- letters[1:10]
 #' sparse_tbl <- as.data.frame(sparse_tbl)
