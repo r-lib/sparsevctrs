@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/404.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/404.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/LICENSE-text.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/LICENSE.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/articles/design.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/articles/design.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/articles/index.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/articles/when-to-use.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/articles/when-to-use.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/authors.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/authors.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/index.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/index.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce-vector.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/coerce-vector.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce_to_sparse_data_frame.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_data_frame.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce_to_sparse_matrix.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_matrix.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/coerce_to_sparse_tibble.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_tibble.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/extractors.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/extractors.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/index.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparse_character.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/sparse_character.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparse_double.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/sparse_double.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparse_integer.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/sparse_integer.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparse_logical.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/sparse_logical.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/sparsevctrs-package.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/sparsevctrs-package.html</loc>
   </url>
   <url>
-    <loc>https://emilhvitfeldt.github.io/sparsevctrs/reference/type-predicates.html</loc>
+    <loc>https://r-lib.github.io/sparsevctrs/reference/type-predicates.html</loc>
   </url>
 </urlset>
