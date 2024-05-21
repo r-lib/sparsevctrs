@@ -11,9 +11,9 @@ Provides sparse vectors powered by ALTREP that behave like regular vectors, and 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/EmilHvitfeldt/sparsevctrs}
-  \item \url{https://emilhvitfeldt.github.io/sparsevctrs/}
-  \item Report bugs at \url{https://github.com/EmilHvitfeldt/sparsevctrs/issues}
+  \item \url{https://github.com/r-lib/sparsevctrs}
+  \item \url{https://r-lib.github.io/sparsevctrs/}
+  \item Report bugs at \url{https://github.com/r-lib/sparsevctrs/issues}
 }
 
 }

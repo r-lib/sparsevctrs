@@ -11,9 +11,9 @@ Description: Provides sparse vectors powered by ALTREP that behave like
     tools to convert between sparse matrices and data frames with sparse
     columns and functions to interact with sparse vectors.
 License: MIT + file LICENSE
-URL: https://github.com/EmilHvitfeldt/sparsevctrs,
-    https://emilhvitfeldt.github.io/sparsevctrs/
-BugReports: https://github.com/EmilHvitfeldt/sparsevctrs/issues
+URL: https://github.com/r-lib/sparsevctrs,
+    https://r-lib.github.io/sparsevctrs/
+BugReports: https://github.com/r-lib/sparsevctrs/issues
 Depends: 
     R (>= 4.0.0)
 Imports: 
@@ -30,7 +30,7 @@ Suggests:
     withr
 VignetteBuilder: 
     knitr
-Config/Needs/website: rmarkdown, lobstr, ggplot2, bench, tidyr, ggbeeswarm
+Config/Needs/website: tidyverse/tidytemplate, rmarkdown, lobstr, ggplot2, bench, tidyr, ggbeeswarm
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

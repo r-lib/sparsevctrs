@@ -5,9 +5,9 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/EmilHvitfeldt/sparsevctrs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EmilHvitfeldt/sparsevctrs/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/r-lib/sparsevctrs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/sparsevctrs/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/EmilHvitfeldt/sparsevctrs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/EmilHvitfeldt/sparsevctrs?branch=main)
+coverage](https://codecov.io/gh/r-lib/sparsevctrs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/sparsevctrs?branch=main)
 <!-- badges: end -->
 
 The goal of sparsevctrs is to provide a sparse vector
@@ -24,7 +24,7 @@ have to.
 You can install the development version of sparsevctrs like so:
 
 ``` r
-remotes::install_github("emilhvitfeldt/sparsevctrs")
+remotes::install_github("r-lib/sparsevctrs")
 ```
 
 ## Examples
