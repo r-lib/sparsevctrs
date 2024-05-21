@@ -29,8 +29,18 @@ coerce_to_sparse_matrix <- function(x) {
     )
   }
 
+  if (!all(vapply(x, is.numeric, logical(1)))) {
+    offenders <- which(!vapply(x, is.numeric, logical(1)))
+    offenders <- names(x)[offenders]
+    cli::cli_abort(c(
+      x = "All columns of {.arg x} must be numeric.",
+      i = "Non-numeric columns: {.field {offenders}}."
+    ))
+  }
+
   all_positions <- lapply(x, sparse_positions)
   all_values <- lapply(x, sparse_values)
+
   all_rows <- rep(seq_along(x), times = lengths(all_positions))
 
   all_positions <- unlist(all_positions, use.names = FALSE)
