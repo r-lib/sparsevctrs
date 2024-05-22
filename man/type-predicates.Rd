@@ -3,6 +3,7 @@
 \name{type-predicates}
 \alias{type-predicates}
 \alias{is_sparse_vector}
+\alias{is_sparse_numeric}
 \alias{is_sparse_double}
 \alias{is_sparse_integer}
 \alias{is_sparse_character}
@@ -10,6 +11,8 @@
 \title{Sparse vector type checkers}
 \usage{
 is_sparse_vector(x)
+
+is_sparse_numeric(x)
 
 is_sparse_double(x)
 
@@ -28,8 +31,9 @@ Helper functions to determine whether an vector is a sparse vector or not.
 \details{
 \code{is_sparse_vector()} is a general function that detects any type of sparse
 vector created with this package. \code{is_sparse_double()},
-\code{is_sparse_integer()}, and \code{is_sparse_character()} are more specific
-functions that only detects the type.
+\code{is_sparse_integer()}, \code{is_sparse_character()}, and \code{is_sparse_logical()} are
+more specific functions that only detects the type. \code{is_sparse_numeric()}
+matches both sparse integers and doubles.
 }
 \examples{
 x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
