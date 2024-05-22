@@ -31,3 +31,51 @@
       sparsevctrs: Sparse vector materialized
       sparsevctrs: Sparse vector materialized
 
+# coerce_to_sparse_data_frame() errors with no column names
+
+    Code
+      coerce_to_sparse_data_frame(sparse_mat)
+    Condition
+      Error in `coerce_to_sparse_data_frame()`:
+      ! `x` must have column names.
+
+# coerce_to_sparse_data_frame() errors with wrong input
+
+    Code
+      coerce_to_sparse_data_frame(mtcars)
+    Condition
+      Error in `coerce_to_sparse_data_frame()`:
+      ! `x` must be a <sparseMatrix>, not a data frame.
+
+---
+
+    Code
+      coerce_to_sparse_data_frame(1:10)
+    Condition
+      Error in `coerce_to_sparse_data_frame()`:
+      ! `x` must be a <sparseMatrix>, not an integer vector.
+
+# coerce_to_sparse_tibble() errors with no column names
+
+    Code
+      coerce_to_sparse_tibble(sparse_mat)
+    Condition
+      Error in `coerce_to_sparse_tibble()`:
+      ! `x` must have column names.
+
+# coerce_to_sparse_tibble() errors with wrong input
+
+    Code
+      coerce_to_sparse_tibble(mtcars)
+    Condition
+      Error in `coerce_to_sparse_tibble()`:
+      ! `x` must be a <sparseMatrix>, not a data frame.
+
+---
+
+    Code
+      coerce_to_sparse_tibble(1:10)
+    Condition
+      Error in `coerce_to_sparse_tibble()`:
+      ! `x` must be a <sparseMatrix>, not an integer vector.
+
