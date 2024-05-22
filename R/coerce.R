@@ -101,6 +101,11 @@ coerce_to_sparse_tibble <- function(x) {
     )
   }
 
+  if (!methods::is(x, "dgCMatrix")) {
+    x <- as(x, "generalMatrix")
+    x <- as(x, "CsparseMatrix")
+  }
+
   if (is.null(colnames(x))) {
     cli::cli_abort(
       "{.arg x} must have column names."
@@ -140,6 +145,11 @@ coerce_to_sparse_data_frame <- function(x) {
     cli::cli_abort(
       "{.arg x} must be a {.cls sparseMatrix}, not {.obj_type_friendly {x}}."
     )
+  }
+
+  if (!methods::is(x, "dgCMatrix")) {
+    x <- as(x, "generalMatrix")
+    x <- as(x, "CsparseMatrix")
   }
 
   if (is.null(colnames(x))) {
