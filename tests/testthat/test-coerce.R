@@ -20,6 +20,8 @@ test_that("coerce_to_sparse_matrix() works", {
 })
 
 test_that("coerce_to_sparse_matrix() errors on wrong input", {
+  skip_if_not_installed("Matrix")
+
   expect_snapshot(
     error = TRUE,
     coerce_to_sparse_matrix(1:10)
@@ -34,17 +36,11 @@ test_that("coerce_to_sparse_matrix() errors on wrong input", {
   )
 })
 
-test_that("coerce_to_sparse_matrix() errors on wrong input", {
-  expect_snapshot(
-    error = TRUE,
-    coerce_to_sparse_matrix(1:10)
-  )
-  expect_snapshot(
-    error = TRUE,
-    coerce_to_sparse_matrix(matrix(0, nrow = 10, ncol = 10))
-  )
-  expect_snapshot(
-    error = TRUE,
-    coerce_to_sparse_matrix(iris)
+test_that("coerce_to_sparse_matrix() will divert for non-sparse data.frames", {
+  skip_if_not_installed("Matrix")
+
+  expect_identical(
+    coerce_to_sparse_matrix(mtcars),
+    Matrix::Matrix(as.matrix(mtcars), sparse = TRUE)
   )
 })

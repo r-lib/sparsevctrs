@@ -38,6 +38,12 @@ coerce_to_sparse_matrix <- function(x) {
     ))
   }
 
+  if (!any(vapply(x, is_sparse_numeric, logical(1)))) {
+    res <- as.matrix(x)
+    res <- Matrix::Matrix(res, sparse = TRUE)
+    return(res)
+  }
+
   all_positions <- lapply(x, sparse_positions)
   all_values <- lapply(x, sparse_values)
 
