@@ -57,6 +57,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">is_sparse_vector</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">is_sparse_numeric</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">is_sparse_double</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">is_sparse_integer</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -76,8 +78,9 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>is_sparse_vector()</code> is a general function that detects any type of sparse
 vector created with this package. <code>is_sparse_double()</code>,
-<code>is_sparse_integer()</code>, and <code>is_sparse_character()</code> are more specific
-functions that only detects the type.</p>
+<code>is_sparse_integer()</code>, <code>is_sparse_character()</code>, and <code>is_sparse_logical()</code> are
+more specific functions that only detects the type. <code>is_sparse_numeric()</code>
+matches both sparse integers and doubles.</p>
     </div>
 
     <div class="section level2">
