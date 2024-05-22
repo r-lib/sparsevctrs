@@ -16,6 +16,9 @@ sparse_double(values, positions, length, default = 0)
 \item{default}{double value, value at indices not specified by \code{positions}.
 Defaults to \code{0}. Cannot be \code{NA}.}
 }
+\value{
+sparse double vector
+}
 \description{
 Construction of vectors where only values and positions are recorded. The
 Length and default values determine all other information.

@@ -9,6 +9,9 @@ coerce_to_sparse_matrix(x)
 \arguments{
 \item{x}{a data frame or tibble with sparse columns.}
 }
+\value{
+sparse matrix
+}
 \description{
 Turning data frame with sparse columns into sparse matrix using
 \code{\link[Matrix:sparseMatrix]{Matrix::sparseMatrix()}}.

@@ -30,6 +30,8 @@
 #' setting `options("sparsevctrs.verbose_materialize" = TRUE)` will print a 
 #' message each time a sparse vector has been forced to materialize.
 #'
+#' @return sparse integer vector
+#' 
 #' @seealso [sparse_double()] [sparse_character()]
 #' 
 #' @examples

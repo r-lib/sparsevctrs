@@ -8,6 +8,8 @@
 #' 
 #' The values of `x` must be double or integer. It must not contain any `Inf` or
 #' `NaN` values.
+#' 
+#' @return sparse vectors
 #'
 #' @examples
 #' x_dense <- c(3, 0, 2, 0, 0, 0, 4, 0, 0, 0)

@@ -13,6 +13,8 @@
 #' @details
 #' for ease of use, these functions also works on non-sparse variables.
 #' 
+#' @return vectors of requested attributes
+#' 
 #' @examples
 #' x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
 #' x_dense <- c(0, pi, 0, 0, 0.5, 0, 0, 0, 0, 0.1)

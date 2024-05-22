@@ -9,6 +9,9 @@ coerce_to_sparse_tibble(x)
 \arguments{
 \item{x}{sparse matrix.}
 }
+\value{
+tibble with sparse columns
+}
 \description{
 Turning a sparse matrix into a tibble.
 }

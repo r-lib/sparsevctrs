@@ -16,6 +16,9 @@ sparse_logical(values, positions, length, default = FALSE)
 \item{default}{logical value, value at indices not specified by \code{positions}.
 Defaults to \code{FALSE}. Cannot be \code{NA}.}
 }
+\value{
+sparse logical vector
+}
 \description{
 Construction of vectors where only values and positions are recorded. The
 Length and default values determine all other information.

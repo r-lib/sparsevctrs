@@ -11,6 +11,8 @@
 #' more specific functions that only detects the type. `is_sparse_numeric()`
 #' matches both sparse integers and doubles.
 #'
+#' @return single logical value
+#' 
 #' @examples
 #' x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
 #' x_dense <- c(0, pi, 0, 0, 0.5, 0, 0, 0, 0, 0.1)
