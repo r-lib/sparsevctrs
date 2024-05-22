@@ -12,7 +12,6 @@
 #' 
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_tibble()]
 #' @examplesIf rlang::is_installed("Matrix")
-#' set.seed(1234)
 #' sparse_tbl <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
 #' names(sparse_tbl) <- letters[1:10]
 #' sparse_tbl <- as.data.frame(sparse_tbl)
@@ -30,8 +29,32 @@ coerce_to_sparse_matrix <- function(x) {
     )
   }
 
+  if (!all(vapply(x, is.numeric, logical(1)))) {
+    offenders <- which(!vapply(x, is.numeric, logical(1)))
+    offenders <- names(x)[offenders]
+    cli::cli_abort(c(
+      x = "All columns of {.arg x} must be numeric.",
+      i = "Non-numeric columns: {.field {offenders}}."
+    ))
+  }
+
+  if (!any(vapply(x, is_sparse_numeric, logical(1)))) {
+    res <- as.matrix(x)
+    res <- Matrix::Matrix(res, sparse = TRUE)
+    return(res)
+  }
+
+  if (!all(vapply(x, sparse_default, numeric(1)) == 0, na.rm = TRUE)) {
+    offenders <- which(vapply(x, sparse_default, numeric(1)) != 0)
+
+    for (i in offenders) {
+      x[[i]] <- x[[i]][]
+    }
+  }
+
   all_positions <- lapply(x, sparse_positions)
   all_values <- lapply(x, sparse_values)
+
   all_rows <- rep(seq_along(x), times = lengths(all_positions))
 
   all_positions <- unlist(all_positions, use.names = FALSE)
@@ -78,6 +101,11 @@ coerce_to_sparse_tibble <- function(x) {
     )
   }
 
+  if (!methods::is(x, "dgCMatrix")) {
+    x <- as(x, "generalMatrix")
+    x <- as(x, "CsparseMatrix")
+  }
+
   if (is.null(colnames(x))) {
     cli::cli_abort(
       "{.arg x} must have column names."
@@ -117,6 +145,11 @@ coerce_to_sparse_data_frame <- function(x) {
     cli::cli_abort(
       "{.arg x} must be a {.cls sparseMatrix}, not {.obj_type_friendly {x}}."
     )
+  }
+
+  if (!methods::is(x, "dgCMatrix")) {
+    x <- as(x, "generalMatrix")
+    x <- as(x, "CsparseMatrix")
   }
 
   if (is.null(colnames(x))) {

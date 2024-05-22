@@ -1,0 +1,205 @@
+### coerce_to_sparse_matrix ----------------------------------------------------
+test_that("coerce_to_sparse_matrix() works", {
+  skip_if_not_installed("Matrix")
+
+  sparse_df <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
+  names(sparse_df) <- letters[1:10]
+  sparse_df <- as.data.frame(sparse_df)
+
+  res <- coerce_to_sparse_matrix(sparse_df)
+  expect_s4_class(res, "dgCMatrix")
+  expect_identical(dim(res), c(10L, 10L))
+
+  exp <- Matrix::diag(1:10, 10, 10)
+  exp <- Matrix::Matrix(exp, sparse = TRUE)
+  exp <- as(exp, "generalMatrix")
+  exp <- as(exp, "CsparseMatrix")
+  colnames(exp) <- colnames(res)
+  rownames(exp) <- rownames(res)
+
+  expect_identical(res, exp)
+})
+
+test_that("coerce_to_sparse_matrix() errors on wrong input", {
+  skip_if_not_installed("Matrix")
+
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_matrix(1:10)
+  )
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_matrix(matrix(0, nrow = 10, ncol = 10))
+  )
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_matrix(iris)
+  )
+})
+
+test_that("coerce_to_sparse_matrix() will divert for non-sparse data.frames", {
+  skip_if_not_installed("Matrix")
+
+  expect_identical(
+    coerce_to_sparse_matrix(mtcars),
+    Matrix::Matrix(as.matrix(mtcars), sparse = TRUE)
+  )
+})
+
+test_that("coerce_to_sparse_matrix() materializes non-zero defaulted columns", {
+  skip_if_not_installed("Matrix")
+  withr::local_options("sparsevctrs.verbose_materialize" = TRUE)
+
+  sparse_df <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
+  names(sparse_df) <- letters[1:10]
+  sparse_df <- as.data.frame(sparse_df)
+  sparse_df$nonzero1 <- sparse_double(1, 1, 10, default = 10)
+  sparse_df$nonzero2 <- sparse_double(1, 1, 10, default = 20)
+  
+  expect_snapshot(
+    res <- coerce_to_sparse_matrix(sparse_df)
+  )
+
+  withr::local_options("sparsevctrs.verbose_materialize" = NULL)
+
+  expect_s4_class(res, "dgCMatrix")
+  expect_identical(dim(res), c(10L, 12L))
+
+  exp <- Matrix::diag(1:10, 10, 10)
+  exp <- Matrix::Matrix(exp, sparse = TRUE)
+  exp <- as(exp, "generalMatrix")
+  exp <- as(exp, "CsparseMatrix")
+
+  exp <- cbind(exp, sparse_df$nonzero1)
+  exp <- cbind(exp, sparse_df$nonzero2)
+
+  colnames(exp) <- colnames(res)
+  rownames(exp) <- rownames(res)
+
+  expect_identical(res, exp)
+})
+
+### coerce_to_sparse_data_frame ------------------------------------------------
+
+test_that("coerce_to_sparse_data_frame() works", {
+  skip_if_not_installed("Matrix")
+
+  sparse_mat <- Matrix::diag(1:10, 10, 10)
+  sparse_mat <- Matrix::Matrix(sparse_mat, sparse = TRUE)
+  sparse_mat <- as(sparse_mat, "generalMatrix")
+  sparse_mat <- as(sparse_mat, "CsparseMatrix")
+  colnames(sparse_mat) <- letters[1:10]
+  rownames(sparse_mat) <- 1:10
+
+  res <- coerce_to_sparse_data_frame(sparse_mat)
+
+  exp <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
+  names(exp) <- letters[1:10]
+  exp <- as.data.frame(exp)
+
+  expect_identical(res, exp)
+})
+
+test_that("coerce_to_sparse_data_frame() works with non-dgCMatrix input", {
+  skip_if_not_installed("Matrix")
+
+  sparse_mat <- Matrix::diag(1:10, 10, 10)
+  sparse_mat <- Matrix::Matrix(sparse_mat, sparse = TRUE)
+  colnames(sparse_mat) <- letters[1:10]
+  rownames(sparse_mat) <- 1:10
+
+  res <- coerce_to_sparse_data_frame(sparse_mat)
+
+  exp <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
+  names(exp) <- letters[1:10]
+  exp <- as.data.frame(exp)
+
+  expect_identical(res, exp)
+})
+
+test_that("coerce_to_sparse_data_frame() errors with no column names", {
+  skip_if_not_installed("Matrix")
+
+  sparse_mat <- Matrix::diag(1:10, 10, 10)
+  sparse_mat <- Matrix::Matrix(sparse_mat, sparse = TRUE)
+
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_data_frame(sparse_mat)
+  )
+})
+
+test_that("coerce_to_sparse_data_frame() errors with wrong input", {
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_data_frame(mtcars)
+  )
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_data_frame(1:10)
+  )
+})
+
+### coerce_to_sparse_tibble ----------------------------------------------------
+
+test_that("coerce_to_sparse_tibble() works", {
+  skip_if_not_installed("Matrix")
+  skip_if_not_installed("tibble")
+
+  sparse_mat <- Matrix::diag(1:10, 10, 10)
+  sparse_mat <- Matrix::Matrix(sparse_mat, sparse = TRUE)
+  sparse_mat <- as(sparse_mat, "generalMatrix")
+  sparse_mat <- as(sparse_mat, "CsparseMatrix")
+  colnames(sparse_mat) <- letters[1:10]
+  rownames(sparse_mat) <- 1:10
+
+  res <- coerce_to_sparse_tibble(sparse_mat)
+
+  exp <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
+  names(exp) <- letters[1:10]
+  exp <- tibble::as_tibble(exp)
+
+  expect_identical(res, exp)
+})
+
+test_that("coerce_to_sparse_tibble() works with non-dgCMatrix input", {
+  skip_if_not_installed("Matrix")
+  skip_if_not_installed("tibble")
+
+  sparse_mat <- Matrix::diag(1:10, 10, 10)
+  sparse_mat <- Matrix::Matrix(sparse_mat, sparse = TRUE)
+  colnames(sparse_mat) <- letters[1:10]
+  rownames(sparse_mat) <- 1:10
+
+  res <- coerce_to_sparse_tibble(sparse_mat)
+
+  exp <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
+  names(exp) <- letters[1:10]
+  exp <- tibble::as_tibble(exp)
+
+  expect_identical(res, exp)
+})
+
+test_that("coerce_to_sparse_tibble() errors with no column names", {
+  skip_if_not_installed("Matrix")
+  skip_if_not_installed("tibble")
+
+  sparse_mat <- Matrix::diag(1:10, 10, 10)
+  sparse_mat <- Matrix::Matrix(sparse_mat, sparse = TRUE)
+
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_tibble(sparse_mat)
+  )
+})
+
+test_that("coerce_to_sparse_tibble() errors with wrong input", {
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_tibble(mtcars)
+  )
+  expect_snapshot(
+    error = TRUE,
+    coerce_to_sparse_tibble(1:10)
+  )
+})
