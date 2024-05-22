@@ -44,6 +44,14 @@ coerce_to_sparse_matrix <- function(x) {
     return(res)
   }
 
+  if (!all(vapply(x, sparse_default, numeric(1)) == 0, na.rm = TRUE)) {
+    offenders <- which(vapply(x, sparse_default, numeric(1)) != 0)
+
+    for (i in offenders) {
+      x[[i]] <- x[[i]][]
+    }
+  }
+
   all_positions <- lapply(x, sparse_positions)
   all_values <- lapply(x, sparse_values)
 

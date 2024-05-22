@@ -23,3 +23,11 @@
       x All columns of `x` must be numeric.
       i Non-numeric columns: Species.
 
+# coerce_to_sparse_matrix() materializes non-zero defaulted columns
+
+    Code
+      res <- coerce_to_sparse_matrix(sparse_df)
+    Output
+      sparsevctrs: Sparse vector materialized
+      sparsevctrs: Sparse vector materialized
+
