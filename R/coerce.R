@@ -102,8 +102,8 @@ coerce_to_sparse_tibble <- function(x) {
   }
 
   if (!methods::is(x, "dgCMatrix")) {
-    x <- as(x, "generalMatrix")
-    x <- as(x, "CsparseMatrix")
+    x <- methods::as(x, "generalMatrix")
+    x <- methods::as(x, "CsparseMatrix")
   }
 
   if (is.null(colnames(x))) {
@@ -148,8 +148,8 @@ coerce_to_sparse_data_frame <- function(x) {
   }
 
   if (!methods::is(x, "dgCMatrix")) {
-    x <- as(x, "generalMatrix")
-    x <- as(x, "CsparseMatrix")
+    x <- methods::as(x, "generalMatrix")
+    x <- methods::as(x, "CsparseMatrix")
   }
 
   if (is.null(colnames(x))) {
