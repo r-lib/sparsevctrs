@@ -6,7 +6,7 @@
 \alias{sparsevctrs-package}
 \title{sparsevctrs: Sparse Vectors for Use in Data Frames}
 \description{
-Provides sparse vectors powered by ALTREP that behave like regular vectors, and can thus be used in data frames. Also provides tools to convert between sparse matrices and data frames with sparse columns and functions to interact with sparse vectors.
+Provides sparse vectors powered by ALTREP (Alternative Representations for R Objects) that behave like regular vectors, and can thus be used in data frames. Also provides tools to convert between sparse matrices and data frames with sparse columns and functions to interact with sparse vectors.
 }
 \seealso{
 Useful links:
@@ -22,6 +22,7 @@ Useful links:
 
 Other contributors:
 \itemize{
+  \item Davis Vaughan \email{davis@posit.co} [contributor]
   \item Posit Software, PBC [copyright holder, funder]
 }
 
