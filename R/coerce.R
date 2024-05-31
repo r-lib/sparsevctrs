@@ -10,6 +10,8 @@
 #' columns or not. Thus it works with any data frame. Needless to say, creating
 #' a sparse matrix out of a dense data frame is not ideal.
 #' 
+#' @return sparse matrix
+#' 
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_tibble()]
 #' @examplesIf rlang::is_installed("Matrix")
 #' sparse_tbl <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
@@ -78,6 +80,8 @@ coerce_to_sparse_matrix <- function(x) {
 #' @details
 #' The only requirement from the sparse matrix is that it contains column names.
 #' 
+#' @return tibble with sparse columns
+#' 
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_matrix()]
 #' @examplesIf rlang::is_installed("tibble")
 #' set.seed(1234)
@@ -125,6 +129,8 @@ coerce_to_sparse_tibble <- function(x) {
 #' 
 #' @details
 #' The only requirement from the sparse matrix is that it contains column names.
+#' 
+#' @return data.frame with sparse columns
 #' 
 #' @seealso [coerce_to_sparse_tibble()] [coerce_to_sparse_matrix()]
 #' @examplesIf rlang::is_installed("Matrix")

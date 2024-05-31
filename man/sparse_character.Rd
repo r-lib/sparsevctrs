@@ -16,6 +16,9 @@ sparse_character(values, positions, length, default = "")
 \item{default}{integer value, value at indices not specified by \code{positions}.
 Defaults to \code{""}. Cannot be \code{NA}.}
 }
+\value{
+sparse character vector
+}
 \description{
 Construction of vectors where only values and positions are recorded. The
 Length and default values determine all other information.

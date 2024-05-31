@@ -9,6 +9,9 @@ coerce_to_sparse_data_frame(x)
 \arguments{
 \item{x}{sparse matrix.}
 }
+\value{
+data.frame with sparse columns
+}
 \description{
 Turning a sparse matrix into a data frame
 }

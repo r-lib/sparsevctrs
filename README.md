@@ -44,7 +44,7 @@ x_dense[7] <- 1
 x_dense[15] <- 10
 
 obj_size(x_sparse)
-#> 1.24 kB
+#> 1.35 kB
 obj_size(x_dense)
 #> 8.05 kB
 
@@ -64,11 +64,11 @@ x_sparse_1000 <- sparse_double(numeric(), integer(), length = 1000)
 x_sparse_1000000 <- sparse_double(numeric(), integer(), length = 10000000)
 
 obj_size(x_sparse_0)
-#> 1.19 kB
+#> 1.30 kB
 obj_size(x_sparse_1000)
-#> 1.19 kB
+#> 1.30 kB
 obj_size(x_sparse_1000000)
-#> 1.19 kB
+#> 1.30 kB
 
 x_dense_0 <- numeric(0)
 x_dense_1000 <- numeric(1000)

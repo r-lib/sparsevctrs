@@ -16,6 +16,9 @@ sparse_integer(values, positions, length, default = 0L)
 \item{default}{integer value, value at indices not specified by \code{positions}.
 Defaults to \code{0L}. Cannot be \code{NA}.}
 }
+\value{
+sparse integer vector
+}
 \description{
 Construction of vectors where only values and positions are recorded. The
 Length and default values determine all other information.

@@ -16,6 +16,9 @@ sparse_default(x)
 \arguments{
 \item{x}{vector to be extracted from.}
 }
+\value{
+vectors of requested attributes
+}
 \description{
 Extract positions, values, and default from sparse vectors without the need
 to materialize vector.

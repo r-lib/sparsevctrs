@@ -25,6 +25,9 @@ is_sparse_logical(x)
 \arguments{
 \item{x}{value to be checked.}
 }
+\value{
+single logical value
+}
 \description{
 Helper functions to determine whether an vector is a sparse vector or not.
 }

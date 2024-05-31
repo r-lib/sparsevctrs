@@ -13,3 +13,5 @@
 ^codecov\.yml$
 ^\.vscode$
 ^debug$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

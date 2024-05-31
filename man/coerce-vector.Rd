@@ -24,6 +24,9 @@ as_sparse_logical(x, default = FALSE)
 The values of \code{x} must be double or integer. It must not contain any \code{Inf} or
 \code{NaN} values.}
 }
+\value{
+sparse vectors
+}
 \description{
 Takes a numeric vector, integer or double, and turn it into a sparse double
 vector.
