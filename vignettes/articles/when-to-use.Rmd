@@ -40,7 +40,7 @@ obj_size(integer(2000))
 obj_size(integer(3000))
 ```
 
-The vectors above only contained the value `0`. We can replicate that sparsely with `sparse_integer(integer(), integer(), length = 0)`. We see that the size of a 0-length sparse integer vector has a size of `1304 B = 1.3 kB`.
+The vectors above only contained the value `0`. We can replicate that sparsely with `sparse_integer(integer(), integer(), length = 0)`. We see that the size of a 0-length sparse integer vector has a size of `888 B`.
 
 ```{r}
 obj_size(sparse_integer(integer(), integer(), length = 0))
@@ -80,9 +80,9 @@ sparse_x <- sparse_integer(1:200, 1:200, 1000)
 obj_size(sparse_x)
 ```
 
-So it all comes down to a trade-off. Dense integer vectors with a size of 313 or less will be smaller than their sparse counterparts no matter what. Dense integer vector vectors with 314 elements will take up the same amount of memory as their sparse counterpart with no values.
+So it all comes down to a trade-off. Dense integer vectors with a size of 210 or less will be smaller than their sparse counterparts no matter what. Dense integer vector vectors with 211 elements will take up the same amount of memory as their sparse counterpart with no values.
 
-From these values we can calculate memory equivalent vectors to determine which would be more efficient, noting that sparse vectors increase in size by twice for each non-default value that their dense counterpart. For a vector of length 1000, the sparse vector will be equivalent in size if it has `343` non-default values. And these values continue to go up.
+From these values we can calculate memory equivalent vectors to determine which would be more efficient, noting that sparse vectors increase in size by twice for each non-default value that their dense counterpart. For a vector of length 1000, the sparse vector will be equivalent in size if it has `210` non-default values. And these values continue to go up.
 
 ## Conversion speed
 
