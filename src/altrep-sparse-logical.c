@@ -140,13 +140,6 @@ static SEXP altrep_sparse_logical_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   SEXP out_default = extract_default(x);
   SET_VECTOR_ELT(out, 3, out_default);
 
-  SEXP names = Rf_allocVector(STRSXP, 4);
-  Rf_setAttrib(out, R_NamesSymbol, names);
-  SET_STRING_ELT(names, 0, Rf_mkChar("val"));
-  SET_STRING_ELT(names, 1, Rf_mkChar("pos"));
-  SET_STRING_ELT(names, 2, Rf_mkChar("len"));
-  SET_STRING_ELT(names, 3, Rf_mkChar("default"));
-
   R_xlen_t i_out = 0;
 
   for (R_xlen_t i = 0; i < size; ++i) {

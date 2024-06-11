@@ -82,10 +82,10 @@ sparse_double <- function(values, positions, length, default = 0) {
 
 new_sparse_double <- function(values, positions, length, default) {
   x <- list(
-    val = values,
-    pos = positions,
-    len = length,
-    default = default
+    values,
+    positions,
+    length,
+    default
   )
 
   .Call(ffi_altrep_new_sparse_double, x)

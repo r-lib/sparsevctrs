@@ -69,10 +69,10 @@ sparse_logical <- function(values, positions, length, default = FALSE) {
 
 new_sparse_logical <- function(values, positions, length, default) {
   x <- list(
-    val = values,
-    pos = positions,
-    len = length,
-    default = default
+    values,
+    positions,
+    length,
+    default
   )
 
   .Call(ffi_altrep_new_sparse_logical, x)
