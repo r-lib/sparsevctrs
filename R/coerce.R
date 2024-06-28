@@ -171,22 +171,31 @@ coerce_to_sparse_data_frame <- function(x) {
 
 .sparse_matrix_to_list <- function(x) {
   values <- x@x
-  positions <- x@i
-  
+  x_positions <- x@i
+  n_nonzero <- diff(x@p)
+
   x_length <- nrow(x)
   
   res <- list()
-  for (i in seq_len(ncol(x))) {
-    start <- x@p[i] + 1
-    end <- x@p[i + 1]
-  
-    index <- seq(start, end)
+  start <- 1
+  for (i in seq_along(n_nonzero)) {
+    if (n_nonzero[i] == 0) {
+      res[[i]] <- sparse_double(
+        values = double(),
+        positions = double(),
+        length = x_length
+      )
+      next
+    } 
+
+    index <- seq(start, start + n_nonzero[i] - 1)
   
     res[[i]] <- sparse_double(
       values = values[index],
-      positions = positions[index] + 1,
+      positions = x_positions[index] + 1,
       length = x_length
     )
+    start <- start + n_nonzero[i]
   }
   
   names(res) <- colnames(x)
