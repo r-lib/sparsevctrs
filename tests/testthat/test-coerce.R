@@ -203,3 +203,21 @@ test_that("coerce_to_sparse_tibble() errors with wrong input", {
     coerce_to_sparse_tibble(1:10)
   )
 })
+
+test_that(".sparse_matrix_to_list() handles fully sparse columns (#69)", {
+  skip_if_not_installed("Matrix")
+  
+  x_mat <- matrix(
+    c(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0), 
+    nrow = 3
+  )
+  colnames(x_mat) <- letters[1:6]
+  
+  x_df <- as.data.frame(x_mat)
+  x_mat_sparse <- Matrix::Matrix(x_mat, sparse = TRUE)
+
+  expect_identical(
+    coerce_to_sparse_data_frame(x_mat_sparse),
+    x_df
+  )
+})
