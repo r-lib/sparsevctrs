@@ -295,10 +295,11 @@
 # verbose testing
 
     Code
-      sparse_double(1, 1, 1)[]
+      tmp <- x[]
     Output
       sparsevctrs: Sparse vector materialized
-      [1] 1
+    Code
+      tmp <- x[]
 
 # printing works #48
 

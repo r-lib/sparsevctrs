@@ -268,9 +268,11 @@ test_that("default argument is working", {
 test_that("verbose testing", {
   withr::local_options("sparsevctrs.verbose_materialize" = TRUE)
 
-  expect_snapshot(
-    sparse_character("A", 1, 1)[]
-  )
+  x <- sparse_character("A", 1, 1)
+  expect_snapshot({
+   tmp <- x[]
+   tmp <- x[]
+  })
 })
 
 test_that("printing works #48", {
