@@ -122,3 +122,10 @@ bool is_index_handleable(SEXP x) {
 
   return true;
 }
+
+void verbose_materialize(void) {
+  if (!Rf_isNull(Rf_GetOption1(Rf_install("sparsevctrs.verbose_materialize"))
+      )) {
+    Rprintf("sparsevctrs: Sparse vector materialized\n");
+  }
+}
