@@ -270,9 +270,27 @@ test_that("verbose testing", {
 
   x <- sparse_character("A", 1, 1)
   expect_snapshot({
-   tmp <- x[]
-   tmp <- x[]
+    tmp <- x[]
+    tmp <- x[]
   })
+
+  withr::local_options("sparsevctrs.verbose_materialize" = 2)
+
+  x <- sparse_character("A", 1, 1)
+  expect_snapshot({
+    tmp <- x[]
+    tmp <- x[]
+  })
+
+  withr::local_options("sparsevctrs.verbose_materialize" = 3)
+
+  x <- sparse_character("A", 1, 1)
+  expect_snapshot(
+    error = TRUE,
+    {
+      tmp <- x[]
+    }
+  )
 })
 
 test_that("printing works #48", {

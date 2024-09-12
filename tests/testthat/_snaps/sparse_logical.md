@@ -266,3 +266,21 @@
     Code
       tmp <- x[]
 
+---
+
+    Code
+      tmp <- x[]
+    Condition
+      Warning:
+      sparsevctrs: Sparse vector materialized
+    Code
+      tmp <- x[]
+
+---
+
+    Code
+      tmp <- x[]
+    Condition
+      Error:
+      ! sparsevctrs: Sparse vector materialized
+
