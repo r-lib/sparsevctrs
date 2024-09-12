@@ -285,10 +285,29 @@
 # verbose testing
 
     Code
-      sparse_character("A", 1, 1)[]
+      tmp <- x[]
     Output
       sparsevctrs: Sparse vector materialized
-      [1] "A"
+    Code
+      tmp <- x[]
+
+---
+
+    Code
+      tmp <- x[]
+    Condition
+      Warning:
+      sparsevctrs: Sparse vector materialized
+    Code
+      tmp <- x[]
+
+---
+
+    Code
+      tmp <- x[]
+    Condition
+      Error:
+      ! sparsevctrs: Sparse vector materialized
 
 # printing works #48
 

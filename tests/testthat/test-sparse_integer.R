@@ -452,8 +452,28 @@ test_that("default argument is working", {
 test_that("verbose testing", {
   withr::local_options("sparsevctrs.verbose_materialize" = TRUE)
 
+  x <- sparse_integer(1, 1, 1)
+  expect_snapshot({
+    tmp <- x[]
+    tmp <- x[]
+  })
+
+  withr::local_options("sparsevctrs.verbose_materialize" = 2)
+
+  x <- sparse_integer(1, 1, 1)
+  expect_snapshot({
+    tmp <- x[]
+    tmp <- x[]
+  })
+
+  withr::local_options("sparsevctrs.verbose_materialize" = 3)
+
+  x <- sparse_integer(1, 1, 1)
   expect_snapshot(
-    sparse_integer(1, 1, 1)[]
+    error = TRUE,
+    {
+      tmp <- x[]
+    }
   )
 })
 

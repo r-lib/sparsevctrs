@@ -304,10 +304,29 @@
 # verbose testing
 
     Code
-      sparse_integer(1, 1, 1)[]
+      tmp <- x[]
     Output
       sparsevctrs: Sparse vector materialized
-      [1] 1
+    Code
+      tmp <- x[]
+
+---
+
+    Code
+      tmp <- x[]
+    Condition
+      Warning:
+      sparsevctrs: Sparse vector materialized
+    Code
+      tmp <- x[]
+
+---
+
+    Code
+      tmp <- x[]
+    Condition
+      Error:
+      ! sparsevctrs: Sparse vector materialized
 
 # printing works #48
 

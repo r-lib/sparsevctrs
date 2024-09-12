@@ -260,8 +260,27 @@
 # verbose testing
 
     Code
-      sparse_logical(TRUE, 1, 1)[]
+      tmp <- x[]
     Output
       sparsevctrs: Sparse vector materialized
-      [1] TRUE
+    Code
+      tmp <- x[]
+
+---
+
+    Code
+      tmp <- x[]
+    Condition
+      Warning:
+      sparsevctrs: Sparse vector materialized
+    Code
+      tmp <- x[]
+
+---
+
+    Code
+      tmp <- x[]
+    Condition
+      Error:
+      ! sparsevctrs: Sparse vector materialized
 

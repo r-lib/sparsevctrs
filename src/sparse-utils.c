@@ -122,3 +122,31 @@ bool is_index_handleable(SEXP x) {
 
   return true;
 }
+
+void verbose_materialize(void) {
+  SEXP option = Rf_GetOption1(Rf_install("sparsevctrs.verbose_materialize"));
+
+  if (!Rf_isNull(option)) {
+    if (TYPEOF(option) == LGLSXP) {
+      Rprintf("sparsevctrs: Sparse vector materialized\n");
+    }
+    if (TYPEOF(option) == REALSXP) {
+      if (*REAL_RO(option) == 3) {
+        Rf_error("sparsevctrs: Sparse vector materialized");
+      } else if (*REAL_RO(option) == 2) {
+        Rf_warning("sparsevctrs: Sparse vector materialized");
+      } else {
+        Rprintf("sparsevctrs: Sparse vector materialized\n");
+      }
+    }
+    if (TYPEOF(option) == INTSXP) {
+      if (*INTEGER_RO(option) == 3) {
+        Rf_error("sparsevctrs: Sparse vector materialized");
+      } else if (*INTEGER_RO(option) == 2) {
+        Rf_warning("sparsevctrs: Sparse vector materialized");
+      } else {
+        Rprintf("sparsevctrs: Sparse vector materialized\n");
+      }
+    }
+  }
+}
