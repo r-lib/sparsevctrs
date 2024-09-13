@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# sparsevctrs
+# sparsevctrs <a href="https://r-lib.github.io/sparsevctrs/"><img src="man/figures/logo.png" align="right" height="138" alt="sparsevctrs website" /></a>
 
 <!-- badges: start -->
 
@@ -44,7 +44,7 @@ x_dense[7] <- 1
 x_dense[15] <- 10
 
 obj_size(x_sparse)
-#> 1.35 kB
+#> 936 B
 obj_size(x_dense)
 #> 8.05 kB
 
@@ -64,11 +64,11 @@ x_sparse_1000 <- sparse_double(numeric(), integer(), length = 1000)
 x_sparse_1000000 <- sparse_double(numeric(), integer(), length = 10000000)
 
 obj_size(x_sparse_0)
-#> 1.30 kB
+#> 888 B
 obj_size(x_sparse_1000)
-#> 1.30 kB
+#> 888 B
 obj_size(x_sparse_1000000)
-#> 1.30 kB
+#> 888 B
 
 x_dense_0 <- numeric(0)
 x_dense_1000 <- numeric(1000)

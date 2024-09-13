@@ -6,6 +6,8 @@
 \alias{sparsevctrs-package}
 \title{sparsevctrs: Sparse Vectors for Use in Data Frames}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Provides sparse vectors powered by ALTREP (Alternative Representations for R Objects) that behave like regular vectors, and can thus be used in data frames. Also provides tools to convert between sparse matrices and data frames with sparse columns and functions to interact with sparse vectors.
 }
 \seealso{
