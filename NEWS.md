@@ -6,6 +6,8 @@
 
 * All coerce functions have received a `call` argument. (#72)
 
+* Helper function `has_sparse_elements()` has been added (#70)
+
 # sparsevctrs 0.1.0
 
 * Initial CRAN submission.
