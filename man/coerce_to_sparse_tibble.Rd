@@ -4,10 +4,15 @@
 \alias{coerce_to_sparse_tibble}
 \title{Coerce sparse matrix to tibble with sparse columns}
 \usage{
-coerce_to_sparse_tibble(x)
+coerce_to_sparse_tibble(x, call = rlang::caller_env(0))
 }
 \arguments{
 \item{x}{sparse matrix.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \value{
 tibble with sparse columns

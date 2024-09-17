@@ -31,6 +31,22 @@
       sparsevctrs: Sparse vector materialized
       sparsevctrs: Sparse vector materialized
 
+# coerce_to_sparse_matrix() can pass through error call
+
+    Code
+      tmp_fun(1)
+    Condition
+      Error in `tmp_fun()`:
+      ! `x` must be a <data.frame>, not a number.
+
+---
+
+    Code
+      tmp_fun(1)
+    Condition
+      Error in `tmp_fun()`:
+      ! `x` must be a <sparseMatrix>, not a number.
+
 # coerce_to_sparse_data_frame() errors with no column names
 
     Code
@@ -54,6 +70,14 @@
     Condition
       Error in `coerce_to_sparse_data_frame()`:
       ! `x` must be a <sparseMatrix>, not an integer vector.
+
+# coerce_to_sparse_data_frame() can pass through error call
+
+    Code
+      tmp_fun(1)
+    Condition
+      Error in `tmp_fun()`:
+      ! `x` must be a <sparseMatrix>, not a number.
 
 # coerce_to_sparse_tibble() errors with no column names
 
