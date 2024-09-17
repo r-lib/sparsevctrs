@@ -4,6 +4,8 @@
 
 * Fixed bug where `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` didn't work with matrices with fully sparse columns. (#69)
 
+* All coerce functions have received a `call` argument. (#72)
+
 # sparsevctrs 0.1.0
 
 * Initial CRAN submission.
