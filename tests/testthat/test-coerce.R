@@ -79,6 +79,17 @@ test_that("coerce_to_sparse_matrix() materializes non-zero defaulted columns", {
   expect_identical(res, exp)
 })
 
+test_that("coerce_to_sparse_matrix() can pass through error call", {
+  tmp_fun <- function(x) {
+    coerce_to_sparse_matrix(x, call = rlang::caller_env(0))
+  }
+  
+  expect_snapshot(
+    error = TRUE,
+    tmp_fun(1)
+  )
+})
+
 ### coerce_to_sparse_data_frame ------------------------------------------------
 
 test_that("coerce_to_sparse_data_frame() works", {
@@ -137,6 +148,17 @@ test_that("coerce_to_sparse_data_frame() errors with wrong input", {
   expect_snapshot(
     error = TRUE,
     coerce_to_sparse_data_frame(1:10)
+  )
+})
+
+test_that("coerce_to_sparse_data_frame() can pass through error call", {
+  tmp_fun <- function(x) {
+    coerce_to_sparse_data_frame(x, call = rlang::caller_env(0))
+  }
+  
+  expect_snapshot(
+    error = TRUE,
+    tmp_fun(1)
   )
 })
 
@@ -203,6 +225,19 @@ test_that("coerce_to_sparse_tibble() errors with wrong input", {
     coerce_to_sparse_tibble(1:10)
   )
 })
+
+test_that("coerce_to_sparse_matrix() can pass through error call", {
+  tmp_fun <- function(x) {
+    coerce_to_sparse_tibble(x, call = rlang::caller_env(0))
+  }
+  
+  expect_snapshot(
+    error = TRUE,
+    tmp_fun(1)
+  )
+})
+
+### .sparse_matrix_to_list -----------------------------------------------------
 
 test_that(".sparse_matrix_to_list() handles fully sparse columns (#69)", {
   skip_if_not_installed("Matrix")
