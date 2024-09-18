@@ -30,3 +30,4 @@ reference:
     contents:
     - type-predicates
     - extractors
+    - has_sparse_elements
