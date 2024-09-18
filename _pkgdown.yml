@@ -31,3 +31,4 @@ reference:
     - type-predicates
     - extractors
     - has_sparse_elements
+    - sparsevctrs_options
