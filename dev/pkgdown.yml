@@ -1,10 +1,10 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   design: design.html
   articles/when-to-use: when-to-use.html
-last_built: 2024-09-12T20:12Z
+last_built: 2024-09-18T18:45Z
 urls:
   reference: https://r-lib.github.io/sparsevctrs/reference
   article: https://r-lib.github.io/sparsevctrs/articles

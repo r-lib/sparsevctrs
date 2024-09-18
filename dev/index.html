@@ -15,6 +15,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Sparse Vectors for Use in Data Frames">
 <meta name="description" content="Provides sparse vectors powered by ALTREP (Alternative Representations for R Objects) that behave like regular vectors, and can thus be used in data frames. Also provides tools to convert between sparse matrices and data frames with sparse columns and functions to interact with sparse vectors.">
 <meta property="og:description" content="Provides sparse vectors powered by ALTREP (Alternative Representations for R Objects) that behave like regular vectors, and can thus be used in data frames. Also provides tools to convert between sparse matrices and data frames with sparse columns and functions to interact with sparse vectors.">
+<meta property="og:image" content="https://r-lib.github.io/sparsevctrs/logo.png">
 <meta name="robots" content="noindex">
 <script defer data-domain="sparsevctrs.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
@@ -58,8 +59,11 @@
 </nav><div class="container template-home" id="container">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="sparsevctrs">sparsevctrs<a class="anchor" aria-label="anchor" href="#sparsevctrs"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="sparsevctrs-">sparsevctrs 
+<a class="anchor" aria-label="anchor" href="#sparsevctrs-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 
 <p>The goal of sparsevctrs is to provide a sparse vector <a href="https://svn.r-project.org/R/branches/ALTREP/ALTREP.html" class="external-link">ALTREP</a> class. With this, you can have sparse data in the form of sparse columns in <code>data.frame</code> or <a href="https://tibble.tidyverse.org/" class="external-link">tibble</a>. Due to the nature of how ALTREP vectors work, these sparse vectors will behave like the normal dense vectors you are used you. The vectors will contain their sparseness as much as they can, and only materialize when they have to.</p>
@@ -85,7 +89,7 @@
 <span><span class="va">x_dense</span><span class="op">[</span><span class="fl">15</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span></span>
 <span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_sparse</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 1.35 kB</span></span>
+<span><span class="co">#&gt; 936 B</span></span>
 <span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_dense</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 8.05 kB</span></span>
 <span></span>
@@ -98,11 +102,11 @@
 <span><span class="va">x_sparse_1000000</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sparse_double.html">sparse_double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10000000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_sparse_0</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 1.30 kB</span></span>
+<span><span class="co">#&gt; 888 B</span></span>
 <span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_sparse_1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 1.30 kB</span></span>
+<span><span class="co">#&gt; 888 B</span></span>
 <span><span class="fu"><a href="https://lobstr.r-lib.org/reference/obj_size.html" class="external-link">obj_size</a></span><span class="op">(</span><span class="va">x_sparse_1000000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 1.30 kB</span></span>
+<span><span class="co">#&gt; 888 B</span></span>
 <span></span>
 <span><span class="va">x_dense_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">x_dense_1000</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
@@ -203,7 +207,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
   </div></footer>
