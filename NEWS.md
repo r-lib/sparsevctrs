@@ -8,6 +8,8 @@
 
 * Helper function `has_sparse_elements()` has been added (#70)
 
+* `is_sparse_vector()` has been rewritten for speed improvement. (#76)
+
 # sparsevctrs 0.1.0
 
 * Initial CRAN submission.
