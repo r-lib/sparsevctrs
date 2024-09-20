@@ -68,6 +68,18 @@ SEXP ffi_extract_altrep_class(SEXP x) {
   return ATTRIB(ALTREP_CLASS(x));
 }
 
+static inline SEXP altrep_package(SEXP x) {
+  return VECTOR_ELT(Rf_PairToVectorList(ATTRIB(ALTREP_CLASS(x))), 1);
+}
+
+SEXP ffi_is_sparse_vector(SEXP x) {
+  if (!is_altrep(x)) {
+    return (Rf_ScalarLogical(FALSE));
+  }
+
+  return Rf_ScalarLogical(altrep_package(x) == Rf_install("sparsevctrs"));
+}
+
 static inline R_xlen_t midpoint(R_xlen_t lhs, R_xlen_t rhs) {
   return lhs + (rhs - lhs) / 2;
 }
