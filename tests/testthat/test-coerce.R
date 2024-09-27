@@ -20,6 +20,36 @@ test_that("coerce_to_sparse_matrix() works", {
   expect_identical(res, exp)
 })
 
+test_that("coerce_to_sparse_matrix() with zero rows and columns", {
+  skip_if_not_installed("Matrix")
+
+  dat <- data.frame()
+  exp <- Matrix::Matrix(nrow = 0, ncol = 0, sparse = TRUE)
+  
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(x = integer(), y = integer())
+  exp <- Matrix::Matrix(nrow = 0, ncol = 2, sparse = TRUE)
+  colnames(exp) <- c("x", "y")
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+
+  dat <- data.frame(x = 1:2)[, integer()]
+  exp <- Matrix::Matrix(nrow = 2, ncol = 0, sparse = TRUE)
+  
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+})
+
 test_that("coerce_to_sparse_matrix() errors on wrong input", {
   skip_if_not_installed("Matrix")
 
