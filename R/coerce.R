@@ -73,11 +73,21 @@ coerce_to_sparse_matrix <- function(x, call = rlang::caller_env(0)) {
   all_positions <- all_positions[non_zero]
   all_values <- all_values[non_zero]
 
+  n_row <- nrow(x)
+  n_col <- ncol(x)
+
+  if (identical(rownames(x), as.character(seq_len(nrow(x))))) {
+    row_names <- NULL
+  } else {
+    row_names <- rownames(x)
+  }
+
   res <- Matrix::sparseMatrix(
     i = all_positions,
     j = all_rows,
     x = all_values,
-    dimnames = list(rownames(x), colnames(x))
+    dims = c(n_row, n_col),
+    dimnames = list(row_names, colnames(x))
   )
   res
 }
