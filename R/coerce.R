@@ -67,6 +67,12 @@ coerce_to_sparse_matrix <- function(x, call = rlang::caller_env(0)) {
   all_positions <- unlist(all_positions, use.names = FALSE)
   all_values <- unlist(all_values, use.names = FALSE)
 
+  # TODO: maybe faster to do this above?
+  non_zero <- all_values != 0
+  all_rows <- all_rows[non_zero]
+  all_positions <- all_positions[non_zero]
+  all_values <- all_values[non_zero]
+
   res <- Matrix::sparseMatrix(
     i = all_positions,
     j = all_rows,
