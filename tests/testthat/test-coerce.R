@@ -190,6 +190,100 @@ test_that("coerce_to_sparse_matrix() works with sparse between dense", {
   )
 })
 
+test_that("coerce_to_sparse_matrix() works with sparse before dense", {
+  skip_if_not_installed("Matrix")
+
+  exp <- Matrix::Matrix(c(0, 0, 0, 0, 0, 1), nrow = 3, ncol = 2, sparse = TRUE)
+  colnames(exp) <- c("x", "y")
+
+  dat <- data.frame(
+    x = c(0, 0, 0), 
+    y = c(0, 0, 1)
+  )
+  
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = c(0, 0, 0), 
+    y = sparse_integer(1, 3, 3)
+  )
+  
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = sparse_integer(integer(), integer(), 3), 
+    y = c(0, 0, 1)
+  )
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = sparse_integer(integer(), integer(), 3), 
+    y = sparse_integer(1, 3, 3)
+  )
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+})
+
+test_that("coerce_to_sparse_matrix() works with sparse after dense", {
+  skip_if_not_installed("Matrix")
+
+  exp <- Matrix::Matrix(c(1, 0, 0, 0, 0, 0), nrow = 3, ncol = 2, sparse = TRUE)
+  colnames(exp) <- c("x", "y")
+
+  dat <- data.frame(
+    x = c(1, 0, 0), 
+    y = c(0, 0, 0)
+  )
+  
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = sparse_integer(1, 1, 3),
+    y = c(0, 0, 0)
+  )
+  
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = c(1, 0, 0),
+    y = sparse_integer(integer(), integer(), 3)
+  )
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = sparse_integer(1, 1, 3),
+    y = sparse_integer(integer(), integer(), 3)
+  )
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+})
+
 test_that("coerce_to_sparse_matrix() errors on wrong input", {
   skip_if_not_installed("Matrix")
 
