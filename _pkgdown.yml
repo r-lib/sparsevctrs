@@ -29,6 +29,7 @@ reference:
   - title: Helper Functions
     contents:
     - sparse_mean
+    - sparse_var
   
   - title: Utility Functions
     contents:
