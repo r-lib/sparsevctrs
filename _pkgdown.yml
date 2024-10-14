@@ -30,6 +30,8 @@ reference:
     contents:
     - sparse_mean
     - sparse_var
+    - sparse_sd
+    - sparse_median
   
   - title: Utility Functions
     contents:
