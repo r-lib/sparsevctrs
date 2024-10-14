@@ -36,14 +36,20 @@
 #' 
 #' @export
 sparse_mean <- function(x, na_rm = FALSE) {
-  values <- sparse_values(x)
-  x_len <- length(x)
   default <- sparse_default(x)
+  values <- sparse_values(x)
+  len_values <- length(values)
+  
+  if (len_values == 0) {
+    return(default)
+  }
+
+  x_len <- length(x)
 
   res <- sum(values, na.rm = na_rm)
 
   if (default != 0) {
-    res <- res + (x_len - length(values)) * default
+    res <- res + (x_len - len_values) * default
   }
   
   if (na_rm) {

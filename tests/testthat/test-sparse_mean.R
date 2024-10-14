@@ -26,4 +26,12 @@ test_that("sparse_mean() works", {
   x <- sparse_double(c(NA, 10, 30), 1:3, 1000, default = 100)
 
   expect_equal(mean(x, na.rm = TRUE), sparse_mean(x, na_rm = TRUE))
+
+  x <- sparse_double(numeric(), integer(), 1000)
+
+  expect_equal(mean(x), sparse_mean(x))
+
+  x <- sparse_double(numeric(), integer(), 1000, default = 100)
+
+  expect_equal(mean(x), sparse_mean(x))
 })
