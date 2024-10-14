@@ -41,6 +41,11 @@ test_that("sparse_median() edge cases", {
 
   expect_equal(median(x), sparse_median(x))
 
+  x <- sparse_double(c(10, NA), c(1, 2), 4)
+
+  expect_equal(median(x), sparse_median(x))
+  expect_equal(median(x, na.rm = TRUE), sparse_median(x, na_rm = TRUE))
+
   x <- sparse_double(c(10, 10, NA), c(1, 2, 3), 5)
 
   expect_equal(median(x), sparse_median(x))
