@@ -46,6 +46,10 @@ sparse_mean <- function(x, na_rm = FALSE) {
     res <- res + (x_len - length(values)) * default
   }
   
+  if (na_rm) {
+    x_len <- x_len - sum(is.na(values))
+  }
+  
   res <- res / x_len
   
   res
