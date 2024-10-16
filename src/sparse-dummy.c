@@ -8,39 +8,28 @@ SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts) {
   R_xlen_t n_lvls = Rf_length(lvls);
   R_xlen_t x_length = Rf_length(x);
   SEXP out = PROTECT(Rf_allocVector(VECSXP, n_lvls));
+  SEXP pos_index = PROTECT(Rf_allocVector(INTSXP, n_lvls));
+  int* v_pos_index = INTEGER(pos_index);
 
   for (R_xlen_t i = 0; i < n_lvls; ++i) {
     R_xlen_t n_val = INTEGER_ELT(counts, i);
-
-    SEXP dummy = PROTECT(Rf_allocVector(VECSXP, 4));
-
-    SEXP dummy_val = Rf_allocVector(INTSXP, n_val);
-    SET_VECTOR_ELT(dummy, 0, dummy_val);
-    int* v_dummy_val = INTEGER(dummy_val);
-
-    SEXP dummy_pos = Rf_allocVector(INTSXP, n_val);
-    SET_VECTOR_ELT(dummy, 1, dummy_pos);
-    int* v_dummy_pos = INTEGER(dummy_pos);
-
-    SEXP dummy_length = Rf_ScalarInteger((int) x_length);
-    SET_VECTOR_ELT(dummy, 2, dummy_length);
-
-    SEXP dummy_default = Rf_ScalarInteger((int) 0);
-    SET_VECTOR_ELT(dummy, 3, dummy_default);
-
-    R_xlen_t pos_index = 0;
-    for (R_xlen_t j = 0; j < x_length; ++j) {
-      if (i == INTEGER_ELT(x, j)) {
-        v_dummy_val[pos_index] = 1;
-        v_dummy_pos[pos_index] = j;
-        if (pos_index == n_val) {
-          break;
-        }
-        ++pos_index;
-      }
-    }
-    SET_VECTOR_ELT(out, i, ffi_altrep_new_sparse_integer(dummy));
+    SET_VECTOR_ELT(out, i, Rf_allocVector(INTSXP, n_val));
+    SET_INTEGER_ELT(pos_index, i, 0);
   }
+
+  for (R_xlen_t i = 0; i < x_length; ++i) {
+    int current_val = INTEGER_ELT(x, i);
+
+    int pos = v_pos_index[current_val - 1];
+
+    SEXP pos_vec = VECTOR_ELT(out, current_val - 1);
+    int* v_pos_vec = INTEGER(pos_vec);
+
+    v_pos_vec[pos] = i + 1;
+    v_pos_index[current_val - 1]++;
+  }
+
+  UNPROTECT(2);
 
   return out;
 }

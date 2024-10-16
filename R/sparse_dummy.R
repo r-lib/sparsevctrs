@@ -10,5 +10,10 @@ sparse_dummy <- function(x, lvls = NULL) {
 
   res <- .Call(ffi_sparse_dummy, x, lvls, counts)
   names(res) <- lvls
-  res
+  
+  lapply(res, create_dummy, length(x))
+}
+
+create_dummy <- function(x, len) {
+  new_sparse_integer(rep(1L, length(x)), x, len, 0L)
 }
