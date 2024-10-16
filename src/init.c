@@ -1,6 +1,7 @@
 #include <Rinternals.h>
 #include "sparse-extractors.h"
 #include "sparse-utils.h"
+#include "sparse-dummy.h"
 
 // Defined in altrep-sparse-double.c
 extern SEXP ffi_altrep_new_sparse_double(SEXP);
@@ -19,15 +20,13 @@ extern SEXP ffi_altrep_new_sparse_logical(SEXP);
 extern void sparsevctrs_init_altrep_sparse_logical(DllInfo*);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"ffi_altrep_new_sparse_double",
-     (DL_FUNC) &ffi_altrep_new_sparse_double,
-     1},
+    {"ffi_altrep_new_sparse_double", (DL_FUNC) &ffi_altrep_new_sparse_double, 1
+    },
     {"ffi_altrep_new_sparse_integer",
      (DL_FUNC) &ffi_altrep_new_sparse_integer,
      1},
-    {"ffi_altrep_new_sparse_string",
-     (DL_FUNC) &ffi_altrep_new_sparse_string,
-     1},
+    {"ffi_altrep_new_sparse_string", (DL_FUNC) &ffi_altrep_new_sparse_string, 1
+    },
     {"ffi_altrep_new_sparse_logical",
      (DL_FUNC) &ffi_altrep_new_sparse_logical,
      1},
@@ -36,7 +35,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"ffi_altrep_sparse_default", (DL_FUNC) &ffi_altrep_sparse_default, 1},
     {"ffi_extract_altrep_class", (DL_FUNC) &ffi_extract_altrep_class, 1},
     {"ffi_is_sparse_vector", (DL_FUNC) &ffi_is_sparse_vector, 1},
-    {NULL, NULL, 0}};
+    {"ffi_sparse_dummy", (DL_FUNC) &ffi_sparse_dummy, 3},
+    {NULL, NULL, 0}
+};
 
 void R_init_sparsevctrs(DllInfo* dll) {
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
