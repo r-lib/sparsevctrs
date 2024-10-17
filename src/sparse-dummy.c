@@ -4,6 +4,32 @@
 extern SEXP ffi_altrep_new_sparse_integer(SEXP);
 extern void sparsevctrs_init_altrep_sparse_integer(DllInfo*);
 
+SEXP create_dummy(SEXP pos, R_xlen_t length) {
+  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
+
+  R_xlen_t pos_len = Rf_length(pos);
+
+  SEXP out_val = Rf_allocVector(INTSXP, pos_len);
+  SET_VECTOR_ELT(out, 0, out_val);
+  int* v_out_val = INTEGER(out_val);
+
+  for (R_xlen_t i = 0; i < pos_len; ++i) {
+    v_out_val[i] = 1;
+  }
+
+  SET_VECTOR_ELT(out, 1, pos);
+
+  SEXP out_length = Rf_ScalarInteger((int) length);
+  SET_VECTOR_ELT(out, 2, out_length);
+
+  SEXP out_default = Rf_ScalarInteger(0);
+  SET_VECTOR_ELT(out, 3, out_default);
+
+  UNPROTECT(1);
+
+  return ffi_altrep_new_sparse_integer(out);
+}
+
 SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts) {
   R_xlen_t n_lvls = Rf_length(lvls);
   R_xlen_t x_length = Rf_length(x);
@@ -27,6 +53,12 @@ SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts) {
 
     v_pos_vec[pos] = i + 1;
     v_pos_index[current_val - 1]++;
+  }
+
+  for (R_xlen_t i = 0; i < n_lvls; ++i) {
+    SEXP pos = VECTOR_ELT(out, i);
+    SEXP dummy = create_dummy(pos, x_length);
+    SET_VECTOR_ELT(out, i, dummy);
   }
 
   UNPROTECT(2);
