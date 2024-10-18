@@ -81,7 +81,7 @@ SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {
 
   // Itterate over input, find its position index, and place the position value
   // at the index. Increment specific index.
-  if (R_isTRUE(one_hot)) {
+  if ((Rboolean) LOGICAL_ELT(one_hot, 0) == TRUE) {
     for (R_xlen_t i = 0; i < len; ++i) {
       int current_val = v_x[i] - 1;
 
@@ -154,7 +154,7 @@ SEXP ffi_sparse_dummy_na(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {
   // Itterate over input, find its position index, and place the position value
   // at the index. Increment specific index.
 
-  if (R_isTRUE(one_hot)) {
+  if ((Rboolean) LOGICAL_ELT(one_hot, 0) == TRUE) {
     for (R_xlen_t i = 0; i < len; ++i) {
       int current_val = v_x[i];
 
