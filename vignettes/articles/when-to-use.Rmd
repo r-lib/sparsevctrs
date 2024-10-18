@@ -103,7 +103,7 @@ sparse_fun <- function(x) {
 }
 
 bench::press(
-  x = c(100, 1000, 10000, 100000, 1000000, 10000000),
+  x = c(10, 100, 1000, 10000, 100000, 1000000),
   {
     bench::mark(
       dense = dense_fun(x),
@@ -131,7 +131,7 @@ sparse_fun <- function(x) {
 }
 
 bench::press(
-  x = c(100, 1000, 10000, 100000, 1000000, 10000000),
+  x = c(10, 100, 1000, 10000, 100000, 1000000),
   {
     bench::mark(
       dense = dense_fun(x),
@@ -157,7 +157,7 @@ sparse_fun <- function(x) {
 }
 
 bench::press(
-  x = c(100, 1000, 10000, 100000, 1000000, 10000000),
+  x = c(10, 100, 1000, 10000, 100000, 1000000),
   {
     dense_x <- dense_fun(x)
     sparse_x <- sparse_fun(x)
@@ -185,7 +185,7 @@ sparse_fun <- function(x) {
 }
 
 bench::press(
-  x = c(100, 1000, 10000, 100000, 1000000, 10000000),
+  x = c(10, 100, 1000, 10000, 100000, 1000000),
   {
     dense_x <- dense_fun(x)
     sparse_x <- sparse_fun(x)
@@ -217,7 +217,7 @@ sparse_mean <- function(x) {
 }
 
 bench::press(
-  x = c(100, 1000, 10000, 100000, 1000000, 10000000),
+  x = c(10, 100, 1000, 10000, 100000, 1000000),
   {
     dense_x <- dense_fun(x)
     sparse_x <- sparse_fun(x)
