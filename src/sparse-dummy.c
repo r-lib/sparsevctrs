@@ -81,14 +81,9 @@ SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {
 
   // Itterate over input, find its position index, and place the position value
   // at the index. Increment specific index.
-
-  if ((bool) one_hot) {
+  if (R_isTRUE(one_hot)) {
     for (R_xlen_t i = 0; i < len; ++i) {
       int current_val = v_x[i] - 1;
-
-      if (current_val == -1) {
-        continue;
-      }
 
       int index = v_pos_index[current_val];
 
@@ -102,6 +97,10 @@ SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {
   } else {
     for (R_xlen_t i = 0; i < len; ++i) {
       int current_val = v_x[i] - 1;
+
+      if (current_val == -1) {
+        continue;
+      }
 
       int index = v_pos_index[current_val];
 
@@ -155,7 +154,7 @@ SEXP ffi_sparse_dummy_na(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {
   // Itterate over input, find its position index, and place the position value
   // at the index. Increment specific index.
 
-  if ((bool) one_hot) {
+  if (R_isTRUE(one_hot)) {
     for (R_xlen_t i = 0; i < len; ++i) {
       int current_val = v_x[i];
 
@@ -174,10 +173,6 @@ SEXP ffi_sparse_dummy_na(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {
         }
       } else {
         --current_val;
-        if (current_val == -1) {
-          continue;
-        }
-
         int index = v_pos_index[current_val];
 
         SEXP pos_vec = VECTOR_ELT(out_positions, current_val);
@@ -210,6 +205,10 @@ SEXP ffi_sparse_dummy_na(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {
         }
       } else {
         --current_val;
+        if (current_val == -1) {
+          continue;
+        }
+
         int index = v_pos_index[current_val];
 
         SEXP pos_vec = VECTOR_ELT(out_positions, current_val);
