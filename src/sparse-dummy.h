@@ -5,6 +5,6 @@
 #include <Rinternals.h>
 #include "sparse-utils.h"
 
-SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts);
+SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot);
 
 #endif

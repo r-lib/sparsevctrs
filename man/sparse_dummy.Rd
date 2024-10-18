@@ -4,10 +4,13 @@
 \alias{sparse_dummy}
 \title{Generate sparse dummy variables}
 \usage{
-sparse_dummy(x)
+sparse_dummy(x, one_hot = FALSE)
 }
 \arguments{
 \item{x}{A factor.}
+
+\item{one_hot}{A single logical value. Should the first factor level be
+ignored. Defaults to \code{FALSE}.}
 }
 \value{
 A list of sparse integer dummy variables.

@@ -18,6 +18,26 @@ test_that("sparse_dummy() works", {
   )
 })
 
+test_that("sparse_dummy() works with one_hot", {
+  x <- factor(c("a", "b", "c", "d", "a"))
+  exp <- list(
+    b = sparse_integer(1, 2, 5),
+    c = sparse_integer(1, 3, 5),
+    d = sparse_integer(1, 4, 5)
+  )
+
+  res <- sparse_dummy(x, one_hot = TRUE)
+  expect_identical(
+    res,
+    exp
+  )
+
+  expect_true(
+    all(vapply(res, is_sparse_integer, logical(1)))
+  )
+})
+
+
 test_that("sparse_dummy() can handle unused levels", {
   x <- factor(c("a", "b", "c", "d", "a"), levels = letters[1:6])
   exp <- list(

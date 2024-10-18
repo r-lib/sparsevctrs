@@ -34,7 +34,7 @@ SEXP create_dummy(SEXP pos, R_xlen_t length) {
   return ffi_altrep_new_sparse_integer(out);
 }
 
-SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts) {
+SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {
   const R_xlen_t n_lvls = Rf_length(lvls);
   const R_xlen_t len = Rf_length(x);
 
@@ -59,17 +59,37 @@ SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts) {
 
   // Itterate over input, find its position index, and place the position value
   // at the index. Increment specific index.
-  for (R_xlen_t i = 0; i < len; ++i) {
-    int current_val = v_x[i] - 1;
 
-    int index = v_pos_index[current_val];
+  if ((bool) one_hot) {
+    for (R_xlen_t i = 0; i < len; ++i) {
+      int current_val = v_x[i] - 1;
 
-    SEXP pos_vec = VECTOR_ELT(out, current_val);
-    int* v_pos_vec = INTEGER(pos_vec);
+      if (current_val == -1) {
+        continue;
+      }
 
-    // we need the result to be 1-indexed
-    v_pos_vec[index] = i + 1;
-    v_pos_index[current_val]++;
+      int index = v_pos_index[current_val];
+
+      SEXP pos_vec = VECTOR_ELT(out, current_val);
+      int* v_pos_vec = INTEGER(pos_vec);
+
+      // we need the result to be 1-indexed
+      v_pos_vec[index] = i + 1;
+      v_pos_index[current_val]++;
+    }
+  } else {
+    for (R_xlen_t i = 0; i < len; ++i) {
+      int current_val = v_x[i] - 1;
+
+      int index = v_pos_index[current_val];
+
+      SEXP pos_vec = VECTOR_ELT(out, current_val);
+      int* v_pos_vec = INTEGER(pos_vec);
+
+      // we need the result to be 1-indexed
+      v_pos_vec[index] = i + 1;
+      v_pos_index[current_val]++;
+    }
   }
 
   // Turn list of integer vectors with positions, into list of sparse integer
