@@ -21,6 +21,9 @@ Generate sparse dummy variables
 \details{
 Only factor variables can be used with \code{\link[=sparse_dummy]{sparse_dummy()}}. A call to
 \code{as.factor()} would be required for any other type of data.
+
+If only a single level is present after \code{one_hot} takes effect. Then the
+vector produced won't be sparse.
 }
 \examples{
 x <- factor(c("a", "a", "b", "c", "d", "b"))

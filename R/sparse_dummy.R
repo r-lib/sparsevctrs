@@ -7,6 +7,9 @@
 #' @details
 #' Only factor variables can be used with [sparse_dummy()]. A call to 
 #' `as.factor()` would be required for any other type of data.
+#' 
+#' If only a single level is present after `one_hot` takes effect. Then the 
+#' vector produced won't be sparse.
 #'
 #' @return A list of sparse integer dummy variables.
 #' 
@@ -29,7 +32,15 @@ sparse_dummy <- function(x, one_hot = FALSE) {
     x <- x - 1L
   }
 
-  counts <- tabulate(x, nbins = length(lvls))
+  n_lvls <- length(lvls)
+
+  if (n_lvls == 1) {
+    res <- list(rep(1L, length(x)))
+    names(res) <- lvls
+    return(res)
+  }
+
+  counts <- tabulate(x, nbins = n_lvls)
 
   res <- .Call(ffi_sparse_dummy, x, lvls, counts, one_hot)
   names(res) <- lvls

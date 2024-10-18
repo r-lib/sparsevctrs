@@ -37,7 +37,6 @@ test_that("sparse_dummy() works with one_hot", {
   )
 })
 
-
 test_that("sparse_dummy() can handle unused levels", {
   x <- factor(c("a", "b", "c", "d", "a"), levels = letters[1:6])
   exp <- list(
@@ -57,6 +56,66 @@ test_that("sparse_dummy() can handle unused levels", {
 
   expect_true(
     all(vapply(res, is_sparse_integer, logical(1)))
+  )
+})
+
+test_that("sparse_dummy() with `one_hot = TRUE` can handle unused levels", {
+  x <- factor(c("a", "b", "c", "d", "a"), levels = letters[1:6])
+  exp <- list(
+    b = sparse_integer(1, 2, 5),
+    c = sparse_integer(1, 3, 5),
+    d = sparse_integer(1, 4, 5),
+    e = sparse_integer(integer(), integer(), 5),
+    f = sparse_integer(integer(), integer(), 5)
+  )
+
+  res <- sparse_dummy(x, one_hot = TRUE) 
+  expect_identical(
+    res,
+    exp
+  )
+
+  expect_true(
+    all(vapply(res, is_sparse_integer, logical(1)))
+  )
+})
+
+test_that("sparse_dummy() works single level", {
+  x <- factor(c("a", "a", "a"))
+  exp <- list(
+    a = c(1L, 1L, 1L)
+  )
+
+  res <- sparse_dummy(x) 
+  expect_identical(
+    res,
+    exp
+  )
+
+  expect_true(is.integer(res$a))
+  expect_false(is_sparse_vector(res$a))
+})
+
+test_that("sparse_dummy() works zero length input", {
+  x <- factor(character())
+  exp <- structure(list(), names = character(0))
+
+  res <- sparse_dummy(x) 
+  expect_identical(
+    res,
+    exp
+  )
+})
+
+test_that("sparse_dummy() works with single level and `one_hot = TRUE`", {
+  x <- factor(c("a", "a", "a"))
+  exp <- structure(list(), names = character(0))
+
+
+  res <- sparse_dummy(x, one_hot = TRUE) 
+  expect_identical(
+    res,
+    exp
   )
 })
 
