@@ -42,7 +42,14 @@ sparse_dummy <- function(x, one_hot = FALSE) {
 
   counts <- tabulate(x, nbins = n_lvls)
 
-  res <- .Call(ffi_sparse_dummy, x, lvls, counts, one_hot)
+  if (anyNA(x)) {
+    n_missing <- sum(is.na(x))
+    counts <- counts + n_missing
+    res <- .Call(ffi_sparse_dummy_na, x, lvls, counts, one_hot)
+  } else {
+    res <- .Call(ffi_sparse_dummy, x, lvls, counts, one_hot)
+  }
+
   names(res) <- lvls
   res
 }

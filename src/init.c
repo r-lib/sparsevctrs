@@ -36,6 +36,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"ffi_extract_altrep_class", (DL_FUNC) &ffi_extract_altrep_class, 1},
     {"ffi_is_sparse_vector", (DL_FUNC) &ffi_is_sparse_vector, 1},
     {"ffi_sparse_dummy", (DL_FUNC) &ffi_sparse_dummy, 4},
+    {"ffi_sparse_dummy_na", (DL_FUNC) &ffi_sparse_dummy_na, 4},
     {NULL, NULL, 0}
 };
 
