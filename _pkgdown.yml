@@ -25,8 +25,15 @@ reference:
     - coerce_to_sparse_matrix
     - coerce_to_sparse_tibble
     - coerce-vector
-
+  
   - title: Helper Functions
+    contents:
+    - sparse_mean
+    - sparse_var
+    - sparse_sd
+    - sparse_median
+  
+  - title: Utility Functions
     contents:
     - type-predicates
     - extractors
