@@ -38,10 +38,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="sparsevctrs-development-version">sparsevctrs (development version)<a class="anchor" aria-label="anchor" href="#sparsevctrs-development-version"></a></h2>
-<ul><li><p>All sparse vector types now have a significant smaller base object size. (<a href="https://github.com/r-lib/sparsevctrs/issues/67" class="external-link">#67</a>)</p></li>
+<ul><li><p>Helper functions <code><a href="../reference/sparse_mean.html">sparse_mean()</a></code>, <code><a href="../reference/sparse_var.html">sparse_var()</a></code>, <code><a href="../reference/sparse_sd.html">sparse_sd()</a></code>, <code><a href="../reference/sparse_median.html">sparse_median()</a></code> has been added. (<a href="https://github.com/r-lib/sparsevctrs/issues/49" class="external-link">#49</a>)</p></li>
+<li><p>All sparse vector types now have a significant smaller base object size. (<a href="https://github.com/r-lib/sparsevctrs/issues/67" class="external-link">#67</a>)</p></li>
 <li><p>Fixed bug where <code><a href="../reference/coerce_to_sparse_data_frame.html">coerce_to_sparse_data_frame()</a></code> and <code><a href="../reference/coerce_to_sparse_tibble.html">coerce_to_sparse_tibble()</a></code> didn’t work with matrices with fully sparse columns. (<a href="https://github.com/r-lib/sparsevctrs/issues/69" class="external-link">#69</a>)</p></li>
 <li><p>All coerce functions have received a <code>call</code> argument. (<a href="https://github.com/r-lib/sparsevctrs/issues/72" class="external-link">#72</a>)</p></li>
-<li><p>Helper function <code><a href="../reference/has_sparse_elements.html">has_sparse_elements()</a></code> has been added (<a href="https://github.com/r-lib/sparsevctrs/issues/70" class="external-link">#70</a>)</p></li>
+<li><p>Utility function <code><a href="../reference/has_sparse_elements.html">has_sparse_elements()</a></code> has been added. (<a href="https://github.com/r-lib/sparsevctrs/issues/70" class="external-link">#70</a>)</p></li>
 <li><p><code><a href="../reference/type-predicates.html">is_sparse_vector()</a></code> has been rewritten for speed improvement. (<a href="https://github.com/r-lib/sparsevctrs/issues/76" class="external-link">#76</a>)</p></li>
 <li><p>Fixed bugs where <code><a href="../reference/coerce_to_sparse_matrix.html">coerce_to_sparse_matrix()</a></code> would error for completely sparse columns. (<a href="https://github.com/r-lib/sparsevctrs/issues/77" class="external-link">#77</a>)</p></li>
 <li><p><code><a href="../reference/coerce_to_sparse_matrix.html">coerce_to_sparse_matrix()</a></code> Now turns dense zeroes into sparse zeroes. (<a href="https://github.com/r-lib/sparsevctrs/issues/77" class="external-link">#77</a>)</p></li>

@@ -197,7 +197,7 @@ go back.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span>, <span class="fl">10000000</span><span class="op">)</span>,</span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>      dense <span class="op">=</span> <span class="fu">dense_fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
@@ -223,7 +223,7 @@ force materialization.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span>, <span class="fl">10000000</span><span class="op">)</span>,</span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>      dense <span class="op">=</span> <span class="fu">dense_fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
@@ -255,7 +255,7 @@ quite well.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span>, <span class="fl">10000000</span><span class="op">)</span>,</span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="va">dense_x</span> <span class="op">&lt;-</span> <span class="fu">dense_fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>    <span class="va">sparse_x</span> <span class="op">&lt;-</span> <span class="fu">sparse_fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -285,7 +285,7 @@ progress. Once such unsupported method is <code><a href="https://rdrr.io/r/base/
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span>, <span class="fl">10000000</span><span class="op">)</span>,</span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="va">dense_x</span> <span class="op">&lt;-</span> <span class="fu">dense_fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>    <span class="va">sparse_x</span> <span class="op">&lt;-</span> <span class="fu">sparse_fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -323,13 +323,13 @@ materialization.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/press.html" class="external-link">press</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span>, <span class="fl">10000000</span><span class="op">)</span>,</span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">100000</span>, <span class="fl">1000000</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
 <span>    <span class="va">dense_x</span> <span class="op">&lt;-</span> <span class="fu">dense_fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>    <span class="va">sparse_x</span> <span class="op">&lt;-</span> <span class="fu">sparse_fun</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>    <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>      dense <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dense_x</span><span class="op">)</span>,</span>
-<span>      sparse <span class="op">=</span> <span class="fu">sparse_mean</span><span class="op">(</span><span class="va">sparse_x</span><span class="op">)</span></span>
+<span>      sparse <span class="op">=</span> <span class="fu"><a href="../reference/sparse_mean.html">sparse_mean</a></span><span class="op">(</span><span class="va">sparse_x</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
