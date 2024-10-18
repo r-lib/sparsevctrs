@@ -7,8 +7,9 @@ extern void sparsevctrs_init_altrep_sparse_integer(DllInfo*);
 SEXP create_dummy(SEXP pos, R_xlen_t length) {
   SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
 
-  R_xlen_t pos_len = Rf_length(pos);
+  const R_xlen_t pos_len = Rf_length(pos);
 
+  // values
   SEXP out_val = Rf_allocVector(INTSXP, pos_len);
   SET_VECTOR_ELT(out, 0, out_val);
   int* v_out_val = INTEGER(out_val);
@@ -17,12 +18,15 @@ SEXP create_dummy(SEXP pos, R_xlen_t length) {
     v_out_val[i] = 1;
   }
 
+  // positions
   SET_VECTOR_ELT(out, 1, pos);
 
-  SEXP out_length = Rf_ScalarInteger((int) length);
+  // length
+  const SEXP out_length = Rf_ScalarInteger((int) length);
   SET_VECTOR_ELT(out, 2, out_length);
 
-  SEXP out_default = Rf_ScalarInteger(0);
+  // default
+  const SEXP out_default = Rf_ScalarInteger(0);
   SET_VECTOR_ELT(out, 3, out_default);
 
   UNPROTECT(1);
@@ -31,33 +35,48 @@ SEXP create_dummy(SEXP pos, R_xlen_t length) {
 }
 
 SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts) {
-  R_xlen_t n_lvls = Rf_length(lvls);
-  R_xlen_t x_length = Rf_length(x);
+  const R_xlen_t n_lvls = Rf_length(lvls);
+  const R_xlen_t len = Rf_length(x);
+
+  const int* v_x = INTEGER_RO(x);
+
+  // Generate list of integer vectors. One vector for each level, with its
+  // length equal to the number of occurances of that level.
   SEXP out = PROTECT(Rf_allocVector(VECSXP, n_lvls));
-  SEXP pos_index = PROTECT(Rf_allocVector(INTSXP, n_lvls));
-  int* v_pos_index = INTEGER(pos_index);
 
   for (R_xlen_t i = 0; i < n_lvls; ++i) {
     R_xlen_t n_val = INTEGER_ELT(counts, i);
     SET_VECTOR_ELT(out, i, Rf_allocVector(INTSXP, n_val));
+  }
+
+  // Vector of positions to keep track of how far into each position vector we
+  // are. Initialize to 0 to indicate first position.
+  SEXP pos_index = PROTECT(Rf_allocVector(INTSXP, n_lvls));
+  int* v_pos_index = INTEGER(pos_index);
+  for (R_xlen_t i = 0; i < n_lvls; ++i) {
     SET_INTEGER_ELT(pos_index, i, 0);
   }
 
-  for (R_xlen_t i = 0; i < x_length; ++i) {
-    int current_val = INTEGER_ELT(x, i);
+  // Itterate over input, find its position index, and place the position value
+  // at the index. Increment specific index.
+  for (R_xlen_t i = 0; i < len; ++i) {
+    int current_val = v_x[i] - 1;
 
-    int pos = v_pos_index[current_val - 1];
+    int index = v_pos_index[current_val];
 
-    SEXP pos_vec = VECTOR_ELT(out, current_val - 1);
+    SEXP pos_vec = VECTOR_ELT(out, current_val);
     int* v_pos_vec = INTEGER(pos_vec);
 
-    v_pos_vec[pos] = i + 1;
-    v_pos_index[current_val - 1]++;
+    // we need the result to be 1-indexed
+    v_pos_vec[index] = i + 1;
+    v_pos_index[current_val]++;
   }
 
+  // Turn list of integer vectors with positions, into list of sparse integer
+  // vectors.
   for (R_xlen_t i = 0; i < n_lvls; ++i) {
-    SEXP pos = VECTOR_ELT(out, i);
-    SEXP dummy = create_dummy(pos, x_length);
+    SEXP positions = VECTOR_ELT(out, i);
+    SEXP dummy = create_dummy(positions, len);
     SET_VECTOR_ELT(out, i, dummy);
   }
 
