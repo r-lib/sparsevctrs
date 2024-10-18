@@ -1,5 +1,7 @@
 # sparsevctrs (development version)
 
+* Helper function `sparse_dummy()` has beenn added. (#49)
+
 * Helper functions `sparse_mean()`, `sparse_var()`, `sparse_sd()`, `sparse_median()` has been added. (#49)
 
 * All sparse vector types now have a significant smaller base object size. (#67)
