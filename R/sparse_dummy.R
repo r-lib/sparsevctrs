@@ -10,13 +10,28 @@
 #' 
 #' If only a single level is present after `one_hot` takes effect. Then the 
 #' vector produced won't be sparse.
+#' 
+#' A missing value at the `i`th element will produce missing values for all 
+#' dummy variables at thr `i`th position.
 #'
 #' @return A list of sparse integer dummy variables.
 #' 
 #' @examples
 #' x <- factor(c("a", "a", "b", "c", "d", "b"))
 #' 
-#' sparse_dummy(x)
+#' sparse_dummy(x, one_hot = FALSE)
+#' 
+#' x <- factor(c("a", "a", "b", "c", "d", "b"))
+#' 
+#' sparse_dummy(x, one_hot = TRUE)
+#' 
+#' x <- factor(c("a", NA, "b", "c", "d", NA))
+#' 
+#' sparse_dummy(x, one_hot = FALSE)
+#' 
+#' x <- factor(c("a", NA, "b", "c", "d", NA))
+#' 
+#' sparse_dummy(x, one_hot = TRUE)
 #' @export
 sparse_dummy <- function(x, one_hot = FALSE) {
   if (!is.factor(x)) {

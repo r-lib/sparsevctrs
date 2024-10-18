@@ -24,9 +24,24 @@ Only factor variables can be used with \code{\link[=sparse_dummy]{sparse_dummy()
 
 If only a single level is present after \code{one_hot} takes effect. Then the
 vector produced won't be sparse.
+
+A missing value at the \code{i}th element will produce missing values for all
+dummy variables at thr \code{i}th position.
 }
 \examples{
 x <- factor(c("a", "a", "b", "c", "d", "b"))
 
-sparse_dummy(x)
+sparse_dummy(x, one_hot = FALSE)
+
+x <- factor(c("a", "a", "b", "c", "d", "b"))
+
+sparse_dummy(x, one_hot = TRUE)
+
+x <- factor(c("a", NA, "b", "c", "d", NA))
+
+sparse_dummy(x, one_hot = FALSE)
+
+x <- factor(c("a", NA, "b", "c", "d", NA))
+
+sparse_dummy(x, one_hot = TRUE)
 }
