@@ -22,7 +22,7 @@ sparse_dummy <- function(x) {
 
   x <- as.integer(x)
   
-  counts <- tabulate(x)
+  counts <- tabulate(x, nbins = length(lvls))
 
   res <- .Call(ffi_sparse_dummy, x, lvls, counts)
   names(res) <- lvls
