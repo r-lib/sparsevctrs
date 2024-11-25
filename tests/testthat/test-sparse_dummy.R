@@ -127,6 +127,22 @@ test_that("sparse_dummy(one_hot = FALSE) works with single level", {
   )
 })
 
+test_that("sparse_dummy(one_hot = FALSE) works with two levels", {
+  x <- factor(c("a", "b", "a"))
+  exp <- list(
+    b = c(0L, 1L, 0L)
+  )
+
+  res <- sparse_dummy(x, one_hot = FALSE)
+  expect_identical(
+    res,
+    exp
+  )
+
+  expect_true(is.integer(res$b))
+  expect_true(is_sparse_vector(res$b))
+})
+
 test_that("sparse_dummy(one_hot = TRUE) works zero length input", {
   x <- factor(character())
   exp <- structure(list(), names = character(0))
