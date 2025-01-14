@@ -33,6 +33,7 @@ reference:
     - sparse_sd
     - sparse_median
     - sparse_dummy
+    - sparsity
   
   - title: Utility Functions
     contents:

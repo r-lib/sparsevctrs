@@ -18,6 +18,8 @@
 
 * `coerce_to_sparse_matrix()` Now turns dense zeroes into sparse zeroes. (#77)
 
+* `sparsity()` has been added, allows sparsity calculations of data.frames, matrices, and sparse matrices. (#82)
+
 # sparsevctrs 0.1.0
 
 * Initial CRAN submission.
