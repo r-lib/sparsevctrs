@@ -1,63 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/404.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/articles/design.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/articles/when-to-use.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/coerce-vector.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_data_frame.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_tibble.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/extractors.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/sparse_character.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/sparse_double.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/sparse_integer.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/sparse_logical.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/sparsevctrs-package.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/sparsevctrs/reference/type-predicates.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://r-lib.github.io/sparsevctrs/404.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/LICENSE-text.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/LICENSE.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/articles/design.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/articles/index.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/articles/when-to-use.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/authors.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/index.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/news/index.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/coerce-vector.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_data_frame.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_matrix.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_tibble.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/extractors.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/has_sparse_elements.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/index.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_character.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_double.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_dummy.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_integer.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_logical.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_mean.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_median.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_sd.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparse_var.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparsevctrs-package.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparsevctrs_options.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/sparsity.html</loc></url>
+<url><loc>https://r-lib.github.io/sparsevctrs/reference/type-predicates.html</loc></url>
 </urlset>
+
