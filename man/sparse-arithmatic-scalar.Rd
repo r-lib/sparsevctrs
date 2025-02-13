@@ -3,9 +3,18 @@
 \name{sparse-arithmatic-scalar}
 \alias{sparse-arithmatic-scalar}
 \alias{sparse_division_scalar}
+\alias{sparse_multiplication_scalar}
+\alias{sparse_addition_scalar}
+\alias{sparse_subtraction_scalar}
 \title{Scalar arithmatic with sparse vectors}
 \usage{
 sparse_division_scalar(x, val)
+
+sparse_multiplication_scalar(x, val)
+
+sparse_addition_scalar(x, val)
+
+sparse_subtraction_scalar(x, val)
 }
 \arguments{
 \item{x}{A sparse vector.}
