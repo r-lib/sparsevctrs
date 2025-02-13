@@ -18,6 +18,9 @@
 #' x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
 #'
 #' sparse_division_scalar(x_sparse, 2)
+#' sparse_multiplication_scalar(x_sparse, 2)
+#' sparse_addition_scalar(x_sparse, 2)
+#' sparse_subtraction_scalar(x_sparse, 2)
 #' @name sparse-arithmatic-scalar
 NULL
 
