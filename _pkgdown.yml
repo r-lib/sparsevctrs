@@ -38,6 +38,7 @@ reference:
   - title: Utility Functions
     contents:
     - type-predicates
+    - sparse-arithmatic-scalar
     - extractors
     - has_sparse_elements
     - sparsevctrs_options
