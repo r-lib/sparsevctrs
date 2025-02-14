@@ -11,9 +11,10 @@
 #'
 #' `sparse_division_scalar()` and `sparse_multiplication_scalar()` are the most
 #' used ones, as they preserve the default, which is often what you want to do.
-#' 
-#' `sparse_division_scalar()` always produces double vectors, regardless of 
-#' whether they could be represented as integers or not.
+#'
+#' `sparse_division_scalar()` always produces double vectors, regardless of
+#' whether they could be represented as integers or not. Expect when `val = 1`
+#' as the input is returned unchanged.
 #'
 #' @return A sparse vector of same type.
 #'
@@ -34,6 +35,10 @@ sparse_division_scalar <- function(x, val) {
     return(rep(Inf, length(x)))
   }
 
+  if (val == 1) {
+    return(x)
+  }
+
   res <- sparse_double(
     values = sparse_values(x) / val,
     positions = sparse_positions(x),
@@ -47,6 +52,10 @@ sparse_division_scalar <- function(x, val) {
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_multiplication_scalar <- function(x, val) {
+  if (val == 1) {
+    return(x)
+  }
+
   if (is_sparse_integer(x)) {
     if (val == 0) {
       res <- sparse_integer(
@@ -88,6 +97,10 @@ sparse_multiplication_scalar <- function(x, val) {
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_addition_scalar <- function(x, val) {
+  if (val == 0) {
+    return(x)
+  }
+
   if (is_sparse_integer(x)) {
     res <- sparse_integer(
       values = sparse_values(x) + val,
@@ -111,6 +124,10 @@ sparse_addition_scalar <- function(x, val) {
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_subtraction_scalar <- function(x, val) {
+  if (val == 0) {
+    return(x)
+  }
+
   if (is_sparse_integer(x)) {
     res <- sparse_integer(
       values = sparse_values(x) - val,

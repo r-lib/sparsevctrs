@@ -72,11 +72,11 @@ test_that("scalar division works", {
   )
   expect_identical(
     sparse_division_scalar(vec_int, 1),
-    exp_double / 1
+    as.integer(exp_double)
   )
   expect_identical(
     sparse_division_scalar(vec_double, 1),
-    exp_double / 1
+    exp_double
   )
   expect_identical(
     sparse_division_scalar(vec_int, 2),
@@ -93,7 +93,7 @@ test_that("scalar division works", {
   )
 
   expect_true(
-    is_sparse_double(sparse_division_scalar(vec_int, 1))
+    is_sparse_integer(sparse_division_scalar(vec_int, 1))
   )
   expect_true(
     is_sparse_double(sparse_division_scalar(vec_double, 1))
