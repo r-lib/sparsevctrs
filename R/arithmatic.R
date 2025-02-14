@@ -30,6 +30,10 @@ NULL
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_division_scalar <- function(x, val) {
+  if (val == 0) {
+    return(rep(Inf, length(x)))
+  }
+
   res <- sparse_double(
     values = sparse_values(x) / val,
     positions = sparse_positions(x),
