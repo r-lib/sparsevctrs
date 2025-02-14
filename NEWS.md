@@ -1,5 +1,7 @@
 # sparsevctrs (development version)
 
+* Adding the scalar arithmatic functions `sparse_division_scalar()`, `sparse_multiplication_scalar()`, `sparse_addition_scalar()`, `sparse_subtraction_scalar()`. (#87)
+
 # sparsevctrs 0.2.0
 
 ## New Functions
