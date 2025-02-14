@@ -12,6 +12,9 @@
 #' `sparse_division_scalar()` and `sparse_multiplication_scalar()` are the most
 #' used ones, as they preserve the default, which is often what you want to do.
 #'
+#' `sparse_division_scalar()` always produces double vectors, regardless of 
+#' whether they could be represented as integers or not.
+#'
 #' @return A sparse vector of same type.
 #'
 #' @examples
@@ -27,22 +30,12 @@ NULL
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_division_scalar <- function(x, val) {
-  if (is_sparse_integer(x)) {
-    res <- sparse_integer(
-      values = sparse_values(x) / val,
-      positions = sparse_positions(x),
-      length = length(x),
-      default = sparse_default(x)
-    )
-  }
-  if (is_sparse_double(x)) {
-    res <- sparse_double(
-      values = sparse_values(x) / val,
-      positions = sparse_positions(x),
-      length = length(x),
-      default = sparse_default(x)
-    )
-  }
+  res <- sparse_double(
+    values = sparse_values(x) / val,
+    positions = sparse_positions(x),
+    length = length(x),
+    default = sparse_default(x)
+  )
 
   res
 }

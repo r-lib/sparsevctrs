@@ -33,6 +33,9 @@ No checking of the inputs are being done.
 
 \code{sparse_division_scalar()} and \code{sparse_multiplication_scalar()} are the most
 used ones, as they preserve the default, which is often what you want to do.
+
+\code{sparse_division_scalar()} always produces double vectors, regardless of
+whether they could be represented as integers or not.
 }
 \examples{
 x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
