@@ -2,6 +2,8 @@
 
 * Adding the scalar arithmatic functions `sparse_division_scalar()`, `sparse_multiplication_scalar()`, `sparse_addition_scalar()`, `sparse_subtraction_scalar()`. (#87)
 
+* Fixed bug in `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` where they didn't work with ngCMatrix. (#89)
+
 # sparsevctrs 0.2.0
 
 ## New Functions
