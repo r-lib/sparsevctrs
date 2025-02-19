@@ -4,6 +4,8 @@
 
 * Fixed bug in `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` where they didn't work with ngCMatrix. (#89)
 
+* Helper function `sparse_sqrt()` has been added. (#90)
+
 # sparsevctrs 0.2.0
 
 ## New Functions
