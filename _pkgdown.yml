@@ -33,6 +33,7 @@ reference:
     - sparse_sd
     - sparse_median
     - sparse_sqrt
+    - sparse_replace_na
     - sparse_dummy
     - sparsity
   
