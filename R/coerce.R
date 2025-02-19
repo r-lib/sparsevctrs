@@ -197,7 +197,12 @@ coerce_to_sparse_data_frame <- function(x, call = rlang::caller_env(0)) {
 }
 
 .sparse_matrix_to_list <- function(x) {
-  values <- x@x
+  if (methods::is(x, "ngCMatrix")) {
+    values <- rep(1, length(x@i))
+  } else {
+    values <- x@x
+  }
+
   x_positions <- x@i
   n_nonzero <- diff(x@p)
 
