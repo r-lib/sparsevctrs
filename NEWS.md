@@ -6,6 +6,8 @@
 
 * Helper function `sparse_sqrt()` has been added. (#90)
 
+* Helper function `sparse_replace_na()` has been added. (#91)
+
 # sparsevctrs 0.2.0
 
 ## New Functions
