@@ -34,6 +34,8 @@ reference:
     - sparse_median
     - sparse_sqrt
     - sparse_replace_na
+    - sparse_is_na
+    - sparse_which_na
     - sparse_dummy
     - sparsity
   
