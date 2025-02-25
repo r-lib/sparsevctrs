@@ -227,10 +227,12 @@ test_that("vector multiplication works - integers", {
   sparse_int_1 <- sparse_integer(c(4, 78), c(1, 10), 10)
   sparse_int_2 <- sparse_integer(c(4, 78), c(1, 9), 10)
   sparse_int_3 <- sparse_integer(c(4, 3, 4, 5), c(2, 3, 5, 9), 10)
+  sparse_int_NA <- sparse_integer(c(4, NA, 4, 5), c(2, 3, 5, 9), 10)
 
   dense_int_1 <- sparse_int_1[]
   dense_int_2 <- sparse_int_2[]
   dense_int_3 <- sparse_int_3[]
+  dense_int_NA <- sparse_int_NA[]
 
   # integer, sparse x sparse
   expect_identical(
@@ -245,6 +247,14 @@ test_that("vector multiplication works - integers", {
     sparse_multiplication(sparse_int_1, sparse_int_3),
     sparse_int_1 * sparse_int_3
   )
+  expect_identical(
+    sparse_multiplication(sparse_int_1, sparse_int_NA),
+    sparse_int_1 * sparse_int_NA
+  )
+  expect_identical(
+    sparse_multiplication(sparse_int_3, sparse_int_NA),
+    sparse_int_3 * sparse_int_NA
+  )
   # integer, dense x dense
   expect_identical(
     sparse_multiplication(dense_int_1, dense_int_1),
@@ -257,6 +267,14 @@ test_that("vector multiplication works - integers", {
   expect_identical(
     sparse_multiplication(dense_int_1, dense_int_3),
     dense_int_1 * dense_int_3
+  )
+  expect_identical(
+    sparse_multiplication(dense_int_1, dense_int_NA),
+    dense_int_1 * dense_int_NA
+  )
+  expect_identical(
+    sparse_multiplication(dense_int_3, dense_int_NA),
+    dense_int_3 * dense_int_NA
   )
   # integer, sparse x dense
   expect_identical(
@@ -271,6 +289,14 @@ test_that("vector multiplication works - integers", {
     sparse_multiplication(sparse_int_1, dense_int_3),
     sparse_int_1 * dense_int_3
   )
+  expect_identical(
+    sparse_multiplication(sparse_int_1, dense_int_NA),
+    sparse_int_1 * dense_int_NA
+  )
+  expect_identical(
+    sparse_multiplication(sparse_int_3, dense_int_NA),
+    sparse_int_3 * dense_int_NA
+  )
   # integer, dense x sparse
   expect_identical(
     sparse_multiplication(dense_int_1, sparse_int_1),
@@ -284,16 +310,26 @@ test_that("vector multiplication works - integers", {
     sparse_multiplication(dense_int_1, sparse_int_3),
     dense_int_1 * sparse_int_3
   )
+  expect_identical(
+    sparse_multiplication(dense_int_1, sparse_int_NA),
+    dense_int_1 * sparse_int_NA
+  )
+  expect_identical(
+    sparse_multiplication(dense_int_3, sparse_int_NA),
+    dense_int_3 * sparse_int_NA
+  )
 })
 
 test_that("vector multiplication works - doubles", {
   sparse_dbl_1 <- sparse_double(c(4.3, 7.8), c(1, 10), 10)
   sparse_dbl_2 <- sparse_double(c(4.3, 7.8), c(1, 9), 10)
   sparse_dbl_3 <- sparse_double(c(4.2, 3.1, 4.4, 5.5), c(2, 3, 5, 9), 10)
+  sparse_dbl_NA <- sparse_double(c(4.2, NA, 4.4, 5.5), c(2, 3, 5, 9), 10)
 
   dense_dbl_1 <- sparse_dbl_1[]
   dense_dbl_2 <- sparse_dbl_2[]
   dense_dbl_3 <- sparse_dbl_3[]
+  dense_dbl_NA <- sparse_dbl_NA[]
 
   # double, sparse x sparse
   expect_identical(
@@ -308,6 +344,14 @@ test_that("vector multiplication works - doubles", {
     sparse_multiplication(sparse_dbl_1, sparse_dbl_3),
     sparse_dbl_1 * sparse_dbl_3
   )
+  expect_identical(
+    sparse_multiplication(sparse_dbl_1, sparse_dbl_NA),
+    sparse_dbl_1 * sparse_dbl_NA
+  )
+  expect_identical(
+    sparse_multiplication(sparse_dbl_3, sparse_dbl_NA),
+    sparse_dbl_3 * sparse_dbl_NA
+  )
   # double, dense x dense
   expect_identical(
     sparse_multiplication(dense_dbl_1, dense_dbl_1),
@@ -320,6 +364,14 @@ test_that("vector multiplication works - doubles", {
   expect_identical(
     sparse_multiplication(dense_dbl_1, dense_dbl_3),
     dense_dbl_1 * dense_dbl_3
+  )
+  expect_identical(
+    sparse_multiplication(dense_dbl_1, dense_dbl_NA),
+    dense_dbl_1 * dense_dbl_NA
+  )
+  expect_identical(
+    sparse_multiplication(dense_dbl_3, dense_dbl_NA),
+    dense_dbl_3 * dense_dbl_NA
   )
   # double, sparse x dense
   expect_identical(
@@ -334,6 +386,14 @@ test_that("vector multiplication works - doubles", {
     sparse_multiplication(sparse_dbl_1, dense_dbl_3),
     sparse_dbl_1 * dense_dbl_3
   )
+  expect_identical(
+    sparse_multiplication(sparse_dbl_1, dense_dbl_NA),
+    sparse_dbl_1 * dense_dbl_NA
+  )
+  expect_identical(
+    sparse_multiplication(sparse_dbl_3, dense_dbl_NA),
+    sparse_dbl_3 * dense_dbl_NA
+  )
   # double, dense x sparse
   expect_identical(
     sparse_multiplication(dense_dbl_1, sparse_dbl_1),
@@ -346,5 +406,13 @@ test_that("vector multiplication works - doubles", {
   expect_identical(
     sparse_multiplication(dense_dbl_1, sparse_dbl_3),
     dense_dbl_1 * sparse_dbl_3
+  )
+  expect_identical(
+    sparse_multiplication(dense_dbl_1, sparse_dbl_NA),
+    dense_dbl_1 * sparse_dbl_NA
+  )
+  expect_identical(
+    sparse_multiplication(dense_dbl_3, sparse_dbl_NA),
+    dense_dbl_3 * sparse_dbl_NA
   )
 })

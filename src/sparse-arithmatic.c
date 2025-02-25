@@ -225,7 +225,9 @@ SEXP multiplication_doubles_dense_dense(SEXP x, SEXP y) {
   SEXP out = Rf_allocVector(REALSXP, len);
 
   for (R_xlen_t i = 0; i < len; i++) {
-    SET_REAL_ELT(out, i, REAL_ELT(x, i) * REAL_ELT(y, i));
+    double x_val = REAL_ELT(x, i);
+    double y_val = REAL_ELT(y, i);
+    SET_REAL_ELT(out, i, x_val * y_val);
   }
 
   return out;
@@ -349,7 +351,13 @@ SEXP multiplication_integers_dense_dense(SEXP x, SEXP y) {
   SEXP out = Rf_allocVector(INTSXP, len);
 
   for (R_xlen_t i = 0; i < len; i++) {
-    SET_INTEGER_ELT(out, i, INTEGER_ELT(x, i) * INTEGER_ELT(y, i));
+    int x_val = INTEGER_ELT(x, i);
+    int y_val = INTEGER_ELT(y, i);
+    if (x_val == NA_INTEGER || y_val == NA_INTEGER) {
+      SET_INTEGER_ELT(out, i, NA_INTEGER);
+    } else {
+      SET_INTEGER_ELT(out, i, x_val * y_val);
+    }
   }
 
   return out;
