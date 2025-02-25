@@ -147,3 +147,56 @@ sparse_subtraction_scalar <- function(x, val) {
 
   res
 }
+
+#' Vector arithmatic with sparse vectors
+#'
+#' Do Arithmatic on sparse vectors without destroying the sparsity.
+#'
+#' @param x A numeric vector.
+#' @param y A numeric vector.
+#'
+#' @details
+#' 
+#' Note that this function works with both sparse and dense vectors for both `x`
+#' and `y`, returning a sparse or dense vector according to the input.
+#' 
+#' @return A sparse vector of same type.
+#'
+#' @examples
+#' x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
+#'
+#' sparse_multiplication(x_sparse, x_sparse)
+#' @name sparse-arithmatic
+NULL
+
+#' @rdname sparse-arithmatic
+#' @export
+sparse_multiplication <- function(x, y) {
+  if (!is.numeric(x)) {
+    cli::cli_abort("{.arg x} must me numeric, not {.obj_type_friendly {x}}.")
+  }
+  if (!is.numeric(y)) {
+    cli::cli_abort("{.arg y} must me numeric not {.obj_type_friendly {x}}.")
+  }
+
+  if (length(x) != length(y)) {
+    x_len <- length(x)
+    y_len <- length(y)
+    cli::cli_abort(
+      "{.arg x} ({x_len}) and {.arg y} ({y_len}) must be the same length."
+    )
+  }
+
+  x_class <- class(x)
+  y_class <- class(y)
+
+  if (x_class != y_class) {
+    if (x_class == "integer") {
+      x <- as.double(x)
+    } else {
+      y <- as.double(y)
+    }
+  }
+
+  .Call(ffi_sparse_multiplication, x, y)
+}
