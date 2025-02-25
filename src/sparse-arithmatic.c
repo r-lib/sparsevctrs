@@ -26,6 +26,31 @@ SEXP empty_sparse_integer(R_xlen_t len) {
   return altrep;
 }
 
+// Defined in altrep-sparse-integer.c
+extern SEXP ffi_altrep_new_sparse_double(SEXP);
+extern void sparsevctrs_init_altrep_sparse_double(DllInfo*);
+
+SEXP empty_sparse_double(R_xlen_t len) {
+  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
+
+  SEXP out_val = Rf_allocVector(REALSXP, 0);
+  SET_VECTOR_ELT(out, 0, out_val);
+
+  SEXP out_pos = Rf_allocVector(INTSXP, 0);
+  SET_VECTOR_ELT(out, 1, out_pos);
+
+  SEXP out_length = Rf_ScalarInteger((int) len);
+  SET_VECTOR_ELT(out, 2, out_length);
+
+  SEXP out_default = Rf_ScalarReal(0);
+  SET_VECTOR_ELT(out, 3, out_default);
+
+  SEXP altrep = ffi_altrep_new_sparse_double(out);
+
+  UNPROTECT(1);
+  return altrep;
+}
+
 SEXP find_overlap(SEXP x, SEXP y) {
   SEXP x_pos = extract_pos(x);
   SEXP y_pos = extract_pos(y);
@@ -100,11 +125,100 @@ SEXP find_overlap(SEXP x, SEXP y) {
 }
 
 SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
-  return x;
+  SEXP overlap = find_overlap(x, y);
+  if (overlap == R_NilValue) {
+    return empty_sparse_double(extract_len(x));
+  }
+
+  SEXP x_pos_idx = VECTOR_ELT(overlap, 0);
+  SEXP y_pos_idx = VECTOR_ELT(overlap, 1);
+
+  SEXP x_pos = extract_pos(x);
+  SEXP x_val = extract_val(x);
+
+  SEXP y_val = extract_val(y);
+
+  R_xlen_t out_len = Rf_length(x_pos_idx);
+  SEXP out_pos = Rf_allocVector(INTSXP, out_len);
+  SEXP out_val = Rf_allocVector(REALSXP, out_len);
+
+  for (R_xlen_t i = 0; i < out_len; i++) {
+    SET_INTEGER_ELT(out_pos, i, INTEGER_ELT(x_pos, INTEGER_ELT(x_pos_idx, i)));
+    SET_REAL_ELT(
+        out_val,
+        i,
+        REAL_ELT(x_val, INTEGER_ELT(x_pos_idx, i)) *
+            REAL_ELT(y_val, INTEGER_ELT(y_pos_idx, i))
+    );
+  }
+
+  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
+
+  SET_VECTOR_ELT(out, 0, out_val);
+
+  SET_VECTOR_ELT(out, 1, out_pos);
+
+  SEXP out_length = Rf_ScalarInteger((int) extract_len(x));
+  SET_VECTOR_ELT(out, 2, out_length);
+
+  SEXP out_default = Rf_ScalarReal(0);
+  SET_VECTOR_ELT(out, 3, out_default);
+
+  SEXP altrep = ffi_altrep_new_sparse_double(out);
+
+  UNPROTECT(1);
+  return altrep;
 }
+
 SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
-  return x;
+  SEXP x_pos = extract_pos(x);
+  SEXP x_val = extract_val(x);
+  R_xlen_t x_len = extract_len(x);
+  R_xlen_t n_values = Rf_length(x_pos);
+
+  R_xlen_t n_zero = 0;
+  for (R_xlen_t i = 0; i < n_values; i++) {
+    if (REAL_ELT(y, INTEGER_ELT(x_pos, i) - 1) == 0) {
+      n_zero++;
+    }
+  }
+
+  R_xlen_t out_len = n_values - n_zero;
+  SEXP out_pos = Rf_allocVector(INTSXP, out_len);
+  SEXP out_val = Rf_allocVector(REALSXP, out_len);
+
+  R_xlen_t idx = 0;
+
+  for (R_xlen_t i = 0; i < n_values; i++) {
+    int cur_pos = INTEGER_ELT(x_pos, i);
+    double y_val = REAL_ELT(y, cur_pos - 1);
+
+    if (y_val != 0) {
+      SET_INTEGER_ELT(out_pos, idx, cur_pos);
+      double cur_val = REAL_ELT(x_val, i);
+      SET_REAL_ELT(out_val, idx, y_val * cur_val);
+      idx++;
+    }
+  }
+
+  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
+
+  SET_VECTOR_ELT(out, 0, out_val);
+
+  SET_VECTOR_ELT(out, 1, out_pos);
+
+  SEXP out_length = Rf_ScalarInteger((int) x_len);
+  SET_VECTOR_ELT(out, 2, out_length);
+
+  SEXP out_default = Rf_ScalarReal(0);
+  SET_VECTOR_ELT(out, 3, out_default);
+
+  SEXP altrep = ffi_altrep_new_sparse_double(out);
+
+  UNPROTECT(1);
+  return altrep;
 }
+
 SEXP multiplication_doubles_dense_dense(SEXP x, SEXP y) {
   R_xlen_t len = Rf_length(x);
 
