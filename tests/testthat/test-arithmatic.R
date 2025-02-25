@@ -222,3 +222,66 @@ test_that("scalar subtraction works", {
     is_sparse_double(sparse_subtraction_scalar(vec_double, 5))
   )
 })
+
+test_that("vector multiplication works", {
+  sparse_int_1 <- sparse_integer(c(4, 78), c(1, 10), 10)
+  sparse_int_2 <- sparse_integer(c(4, 78), c(1, 9), 10)
+  sparse_int_3 <- sparse_integer(c(4, 3, 4, 5), c(2, 3, 5, 9), 10)
+
+  dense_int_1 <- sparse_int_1[]
+  dense_int_2 <- sparse_int_2[]
+  dense_int_3 <- sparse_int_3[]
+
+  # integer, sparse x sparse
+  expect_identical(
+    sparse_multiplication(sparse_int_1, sparse_int_1),
+    sparse_int_1 * sparse_int_1
+  )
+  expect_identical(
+    sparse_multiplication(sparse_int_1, sparse_int_2),
+    sparse_int_1 * sparse_int_2
+  )
+  expect_identical(
+    sparse_multiplication(sparse_int_1, sparse_int_3),
+    sparse_int_1 * sparse_int_3
+  )
+  # integer, dense x dense
+  expect_identical(
+    sparse_multiplication(dense_int_1, dense_int_1),
+    dense_int_1 * dense_int_1
+  )
+  expect_identical(
+    sparse_multiplication(dense_int_1, dense_int_2),
+    dense_int_1 * dense_int_2
+  )
+  expect_identical(
+    sparse_multiplication(dense_int_1, dense_int_3),
+    dense_int_1 * dense_int_3
+  )
+  # integer, sparse x dense
+  expect_identical(
+    sparse_multiplication(sparse_int_1, dense_int_1),
+    sparse_int_1 * dense_int_1
+  )
+  expect_identical(
+    sparse_multiplication(sparse_int_1, dense_int_2),
+    sparse_int_1 * dense_int_2
+  )
+  expect_identical(
+    sparse_multiplication(sparse_int_1, dense_int_3),
+    sparse_int_1 * dense_int_3
+  )
+  # integer, dense x sparse
+  expect_identical(
+    sparse_multiplication(dense_int_1, sparse_int_1),
+    dense_int_1 * sparse_int_1
+  )
+  expect_identical(
+    sparse_multiplication(dense_int_1, sparse_int_2),
+    dense_int_1 * sparse_int_2
+  )
+  expect_identical(
+    sparse_multiplication(dense_int_1, sparse_int_3),
+    dense_int_1 * sparse_int_3
+  )
+})
