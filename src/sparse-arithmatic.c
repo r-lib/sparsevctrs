@@ -355,7 +355,8 @@ SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
   R_xlen_t y_len = Rf_length(y);
   for (R_xlen_t i = 0; i < y_len; i++) {
     if (R_IsNA(REAL_ELT(y, i))) {
-      if (!int_match((int) i, x_pos)) {
+      // i + 1 because of R-indexing
+      if (!int_match((int) i + 1, x_pos)) {
         n_y_nas++;
       }
     }
@@ -366,7 +367,8 @@ SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
 
   for (R_xlen_t i = 0; i < y_len; i++) {
     if (R_IsNA(REAL_ELT(y, i))) {
-      if (!int_match((int) i, x_pos)) {
+      // i + 1 because of R-indexing
+      if (!int_match((int) i + 1, x_pos)) {
         SET_INTEGER_ELT(y_na_pos, idx, i);
         idx++;
       }
@@ -393,7 +395,8 @@ SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
   for (R_xlen_t i = 0; i < n_values; i++) {
     if (R_IsNA(REAL_ELT(x_val, i))) {
       int cur_pos = INTEGER_ELT(x_pos, i);
-      int cur_y_val = REAL_ELT(y, cur_pos);
+      // cur_pos - 1 because of R-indexing
+      int cur_y_val = REAL_ELT(y, cur_pos - 1);
 
       if (cur_y_val == 0) {
         SET_INTEGER_ELT(x_na_pos, idx, cur_pos);
@@ -600,7 +603,8 @@ SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
   R_xlen_t y_len = Rf_length(y);
   for (R_xlen_t i = 0; i < y_len; i++) {
     if (INTEGER_ELT(y, i) == NA_INTEGER) {
-      if (!int_match((int) i, x_pos)) {
+      // i + 1 because of R-indexing
+      if (!int_match((int) i + 1, x_pos)) {
         n_y_nas++;
       }
     }
@@ -611,7 +615,8 @@ SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
 
   for (R_xlen_t i = 0; i < y_len; i++) {
     if (INTEGER_ELT(y, i) == NA_INTEGER) {
-      if (!int_match((int) i, x_pos)) {
+      // i + 1 because of R-indexing
+      if (!int_match((int) i + 1, x_pos)) {
         SET_INTEGER_ELT(y_na_pos, idx, i);
         idx++;
       }
@@ -638,7 +643,8 @@ SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
   for (R_xlen_t i = 0; i < n_values; i++) {
     if (INTEGER_ELT(x_val, i) == NA_INTEGER) {
       int cur_pos = INTEGER_ELT(x_pos, i);
-      int cur_y_val = INTEGER_ELT(y, cur_pos);
+      // cur_pos - 1 because of R-indexing
+      int cur_y_val = INTEGER_ELT(y, cur_pos - 1);
 
       if (cur_y_val == 0) {
         SET_INTEGER_ELT(x_na_pos, idx, cur_pos);
