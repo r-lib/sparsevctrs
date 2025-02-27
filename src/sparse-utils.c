@@ -212,7 +212,7 @@ void sort_pos_and_val(SEXP pos, SEXP val) {
     SEXP sorted_val = Rf_allocVector(REALSXP, len);
 
     for (R_xlen_t i = 0; i < len; i++) {
-      int cur_index = REAL_ELT(index, i);
+      int cur_index = INTEGER_ELT(index, i);
 
       SET_REAL_ELT(sorted_val, i, REAL_ELT(val, cur_index));
     }

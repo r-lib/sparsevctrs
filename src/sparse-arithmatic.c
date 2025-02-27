@@ -153,18 +153,36 @@ SEXP find_nas_with_no_overlap(SEXP x, SEXP y) {
 
   SEXP x_matches = Rf_allocVector(INTSXP, x_len);
   SEXP y_matches = Rf_allocVector(INTSXP, y_len);
+
   for (R_xlen_t i = 0; i < x_len; i++) {
-    if (INTEGER_ELT(x_val, i) == NA_INTEGER) {
-      SET_LOGICAL_ELT(x_matches, i, 1);
+    if (Rf_isInteger(x_val)) {
+      if (INTEGER_ELT(x_val, i) == NA_INTEGER) {
+        SET_LOGICAL_ELT(x_matches, i, 1);
+      } else {
+        SET_LOGICAL_ELT(x_matches, i, 0);
+      }
     } else {
-      SET_LOGICAL_ELT(x_matches, i, 0);
+      if (R_IsNA(REAL_ELT(x_val, i))) {
+        SET_LOGICAL_ELT(x_matches, i, 1);
+      } else {
+        SET_LOGICAL_ELT(x_matches, i, 0);
+      }
     }
   }
+
   for (R_xlen_t i = 0; i < y_len; i++) {
-    if (INTEGER_ELT(y_val, i) == NA_INTEGER) {
-      SET_LOGICAL_ELT(y_matches, i, 1);
+    if (Rf_isInteger(y_val)) {
+      if (INTEGER_ELT(y_val, i) == NA_INTEGER) {
+        SET_LOGICAL_ELT(y_matches, i, 1);
+      } else {
+        SET_LOGICAL_ELT(y_matches, i, 0);
+      }
     } else {
-      SET_LOGICAL_ELT(y_matches, i, 0);
+      if (R_IsNA(REAL_ELT(y_val, i))) {
+        SET_LOGICAL_ELT(y_matches, i, 1);
+      } else {
+        SET_LOGICAL_ELT(y_matches, i, 0);
+      }
     }
   }
 
@@ -230,30 +248,75 @@ SEXP find_nas_with_no_overlap(SEXP x, SEXP y) {
 
 SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
   SEXP overlap = find_overlap(x, y);
-  if (overlap == R_NilValue) {
+  SEXP nas = find_nas_with_no_overlap(x, y);
+
+  SEXP x_val = extract_val(x);
+  SEXP x_pos = extract_pos(x);
+  SEXP y_val = extract_val(y);
+  SEXP y_pos = extract_pos(y);
+
+  SEXP x_na_pos = VECTOR_ELT(nas, 0);
+  SEXP y_na_pos = VECTOR_ELT(nas, 1);
+
+  int x_na_count = Rf_length(x_na_pos);
+  int y_na_count = Rf_length(y_na_pos);
+
+  if (overlap == R_NilValue && x_na_count == 0 && y_na_count == 0) {
     return empty_sparse_double(extract_len(x));
   }
 
-  SEXP x_pos_idx = VECTOR_ELT(overlap, 0);
-  SEXP y_pos_idx = VECTOR_ELT(overlap, 1);
+  R_xlen_t n_overlap = 0;
+  if (overlap != R_NilValue) {
+    n_overlap = Rf_length(VECTOR_ELT(overlap, 0));
+  }
 
-  SEXP x_pos = extract_pos(x);
-  SEXP x_val = extract_val(x);
+  R_xlen_t out_len = n_overlap + x_na_count + y_na_count;
 
-  SEXP y_val = extract_val(y);
-
-  R_xlen_t out_len = Rf_length(x_pos_idx);
   SEXP out_pos = Rf_allocVector(INTSXP, out_len);
   SEXP out_val = Rf_allocVector(REALSXP, out_len);
+  R_xlen_t out_idx = 0;
 
-  for (R_xlen_t i = 0; i < out_len; i++) {
-    SET_INTEGER_ELT(out_pos, i, INTEGER_ELT(x_pos, INTEGER_ELT(x_pos_idx, i)));
-    SET_REAL_ELT(
-        out_val,
-        i,
-        REAL_ELT(x_val, INTEGER_ELT(x_pos_idx, i)) *
-            REAL_ELT(y_val, INTEGER_ELT(y_pos_idx, i))
+  if (overlap != R_NilValue) {
+    SEXP x_pos_idx = VECTOR_ELT(overlap, 0);
+    SEXP y_pos_idx = VECTOR_ELT(overlap, 1);
+
+    SEXP x_pos = extract_pos(x);
+
+    for (R_xlen_t i = 0; i < n_overlap; i++) {
+      SET_INTEGER_ELT(
+          out_pos, i, INTEGER_ELT(x_pos, INTEGER_ELT(x_pos_idx, i))
+      );
+
+      SET_REAL_ELT(
+          out_val,
+          out_idx,
+          REAL_ELT(x_val, INTEGER_ELT(x_pos_idx, i)) *
+              REAL_ELT(y_val, INTEGER_ELT(y_pos_idx, i))
+      );
+      out_idx++;
+    }
+  }
+
+  // set x NA values
+  for (R_xlen_t i = 0; i < x_na_count; i++) {
+    SET_INTEGER_ELT(
+        out_pos, out_idx, INTEGER_ELT(x_pos, INTEGER_ELT(x_na_pos, i))
     );
+    SET_REAL_ELT(out_val, out_idx, NA_REAL);
+    out_idx++;
+  }
+
+  // set y NA values
+  for (R_xlen_t i = 0; i < y_na_count; i++) {
+    SET_INTEGER_ELT(
+        out_pos, out_idx, INTEGER_ELT(y_pos, INTEGER_ELT(y_na_pos, i))
+    );
+    SET_REAL_ELT(out_val, out_idx, NA_REAL);
+    out_idx++;
+  }
+
+  if (out_len > 1) {
+    sort_pos_and_val(out_pos, out_val);
   }
 
   SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
@@ -287,11 +350,63 @@ SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
     }
   }
 
-  R_xlen_t out_len = n_values - n_zero;
+  // Locate NA values for Y - dense
+  R_xlen_t n_y_nas = 0;
+  R_xlen_t y_len = Rf_length(y);
+  for (R_xlen_t i = 0; i < y_len; i++) {
+    if (R_IsNA(REAL_ELT(y, i))) {
+      if (!int_match((int) i, x_pos)) {
+        n_y_nas++;
+      }
+    }
+  }
+
+  SEXP y_na_pos = Rf_allocVector(INTSXP, n_y_nas);
+  R_xlen_t idx = 0;
+
+  for (R_xlen_t i = 0; i < y_len; i++) {
+    if (R_IsNA(REAL_ELT(y, i))) {
+      if (!int_match((int) i, x_pos)) {
+        SET_INTEGER_ELT(y_na_pos, idx, i);
+        idx++;
+      }
+    }
+  }
+
+  // Locate NA values for X sparse
+  R_xlen_t n_x_nas = 0;
+  for (R_xlen_t i = 0; i < n_values; i++) {
+    if (R_IsNA(REAL_ELT(x_val, i))) {
+      int cur_pos = INTEGER_ELT(x_pos, i);
+      // cur_pos - 1 because of R-indexing
+      int cur_y_val = REAL_ELT(y, cur_pos - 1);
+
+      if (cur_y_val == 0) {
+        n_x_nas++;
+      }
+    }
+  }
+
+  SEXP x_na_pos = Rf_allocVector(INTSXP, n_x_nas);
+  idx = 0;
+
+  for (R_xlen_t i = 0; i < n_values; i++) {
+    if (R_IsNA(REAL_ELT(x_val, i))) {
+      int cur_pos = INTEGER_ELT(x_pos, i);
+      int cur_y_val = REAL_ELT(y, cur_pos);
+
+      if (cur_y_val == 0) {
+        SET_INTEGER_ELT(x_na_pos, idx, cur_pos);
+        idx++;
+      }
+    }
+  }
+
+  R_xlen_t out_len = n_values - n_zero + n_x_nas + n_y_nas;
   SEXP out_pos = Rf_allocVector(INTSXP, out_len);
   SEXP out_val = Rf_allocVector(REALSXP, out_len);
 
-  R_xlen_t idx = 0;
+  idx = 0;
 
   for (R_xlen_t i = 0; i < n_values; i++) {
     int cur_pos = INTEGER_ELT(x_pos, i);
@@ -303,6 +418,29 @@ SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
       SET_REAL_ELT(out_val, idx, y_val * cur_val);
       idx++;
     }
+  }
+
+  // set x na values
+  for (R_xlen_t i = 0; i < n_x_nas; i++) {
+    int cur_pos = INTEGER_ELT(x_na_pos, i);
+
+    SET_INTEGER_ELT(out_pos, idx, cur_pos);
+    SET_REAL_ELT(out_val, idx, NA_REAL);
+    idx++;
+  }
+
+  // set y na values
+  for (R_xlen_t i = 0; i < n_y_nas; i++) {
+    int cur_pos = INTEGER_ELT(y_na_pos, i);
+
+    // cur_pos + 1 because it is R-indexed
+    SET_INTEGER_ELT(out_pos, idx, cur_pos + 1);
+    SET_REAL_ELT(out_val, idx, NA_REAL);
+    idx++;
+  }
+
+  if (out_len > 1) {
+    sort_pos_and_val(out_pos, out_val);
   }
 
   SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
