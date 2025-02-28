@@ -43,6 +43,7 @@ reference:
     contents:
     - type-predicates
     - sparse-arithmatic-scalar
+    - sparse-arithmatic
     - extractors
     - has_sparse_elements
     - sparsevctrs_options
