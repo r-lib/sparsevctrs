@@ -10,6 +10,8 @@
 
 * Adding the arithmatic function `sparse_multiplication()`. (#93)
 
+* Adding `wts` argument to `sparse_mean()`. (#95)
+
 # sparsevctrs 0.2.0
 
 ## New Functions
