@@ -4,10 +4,12 @@
 \alias{sparse_mean}
 \title{Calculate mean from sparse vectors}
 \usage{
-sparse_mean(x, na_rm = FALSE)
+sparse_mean(x, wts = NULL, na_rm = FALSE)
 }
 \arguments{
 \item{x}{A sparse numeric vector.}
+
+\item{wts}{A numeric vector, should be same length as \code{x}.}
 
 \item{na_rm}{Logical, whether to remove missing values. Defaults to \code{FALSE}.}
 }

@@ -1,7 +1,9 @@
 #' Calculate mean from sparse vectors
 #'
 #' @param x A sparse numeric vector.
+#' @param wts A numeric vector, should be same length as `x`.
 #' @param na_rm Logical, whether to remove missing values. Defaults to `FALSE`.
+#'
 #'
 #' @details
 #' This function, as with any of the other helper functions assumes that the
@@ -33,7 +35,11 @@
 #' )
 #'
 #' @export
-sparse_mean <- function(x, na_rm = FALSE) {
+sparse_mean <- function(x, wts = NULL, na_rm = FALSE) {
+  if (!is.null(wts)) {
+    x <- sparse_multiplication(x, wts)
+  }
+
   default <- sparse_default(x)
   values <- sparse_values(x)
   len_values <- length(values)
@@ -46,7 +52,7 @@ sparse_mean <- function(x, na_rm = FALSE) {
 
   res <- sum(values, na.rm = na_rm)
 
-  if (default != 0) {
+  if (!is.na(default) && default != 0) {
     res <- res + (x_len - len_values) * default
   }
 
@@ -54,7 +60,15 @@ sparse_mean <- function(x, na_rm = FALSE) {
     x_len <- x_len - sum(is.na(values))
   }
 
-  res <- res / x_len
+  if (is.null(wts)) {
+    res <- res / x_len
+  } else {
+    na_loc <- sparse_which_na(x)
+    if (length(na_loc) > 0) {
+      wts <- wts[-na_loc]
+    }
+    res <- res / sum(wts)
+  }
 
   res
 }
