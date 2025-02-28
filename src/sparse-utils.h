@@ -33,4 +33,6 @@ bool is_index_handleable(SEXP x);
 
 void verbose_materialize(void);
 
+void sort_pos_and_val(SEXP pos, SEXP val);
+
 #endif

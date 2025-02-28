@@ -8,6 +8,8 @@
 
 * Helper function `sparse_replace_na()` has been added. (#91)
 
+* Adding the arithmatic function `sparse_multiplication()`. (#93)
+
 # sparsevctrs 0.2.0
 
 ## New Functions
