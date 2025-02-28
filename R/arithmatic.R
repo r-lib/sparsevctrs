@@ -193,17 +193,28 @@ sparse_multiplication <- function(x, y) {
   if (x_class != y_class) {
     if (x_class == "integer") {
       if (is_sparse_vector(x)) {
-        x <- as_sparse_double(x)
+        x <- as_sparse_double(x, default = sparse_default(x))
       } else {
         x <- as.double(x)
       }
     } else {
       if (is_sparse_vector(y)) {
-        y <- as_sparse_double(y)
+        y <- as_sparse_double(y, default = sparse_default(y))
       } else {
         y <- as.double(y)
       }
     }
+  }
+
+  x_default <- sparse_default(x)
+  y_default <- sparse_default(y)
+
+  if (!is.na(x_default) && x_default != 0) {
+    x <- x[]
+  }
+
+  if (!is.na(y_default) && y_default != 0) {
+    y <- y[]
   }
 
   .Call(ffi_sparse_multiplication, x, y)
