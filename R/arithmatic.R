@@ -192,9 +192,17 @@ sparse_multiplication <- function(x, y) {
 
   if (x_class != y_class) {
     if (x_class == "integer") {
-      x <- as.double(x)
+      if (is_sparse_vector(x)) {
+        x <- as_sparse_double(x)
+      } else {
+        x <- as.double(x)
+      }
     } else {
-      y <- as.double(y)
+      if (is_sparse_vector(y)) {
+        y <- as_sparse_double(y)
+      } else {
+        y <- as.double(y)
+      }
     }
   }
 

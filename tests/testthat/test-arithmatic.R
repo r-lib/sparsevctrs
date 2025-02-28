@@ -453,3 +453,73 @@ test_that("vector multiplication works - doubles", {
   )
 })
 
+test_that("vector multiplication works - types", {
+  sparse_int <- sparse_integer(c(4, 78), c(1, 10), 10)
+  dense_int <- sparse_int[]
+  sparse_dbl <- sparse_double(c(4.3, 7.8), c(1, 10), 10)
+  dense_dbl <- sparse_dbl[]
+
+  res <- sparse_multiplication(sparse_int, sparse_int)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.integer(res))
+
+  res <- sparse_multiplication(sparse_int, dense_int)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.integer(res))
+
+  res <- sparse_multiplication(sparse_int, sparse_dbl)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(sparse_int, dense_dbl)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(dense_int, sparse_int)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.integer(res))
+
+  res <- sparse_multiplication(dense_int, dense_int)
+  expect_false(is_sparse_vector(res))
+  expect_true(is.integer(res))
+
+  res <- sparse_multiplication(dense_int, sparse_dbl)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(dense_int, dense_dbl)
+  expect_false(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(sparse_dbl, sparse_int)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(sparse_dbl, dense_int)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(sparse_dbl, sparse_dbl)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(sparse_dbl, dense_dbl)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(dense_dbl, sparse_int)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(dense_dbl, dense_int)
+  expect_false(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(dense_dbl, sparse_dbl)
+  expect_true(is_sparse_vector(res))
+  expect_true(is.double(res))
+
+  res <- sparse_multiplication(dense_dbl, dense_dbl)
+  expect_false(is_sparse_vector(res))
+  expect_true(is.double(res))
+})
