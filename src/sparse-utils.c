@@ -166,6 +166,11 @@ void verbose_materialize(void) {
 void sort_pos_and_val(SEXP pos, SEXP val) {
   R_xlen_t len = Rf_length(pos);
 
+  // nothing to sort -> stop early
+  if (len < 2) {
+    return;
+  }
+
   SEXP index = Rf_allocVector(INTSXP, len);
   SEXP sorted_pos = Rf_allocVector(INTSXP, len);
 

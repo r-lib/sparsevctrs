@@ -289,9 +289,7 @@ SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
     out_idx++;
   }
 
-  if (out_len > 1) {
-    sort_pos_and_val(out_pos, out_val);
-  }
+  sort_pos_and_val(out_pos, out_val);
 
   SEXP out_length = Rf_ScalarInteger((int) extract_len(x));
   SEXP out_default = Rf_ScalarReal(0);
@@ -406,9 +404,7 @@ SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
     idx++;
   }
 
-  if (out_len > 1) {
-    sort_pos_and_val(out_pos, out_val);
-  }
+  sort_pos_and_val(out_pos, out_val);
 
   SEXP out_length = Rf_ScalarInteger((int) x_len);
   SEXP out_default = Rf_ScalarReal(0);
@@ -517,9 +513,7 @@ SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
     out_idx++;
   }
 
-  if (out_len > 1) {
-    sort_pos_and_val(out_pos, out_val);
-  }
+  sort_pos_and_val(out_pos, out_val);
 
   SEXP out_length = Rf_ScalarInteger((int) extract_len(x));
   SEXP out_default = Rf_ScalarInteger(0);
@@ -634,9 +628,7 @@ SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
     idx++;
   }
 
-  if (out_len > 1) {
-    sort_pos_and_val(out_pos, out_val);
-  }
+  sort_pos_and_val(out_pos, out_val);
 
   SEXP out_length = Rf_ScalarInteger((int) x_len);
   SEXP out_default = Rf_ScalarInteger(0);
