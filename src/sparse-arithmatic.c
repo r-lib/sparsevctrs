@@ -1,54 +1,28 @@
 #include "sparse-arithmatic.h"
 #include "sparse-utils.h"
-
-// Defined in altrep-sparse-integer.c
-extern SEXP ffi_altrep_new_sparse_integer(SEXP);
-extern void sparsevctrs_init_altrep_sparse_integer(DllInfo*);
+#include "altrep-sparse-double.h"
+#include "altrep-sparse-integer.h"
 
 SEXP empty_sparse_integer(R_xlen_t len) {
-  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
+  SEXP out = new_sparse_integer(
+      Rf_allocVector(INTSXP, 0),
+      Rf_allocVector(INTSXP, 0),
+      Rf_ScalarInteger((int) len),
+      Rf_ScalarInteger(0)
+  );
 
-  SEXP out_val = Rf_allocVector(INTSXP, 0);
-  SET_VECTOR_ELT(out, 0, out_val);
-
-  SEXP out_pos = Rf_allocVector(INTSXP, 0);
-  SET_VECTOR_ELT(out, 1, out_pos);
-
-  SEXP out_length = Rf_ScalarInteger((int) len);
-  SET_VECTOR_ELT(out, 2, out_length);
-
-  SEXP out_default = Rf_ScalarInteger(0);
-  SET_VECTOR_ELT(out, 3, out_default);
-
-  SEXP altrep = ffi_altrep_new_sparse_integer(out);
-
-  UNPROTECT(1);
-  return altrep;
+  return out;
 }
 
-// Defined in altrep-sparse-integer.c
-extern SEXP ffi_altrep_new_sparse_double(SEXP);
-extern void sparsevctrs_init_altrep_sparse_double(DllInfo*);
-
 SEXP empty_sparse_double(R_xlen_t len) {
-  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
+  SEXP out = new_sparse_double(
+      Rf_allocVector(REALSXP, 0),
+      Rf_allocVector(INTSXP, 0),
+      Rf_ScalarInteger((int) len),
+      Rf_ScalarReal(0)
+  );
 
-  SEXP out_val = Rf_allocVector(REALSXP, 0);
-  SET_VECTOR_ELT(out, 0, out_val);
-
-  SEXP out_pos = Rf_allocVector(INTSXP, 0);
-  SET_VECTOR_ELT(out, 1, out_pos);
-
-  SEXP out_length = Rf_ScalarInteger((int) len);
-  SET_VECTOR_ELT(out, 2, out_length);
-
-  SEXP out_default = Rf_ScalarReal(0);
-  SET_VECTOR_ELT(out, 3, out_default);
-
-  SEXP altrep = ffi_altrep_new_sparse_double(out);
-
-  UNPROTECT(1);
-  return altrep;
+  return out;
 }
 
 SEXP find_overlap(SEXP x, SEXP y) {
@@ -319,22 +293,12 @@ SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
     sort_pos_and_val(out_pos, out_val);
   }
 
-  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
-
-  SET_VECTOR_ELT(out, 0, out_val);
-
-  SET_VECTOR_ELT(out, 1, out_pos);
-
   SEXP out_length = Rf_ScalarInteger((int) extract_len(x));
-  SET_VECTOR_ELT(out, 2, out_length);
-
   SEXP out_default = Rf_ScalarReal(0);
-  SET_VECTOR_ELT(out, 3, out_default);
 
-  SEXP altrep = ffi_altrep_new_sparse_double(out);
+  SEXP out = new_sparse_double(out_val, out_pos, out_length, out_default);
 
-  UNPROTECT(1);
-  return altrep;
+  return out;
 }
 
 SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
@@ -446,22 +410,12 @@ SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
     sort_pos_and_val(out_pos, out_val);
   }
 
-  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
-
-  SET_VECTOR_ELT(out, 0, out_val);
-
-  SET_VECTOR_ELT(out, 1, out_pos);
-
   SEXP out_length = Rf_ScalarInteger((int) x_len);
-  SET_VECTOR_ELT(out, 2, out_length);
-
   SEXP out_default = Rf_ScalarReal(0);
-  SET_VECTOR_ELT(out, 3, out_default);
 
-  SEXP altrep = ffi_altrep_new_sparse_double(out);
+  SEXP out = new_sparse_double(out_val, out_pos, out_length, out_default);
 
-  UNPROTECT(1);
-  return altrep;
+  return out;
 }
 
 SEXP multiplication_doubles_dense_dense(SEXP x, SEXP y) {
@@ -567,22 +521,12 @@ SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
     sort_pos_and_val(out_pos, out_val);
   }
 
-  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
-
-  SET_VECTOR_ELT(out, 0, out_val);
-
-  SET_VECTOR_ELT(out, 1, out_pos);
-
   SEXP out_length = Rf_ScalarInteger((int) extract_len(x));
-  SET_VECTOR_ELT(out, 2, out_length);
-
   SEXP out_default = Rf_ScalarInteger(0);
-  SET_VECTOR_ELT(out, 3, out_default);
 
-  SEXP altrep = ffi_altrep_new_sparse_integer(out);
+  SEXP out = new_sparse_integer(out_val, out_pos, out_length, out_default);
 
-  UNPROTECT(1);
-  return altrep;
+  return out;
 }
 
 SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
@@ -694,22 +638,12 @@ SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
     sort_pos_and_val(out_pos, out_val);
   }
 
-  SEXP out = PROTECT(Rf_allocVector(VECSXP, 4));
-
-  SET_VECTOR_ELT(out, 0, out_val);
-
-  SET_VECTOR_ELT(out, 1, out_pos);
-
   SEXP out_length = Rf_ScalarInteger((int) x_len);
-  SET_VECTOR_ELT(out, 2, out_length);
-
   SEXP out_default = Rf_ScalarInteger(0);
-  SET_VECTOR_ELT(out, 3, out_default);
 
-  SEXP altrep = ffi_altrep_new_sparse_integer(out);
+  SEXP out = new_sparse_integer(out_val, out_pos, out_length, out_default);
 
-  UNPROTECT(1);
-  return altrep;
+  return out;
 }
 
 SEXP multiplication_integers_dense_dense(SEXP x, SEXP y) {
