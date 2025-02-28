@@ -157,20 +157,20 @@ sparse_subtraction_scalar <- function(x, val) {
 #' @param y A numeric vector.
 #'
 #' @details
-#' 
+#'
 #' Note that this function works with both sparse and dense vectors for both `x`
 #' and `y`, returning a sparse or dense vector according to the input.
-#' 
-#' For `sparse_multiplication()` the class of the resulting vector depends on 
-#' the classes of `x` and `y`. If both `x` and `y` are integer vectors then an 
+#'
+#' For `sparse_multiplication()` the class of the resulting vector depends on
+#' the classes of `x` and `y`. If both `x` and `y` are integer vectors then an
 #' integer vector is returned, otherwise a double vector is returned.
-#' 
+#'
 #' `sparse_multiplication()` will return a non-sparse vector if both `x` and `y`
 #' is non-sparse. Otherwise a sparse vector is returned.
-#' 
+#'
 #' `sparse_multiplication()` will destroy sparsity of sparse vectors with non-0
 #' `default` values.
-#' 
+#'
 #' @return A sparse vector of same type.
 #'
 #' @examples

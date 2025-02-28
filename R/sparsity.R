@@ -1,39 +1,39 @@
 #' Calculate sparsity of data frames, matrices, and sparse matrices
-#' 
-#' Turning data frame with sparse columns into sparse matrix using 
+#'
+#' Turning data frame with sparse columns into sparse matrix using
 #' [Matrix::sparseMatrix()].
-#' 
+#'
 #' @param x a data frame, matrix of sparse matrix.
-#' @param sample a integer or `NULL`. Number of rows to sample to estimate 
-#'   sparsity. If `NULL` then no sampling is performed. Will not be used when 
+#' @param sample a integer or `NULL`. Number of rows to sample to estimate
+#'   sparsity. If `NULL` then no sampling is performed. Will not be used when
 #'   `x` is a sparse matrix. Defaults to `NULL`.
 #'
 #' @details
 #' Only numeric 0s are considered zeroes in this calculations. Missing values,
 #' logical vectors and then string `"0"` aren't counted.
-#' 
+#'
 #' @return a single number, between 0 and 1.
-#' 
+#'
 #' @examples
-#' 
+#'
 #' # data frame
 #' sparsity(mtcars)
-#' 
+#'
 #' # Matrix
 #' set.seed(1234)
 #' mat <- matrix(sample(0:1, 100, TRUE, c(0.9, 0.1)), nrow = 10)
 #' colnames(mat) <- letters[1:10]
-#' 
+#'
 #' sparsity(mat)
-#' 
+#'
 #' # Sparse matrix
 #' sparse_mat <- Matrix::Matrix(mat, sparse = TRUE)
-#' 
+#'
 #' sparsity(sparse_mat)
 #' @export
 sparsity <- function(x, sample = NULL) {
   check_number_whole(sample, min = 1, allow_null = TRUE)
-  
+
   x_type <- input_type(x)
 
   if (x_type != "sparse_matrix") {
@@ -109,4 +109,3 @@ sparsity_mat <- function(x) {
 sparsity_sparse_mat <- function(x) {
   1 - (length(x@x) / length(x))
 }
-  

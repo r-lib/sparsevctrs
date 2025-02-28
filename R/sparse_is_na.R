@@ -6,11 +6,11 @@
 #' This function, as with any of the other helper functions assumes that the
 #' input `x` is a sparse numeric vector. This is done for performance reasons,
 #' and it is thus the users responsibility to perform input checking.
-#' 
+#'
 #' Note that the resulting vector will be not be a sparse vector.
 #'
 #' @seealso [sparse_which_na()]
-#' 
+#'
 #' @return A logical vector.
 #'
 #' @examples

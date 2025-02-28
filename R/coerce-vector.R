@@ -1,22 +1,22 @@
 #' Coerce numeric vector to sparse double
-#' 
+#'
 #' Takes a numeric vector, integer or double, and turn it into a sparse double
 #' vector.
-#' 
+#'
 #' @param x a numeric vector.
 #' @param default default value to use. Defaults to `0`.
-#' 
+#'
 #' The values of `x` must be double or integer. It must not contain any `Inf` or
 #' `NaN` values.
-#' 
+#'
 #' @return sparse vectors
 #'
 #' @examples
 #' x_dense <- c(3, 0, 2, 0, 0, 0, 4, 0, 0, 0)
 #' x_sparse <- as_sparse_double(x_dense)
 #' x_sparse
-#' 
-#' is_sparse_double(x_sparse) 
+#'
+#' is_sparse_double(x_sparse)
 #' @name coerce-vector
 NULL
 
