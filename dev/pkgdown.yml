@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   design: design.html
   articles/when-to-use: when-to-use.html
-last_built: 2025-02-21T00:53Z
+last_built: 2025-02-28T16:54Z
 urls:
   reference: https://r-lib.github.io/sparsevctrs/reference
   article: https://r-lib.github.io/sparsevctrs/articles
