@@ -1,12 +1,12 @@
 {
   "[c]": {
-      "editor.formatOnSave": true,
-      "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
   },
   "clangd.arguments": [
-      "-header-insertion=never"
+    "-header-insertion=never"
   ],
   "[r]": {
     "editor.formatOnSave": true
-}
+  }
 }
