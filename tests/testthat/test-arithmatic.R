@@ -5,7 +5,6 @@ test_that("scalar multiplication works", {
   exp_int <- as.integer(c(4, 0, 0, 0, 0, 0, 0, 0, 0, 78))
   exp_double <- c(4, 0, 0, 0, 0, 0, 0, 0, 0, 78)
 
-
   expect_identical(
     sparse_multiplication_scalar(vec_int, 0),
     exp_int * 0L
@@ -113,7 +112,6 @@ test_that("scalar addition works", {
   exp_int <- as.integer(c(4, 0, 0, 0, 0, 0, 0, 0, 0, 78))
   exp_double <- c(4, 0, 0, 0, 0, 0, 0, 0, 0, 78)
 
-
   expect_identical(
     sparse_addition_scalar(vec_int, 0),
     exp_int + 0L
@@ -164,14 +162,12 @@ test_that("scalar addition works", {
   )
 })
 
-
 test_that("scalar subtraction works", {
   vec_int <- sparse_integer(c(4, 78), c(1, 10), 10)
   vec_double <- sparse_double(c(4, 78), c(1, 10), 10)
 
   exp_int <- as.integer(c(4, 0, 0, 0, 0, 0, 0, 0, 0, 78))
   exp_double <- c(4, 0, 0, 0, 0, 0, 0, 0, 0, 78)
-
 
   expect_identical(
     sparse_subtraction_scalar(vec_int, 0),

@@ -107,7 +107,7 @@ test_that("input checking is done correctly", {
     error = TRUE,
     sparse_logical(rep(TRUE, 100), rep(1, 100), 100)
   )
-  
+
   # Ordered position
   expect_snapshot(
     error = TRUE,
@@ -153,7 +153,11 @@ test_that("length() works with sparse_logical()", {
 })
 
 test_that("single subsetting works with sparse_logical()", {
-  x_sparse <- sparse_logical(value = c(TRUE, NA, TRUE), position = c(1, 5, 8), 10)
+  x_sparse <- sparse_logical(
+    value = c(TRUE, NA, TRUE),
+    position = c(1, 5, 8),
+    10
+  )
   x_dense <- c(TRUE, FALSE, FALSE, FALSE, NA, FALSE, FALSE, TRUE, FALSE, FALSE)
 
   for (i in seq_len(10)) {
@@ -165,7 +169,7 @@ test_that("single subsetting works with sparse_logical()", {
   expect_identical(x_sparse[NA_integer_], x_dense[NA_integer_])
 
   expect_identical(x_sparse[NULL], x_dense[NULL])
-  
+
   expect_identical(x_sparse[NaN], x_dense[NaN])
 
   expect_identical(x_sparse[100], x_dense[100])
@@ -179,7 +183,11 @@ test_that("single subsetting works with sparse_logical()", {
 })
 
 test_that("multiple subsetting works with sparse_logical()", {
-  x_sparse <- sparse_logical(value = c(TRUE, NA, TRUE), position = c(1, 5, 8), 10)
+  x_sparse <- sparse_logical(
+    value = c(TRUE, NA, TRUE),
+    position = c(1, 5, 8),
+    10
+  )
   x_dense <- c(TRUE, FALSE, FALSE, FALSE, NA, FALSE, FALSE, TRUE, FALSE, FALSE)
 
   expect_identical(x_sparse[1:2], x_dense[1:2])
@@ -210,7 +218,11 @@ test_that("multiple subsetting works with sparse_logical()", {
 })
 
 test_that("materialization works with sparse_logical()", {
-  x_sparse <- sparse_logical(value = c(TRUE, NA, TRUE), position = c(1, 5, 8), 10)
+  x_sparse <- sparse_logical(
+    value = c(TRUE, NA, TRUE),
+    position = c(1, 5, 8),
+    10
+  )
   x_dense <- c(TRUE, FALSE, FALSE, FALSE, NA, FALSE, FALSE, TRUE, FALSE, FALSE)
 
   expect_identical(x_sparse[], x_dense)
@@ -257,9 +269,9 @@ test_that("default argument is working", {
   )
 
   x_sparse <- sparse_logical(
-    value = c(FALSE, NA, FALSE), 
-    position = c(1, 5, 8), 
-    length = 10, 
+    value = c(FALSE, NA, FALSE),
+    position = c(1, 5, 8),
+    length = 10,
     default = TRUE
   )
 
@@ -280,7 +292,7 @@ test_that("default argument is working", {
 
 test_that("verbose testing", {
   withr::local_options("sparsevctrs.verbose_materialize" = TRUE)
-  
+
   x <- sparse_logical(TRUE, 1, 1)
   expect_snapshot({
     tmp <- x[]
@@ -288,7 +300,7 @@ test_that("verbose testing", {
   })
 
   withr::local_options("sparsevctrs.verbose_materialize" = 2)
-  
+
   x <- sparse_logical(TRUE, 1, 1)
   expect_snapshot({
     tmp <- x[]
@@ -296,7 +308,7 @@ test_that("verbose testing", {
   })
 
   withr::local_options("sparsevctrs.verbose_materialize" = 3)
-  
+
   x <- sparse_logical(TRUE, 1, 1)
   expect_snapshot(
     error = TRUE,

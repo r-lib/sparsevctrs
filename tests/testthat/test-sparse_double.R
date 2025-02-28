@@ -89,7 +89,6 @@ test_that("input checking is done correctly", {
     sparse_double(numeric(0), integer(0), NaN)
   )
 
-
   # Length restriction
   expect_snapshot(
     error = TRUE,
@@ -109,7 +108,7 @@ test_that("input checking is done correctly", {
     error = TRUE,
     sparse_double(1:100, rep(1, 100), 100)
   )
-  
+
   # Ordered position
   expect_snapshot(
     error = TRUE,
@@ -177,7 +176,7 @@ test_that("single subsetting works with sparse_double()", {
   expect_identical(x_sparse[NA_integer_], x_dense[NA_integer_])
 
   expect_identical(x_sparse[NULL], x_dense[NULL])
-  
+
   expect_identical(x_sparse[NaN], x_dense[NaN])
 
   expect_identical(x_sparse[100], x_dense[100])
@@ -410,7 +409,7 @@ test_that("default argument is working", {
     error = TRUE,
     sparse_double(1, 1, 10, default = 1:10)
   )
-  
+
   expect_snapshot(
     error = TRUE,
     sparse_double(1, 1, 10, default = TRUE)
@@ -422,9 +421,9 @@ test_that("default argument is working", {
   )
 
   x_sparse <- sparse_double(
-    value = c(10, NA, 20), 
-    position = c(1, 5, 8), 
-    length = 10, 
+    value = c(10, NA, 20),
+    position = c(1, 5, 8),
+    length = 10,
     default = 4
   )
 
@@ -476,4 +475,3 @@ test_that("printing works #48", {
     sparse_double(1, 1, 10) + 1
   )
 })
-

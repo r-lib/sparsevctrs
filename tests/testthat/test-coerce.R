@@ -25,7 +25,7 @@ test_that("coerce_to_sparse_matrix() with zero rows and columns", {
 
   dat <- data.frame()
   exp <- Matrix::Matrix(nrow = 0, ncol = 0, sparse = TRUE)
-  
+
   expect_identical(
     coerce_to_sparse_matrix(dat),
     exp
@@ -40,10 +40,9 @@ test_that("coerce_to_sparse_matrix() with zero rows and columns", {
     exp
   )
 
-
   dat <- data.frame(x = 1:2)[, integer()]
   exp <- Matrix::Matrix(nrow = 2, ncol = 0, sparse = TRUE)
-  
+
   expect_identical(
     coerce_to_sparse_matrix(dat),
     exp
@@ -57,7 +56,7 @@ test_that("coerce_to_sparse_matrix() works with single all sparse vector", {
   colnames(exp) <- c("x")
 
   dat <- data.frame(x = rep(0, 10))
-  
+
   expect_identical(
     coerce_to_sparse_matrix(dat),
     exp
@@ -78,7 +77,7 @@ test_that("coerce_to_sparse_matrix() works with multiple all sparse vector", {
   colnames(exp) <- c("x", "y")
 
   dat <- data.frame(x = rep(0, 10), y = rep(0, 10))
-  
+
   expect_identical(
     coerce_to_sparse_matrix(dat),
     exp
@@ -102,52 +101,8 @@ test_that("coerce_to_sparse_matrix() works with sparse between dense", {
   colnames(exp) <- c("x", "y", "z")
 
   dat <- data.frame(
-    x = c(1, 0), 
-    y = c(0, 0), 
-    z = c(0, 1)
-  )
-  
-  expect_identical(
-    coerce_to_sparse_matrix(dat),
-    exp
-  )
-
-  dat <- data.frame(
-    x = sparse_integer(1, 1, 2), 
-    y = c(0, 0), 
-    z = c(0, 1)
-  )
-  
-  expect_identical(
-    coerce_to_sparse_matrix(dat),
-    exp
-  )
-
-  dat <- data.frame(
-    x = c(1, 0), 
-    y = c(0, 0), 
-    z = sparse_integer(1, 2, 2)
-  )
-  
-  expect_identical(
-    coerce_to_sparse_matrix(dat),
-    exp
-  )
-
-  dat <- data.frame(
-    x = sparse_integer(1, 1, 2), 
-    y = c(0, 0), 
-    z = sparse_integer(1, 2, 2)
-  )
-  
-  expect_identical(
-    coerce_to_sparse_matrix(dat),
-    exp
-  )
-
-  dat <- data.frame(
-    x = c(1, 0), 
-    y = sparse_integer(integer(), integer(), 2), 
+    x = c(1, 0),
+    y = c(0, 0),
     z = c(0, 1)
   )
 
@@ -157,8 +112,8 @@ test_that("coerce_to_sparse_matrix() works with sparse between dense", {
   )
 
   dat <- data.frame(
-    x = sparse_integer(1, 1, 2), 
-    y = sparse_integer(integer(), integer(), 2), 
+    x = sparse_integer(1, 1, 2),
+    y = c(0, 0),
     z = c(0, 1)
   )
 
@@ -168,8 +123,8 @@ test_that("coerce_to_sparse_matrix() works with sparse between dense", {
   )
 
   dat <- data.frame(
-    x = c(1, 0), 
-    y = sparse_integer(integer(), integer(), 2), 
+    x = c(1, 0),
+    y = c(0, 0),
     z = sparse_integer(1, 2, 2)
   )
 
@@ -179,8 +134,52 @@ test_that("coerce_to_sparse_matrix() works with sparse between dense", {
   )
 
   dat <- data.frame(
-    x = sparse_integer(1, 1, 2), 
-    y = sparse_integer(integer(), integer(), 2), 
+    x = sparse_integer(1, 1, 2),
+    y = c(0, 0),
+    z = sparse_integer(1, 2, 2)
+  )
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = c(1, 0),
+    y = sparse_integer(integer(), integer(), 2),
+    z = c(0, 1)
+  )
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = sparse_integer(1, 1, 2),
+    y = sparse_integer(integer(), integer(), 2),
+    z = c(0, 1)
+  )
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = c(1, 0),
+    y = sparse_integer(integer(), integer(), 2),
+    z = sparse_integer(1, 2, 2)
+  )
+
+  expect_identical(
+    coerce_to_sparse_matrix(dat),
+    exp
+  )
+
+  dat <- data.frame(
+    x = sparse_integer(1, 1, 2),
+    y = sparse_integer(integer(), integer(), 2),
     z = sparse_integer(1, 2, 2)
   )
 
@@ -197,27 +196,27 @@ test_that("coerce_to_sparse_matrix() works with sparse before dense", {
   colnames(exp) <- c("x", "y")
 
   dat <- data.frame(
-    x = c(0, 0, 0), 
+    x = c(0, 0, 0),
     y = c(0, 0, 1)
   )
-  
+
   expect_identical(
     coerce_to_sparse_matrix(dat),
     exp
   )
 
   dat <- data.frame(
-    x = c(0, 0, 0), 
+    x = c(0, 0, 0),
     y = sparse_integer(1, 3, 3)
   )
-  
+
   expect_identical(
     coerce_to_sparse_matrix(dat),
     exp
   )
 
   dat <- data.frame(
-    x = sparse_integer(integer(), integer(), 3), 
+    x = sparse_integer(integer(), integer(), 3),
     y = c(0, 0, 1)
   )
 
@@ -227,7 +226,7 @@ test_that("coerce_to_sparse_matrix() works with sparse before dense", {
   )
 
   dat <- data.frame(
-    x = sparse_integer(integer(), integer(), 3), 
+    x = sparse_integer(integer(), integer(), 3),
     y = sparse_integer(1, 3, 3)
   )
 
@@ -244,10 +243,10 @@ test_that("coerce_to_sparse_matrix() works with sparse after dense", {
   colnames(exp) <- c("x", "y")
 
   dat <- data.frame(
-    x = c(1, 0, 0), 
+    x = c(1, 0, 0),
     y = c(0, 0, 0)
   )
-  
+
   expect_identical(
     coerce_to_sparse_matrix(dat),
     exp
@@ -257,7 +256,7 @@ test_that("coerce_to_sparse_matrix() works with sparse after dense", {
     x = sparse_integer(1, 1, 3),
     y = c(0, 0, 0)
   )
-  
+
   expect_identical(
     coerce_to_sparse_matrix(dat),
     exp
@@ -319,7 +318,7 @@ test_that("coerce_to_sparse_matrix() materializes non-zero defaulted columns", {
   sparse_df <- as.data.frame(sparse_df)
   sparse_df$nonzero1 <- sparse_double(1, 1, 10, default = 10)
   sparse_df$nonzero2 <- sparse_double(1, 1, 10, default = 20)
-  
+
   expect_snapshot(
     res <- coerce_to_sparse_matrix(sparse_df)
   )
@@ -347,7 +346,7 @@ test_that("coerce_to_sparse_matrix() can pass through error call", {
   tmp_fun <- function(x) {
     coerce_to_sparse_matrix(x, call = rlang::caller_env(0))
   }
-  
+
   expect_snapshot(
     error = TRUE,
     tmp_fun(1)
@@ -419,7 +418,7 @@ test_that("coerce_to_sparse_data_frame() can pass through error call", {
   tmp_fun <- function(x) {
     coerce_to_sparse_data_frame(x, call = rlang::caller_env(0))
   }
-  
+
   expect_snapshot(
     error = TRUE,
     tmp_fun(1)
@@ -494,7 +493,7 @@ test_that("coerce_to_sparse_matrix() can pass through error call", {
   tmp_fun <- function(x) {
     coerce_to_sparse_tibble(x, call = rlang::caller_env(0))
   }
-  
+
   expect_snapshot(
     error = TRUE,
     tmp_fun(1)
@@ -505,13 +504,13 @@ test_that("coerce_to_sparse_matrix() can pass through error call", {
 
 test_that(".sparse_matrix_to_list() handles fully sparse columns (#69)", {
   skip_if_not_installed("Matrix")
-  
+
   x_mat <- matrix(
-    c(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0), 
+    c(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
     nrow = 3
   )
   colnames(x_mat) <- letters[1:6]
-  
+
   x_df <- as.data.frame(x_mat)
   x_mat_sparse <- Matrix::Matrix(x_mat, sparse = TRUE)
 

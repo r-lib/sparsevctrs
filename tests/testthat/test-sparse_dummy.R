@@ -20,7 +20,7 @@ test_that("sparse_dummy(one_hot = FALSE) works zero length input", {
   x <- factor(character())
   exp <- structure(list(), names = character(0))
 
-  res <- sparse_dummy(x, one_hot = FALSE) 
+  res <- sparse_dummy(x, one_hot = FALSE)
   expect_identical(
     res,
     exp
@@ -38,7 +38,7 @@ test_that("sparse_dummy(one_hot = TRUE) works with no NAs", {
     d = sparse_integer(1, 4, 5)
   )
 
-  res <- sparse_dummy(x, one_hot = TRUE) 
+  res <- sparse_dummy(x, one_hot = TRUE)
   expect_identical(
     res,
     exp
@@ -60,7 +60,7 @@ test_that("sparse_dummy(one_hot = TRUE) works with no NAs and unseen levels", {
     f = sparse_integer(integer(), integer(), 5)
   )
 
-  res <- sparse_dummy(x, one_hot = TRUE) 
+  res <- sparse_dummy(x, one_hot = TRUE)
   expect_identical(
     res,
     exp
@@ -81,7 +81,7 @@ test_that("sparse_dummy(one_hot = TRUE) works with NA", {
     c = sparse_integer(c(NA, 1, NA), c(2, 4, 6), 6)
   )
 
-  res <- sparse_dummy(x, one_hot = TRUE) 
+  res <- sparse_dummy(x, one_hot = TRUE)
   expect_identical(
     res,
     exp
@@ -102,7 +102,7 @@ test_that("sparse_dummy(one_hot = TRUE) works with NA and unseen levels", {
     e = sparse_integer(c(NA, NA), c(2, 6), 6)
   )
 
-  res <- sparse_dummy(x, one_hot = TRUE) 
+  res <- sparse_dummy(x, one_hot = TRUE)
   expect_identical(
     res,
     exp
@@ -147,7 +147,7 @@ test_that("sparse_dummy(one_hot = TRUE) works zero length input", {
   x <- factor(character())
   exp <- structure(list(), names = character(0))
 
-  res <- sparse_dummy(x, one_hot = FALSE) 
+  res <- sparse_dummy(x, one_hot = FALSE)
   expect_identical(
     res,
     exp
@@ -205,7 +205,7 @@ test_that("sparse_dummy(one_hot = FALSE) works with NA", {
     c = sparse_integer(c(NA, 1, NA), c(2, 4, 6), 6)
   )
 
-  res <- sparse_dummy(x, one_hot = FALSE) 
+  res <- sparse_dummy(x, one_hot = FALSE)
   expect_identical(
     res,
     exp
@@ -224,8 +224,8 @@ test_that("sparse_dummy(one_hot = FALSE) works with NA and unseen levels", {
     d = sparse_integer(c(NA, NA), c(2, 6), 6),
     e = sparse_integer(c(NA, NA), c(2, 6), 6)
   )
-  
-  res <- sparse_dummy(x, one_hot = FALSE) 
+
+  res <- sparse_dummy(x, one_hot = FALSE)
   expect_identical(
     res,
     exp
@@ -256,4 +256,3 @@ test_that("sparse_dummy() errors with wrong input", {
     sparse_dummy(NULL)
   )
 })
-

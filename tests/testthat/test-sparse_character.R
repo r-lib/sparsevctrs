@@ -1,5 +1,4 @@
 test_that("input checking is done correctly", {
-
   # value
   expect_snapshot(
     error = TRUE,
@@ -108,7 +107,7 @@ test_that("input checking is done correctly", {
     error = TRUE,
     sparse_character(letters, rep(1, 26), 100)
   )
-  
+
   # Ordered position
   expect_snapshot(
     error = TRUE,
@@ -164,7 +163,11 @@ test_that("length() works with sparse_character()", {
 })
 
 test_that("single subsetting works with sparse_character()", {
-  x_sparse <- sparse_character(value = c("A", NA, "B"), position = c(1, 5, 8), 10)
+  x_sparse <- sparse_character(
+    value = c("A", NA, "B"),
+    position = c(1, 5, 8),
+    10
+  )
   x_dense <- c("A", "", "", "", NA, "", "", "B", "", "")
 
   for (i in seq_len(10)) {
@@ -176,7 +179,7 @@ test_that("single subsetting works with sparse_character()", {
   expect_identical(x_sparse[NA_integer_], x_dense[NA_integer_])
 
   expect_identical(x_sparse[NULL], x_dense[NULL])
-  
+
   expect_identical(x_sparse[NaN], x_dense[NaN])
 
   expect_identical(x_sparse[100], x_dense[100])
@@ -190,7 +193,11 @@ test_that("single subsetting works with sparse_character()", {
 })
 
 test_that("multiple subsetting works with sparse_character()", {
-  x_sparse <- sparse_character(value = c("A", NA, "B"), position = c(1, 5, 8), 10)
+  x_sparse <- sparse_character(
+    value = c("A", NA, "B"),
+    position = c(1, 5, 8),
+    10
+  )
   x_dense <- c("A", "", "", "", NA, "", "", "B", "", "")
 
   expect_identical(x_sparse[1:2], x_dense[1:2])
@@ -221,7 +228,11 @@ test_that("multiple subsetting works with sparse_character()", {
 })
 
 test_that("materialization works with sparse_character()", {
-  x_sparse <- sparse_character(value = c("A", NA, "B"), position = c(1, 5, 8), 10)
+  x_sparse <- sparse_character(
+    value = c("A", NA, "B"),
+    position = c(1, 5, 8),
+    10
+  )
   x_dense <- c("A", "", "", "", NA, "", "", "B", "", "")
 
   expect_identical(x_sparse[], x_dense)
@@ -232,7 +243,7 @@ test_that("default argument is working", {
     error = TRUE,
     sparse_character("A", 1, 10, default = letters)
   )
-  
+
   expect_snapshot(
     error = TRUE,
     sparse_character("A", 1, 10, default = TRUE)
@@ -244,9 +255,9 @@ test_that("default argument is working", {
   )
 
   x_sparse <- sparse_character(
-    value = c("A", NA, "B"), 
-    position = c(1, 5, 8), 
-    length = 10, 
+    value = c("A", NA, "B"),
+    position = c(1, 5, 8),
+    length = 10,
     default = "H"
   )
 

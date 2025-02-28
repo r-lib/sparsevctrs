@@ -36,5 +36,5 @@ x_dense <- c(3, 0, 2, 0, 0, 0, 4, 0, 0, 0)
 x_sparse <- as_sparse_double(x_dense)
 x_sparse
 
-is_sparse_double(x_sparse) 
+is_sparse_double(x_sparse)
 }

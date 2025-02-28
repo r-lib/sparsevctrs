@@ -13,21 +13,21 @@ test_that("works with non-numeric data.frames", {
   mtcars_exp_sparsity <- mean(mtcars == 0)
 
   mtcars$vs <- as.character(vs)
-  
+
   expect_identical(
     sparsity(mtcars),
     mtcars_exp_sparsity
   )
 
   mtcars$vs <- as.logical(vs)
-  
+
   expect_identical(
     sparsity(mtcars),
     mtcars_exp_sparsity
   )
 
   mtcars$vs <- ifelse(vs == 1, 1, NA)
-  
+
   expect_identical(
     sparsity(mtcars),
     mtcars_exp_sparsity
@@ -100,7 +100,7 @@ test_that("works with sparse matrices", {
   )
 
   mtcars_sparse_mat[1, 1] <- NA
-  
+
   expect_equal(
     sparsity(mtcars_sparse_mat),
     mtcars_exp_sparsity

@@ -1,8 +1,8 @@
 #' Coerce sparse data frame to sparse matrix
-#' 
-#' Turning data frame with sparse columns into sparse matrix using 
+#'
+#' Turning data frame with sparse columns into sparse matrix using
 #' [Matrix::sparseMatrix()].
-#' 
+#'
 #' @param x a data frame or tibble with sparse columns.
 #' @inheritParams rlang::args_error_context
 #'
@@ -10,16 +10,16 @@
 #' No checking is currently do to `x` to determine whether it contains sparse
 #' columns or not. Thus it works with any data frame. Needless to say, creating
 #' a sparse matrix out of a dense data frame is not ideal.
-#' 
+#'
 #' @return sparse matrix
-#' 
+#'
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_tibble()]
 #' @examplesIf rlang::is_installed("Matrix")
 #' sparse_tbl <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
 #' names(sparse_tbl) <- letters[1:10]
 #' sparse_tbl <- as.data.frame(sparse_tbl)
 #' sparse_tbl
-#' 
+#'
 #' res <- coerce_to_sparse_matrix(sparse_tbl)
 #' res
 #' @export
@@ -93,17 +93,17 @@ coerce_to_sparse_matrix <- function(x, call = rlang::caller_env(0)) {
 }
 
 #' Coerce sparse matrix to tibble with sparse columns
-#' 
+#'
 #' Turning a sparse matrix into a tibble.
-#' 
-#' @param x sparse matrix. 
+#'
+#' @param x sparse matrix.
 #' @inheritParams rlang::args_error_context
-#' 
+#'
 #' @details
 #' The only requirement from the sparse matrix is that it contains column names.
-#' 
+#'
 #' @return tibble with sparse columns
-#' 
+#'
 #' @seealso [coerce_to_sparse_data_frame()] [coerce_to_sparse_matrix()]
 #' @examplesIf rlang::is_installed("tibble")
 #' set.seed(1234)
@@ -111,10 +111,10 @@ coerce_to_sparse_matrix <- function(x, call = rlang::caller_env(0)) {
 #' colnames(mat) <- letters[1:10]
 #' sparse_mat <- Matrix::Matrix(mat, sparse = TRUE)
 #' sparse_mat
-#' 
+#'
 #' res <- coerce_to_sparse_tibble(sparse_mat)
 #' res
-#' 
+#'
 #' # All columns are sparse
 #' vapply(res, is_sparse_vector, logical(1))
 #' @export
@@ -146,17 +146,17 @@ coerce_to_sparse_tibble <- function(x, call = rlang::caller_env(0)) {
 }
 
 #' Coerce sparse matrix to data frame with sparse columns
-#' 
+#'
 #' Turning a sparse matrix into a data frame
-#' 
-#' @param x sparse matrix. 
+#'
+#' @param x sparse matrix.
 #' @inheritParams rlang::args_error_context
-#' 
+#'
 #' @details
 #' The only requirement from the sparse matrix is that it contains column names.
-#' 
+#'
 #' @return data.frame with sparse columns
-#' 
+#'
 #' @seealso [coerce_to_sparse_tibble()] [coerce_to_sparse_matrix()]
 #' @examplesIf rlang::is_installed("Matrix")
 #' set.seed(1234)
@@ -164,10 +164,10 @@ coerce_to_sparse_tibble <- function(x, call = rlang::caller_env(0)) {
 #' colnames(mat) <- letters[1:10]
 #' sparse_mat <- Matrix::Matrix(mat, sparse = TRUE)
 #' sparse_mat
-#' 
+#'
 #' res <- coerce_to_sparse_data_frame(sparse_mat)
 #' res
-#' 
+#'
 #' # All columns are sparse
 #' vapply(res, is_sparse_vector, logical(1))
 #' @export
@@ -207,7 +207,7 @@ coerce_to_sparse_data_frame <- function(x, call = rlang::caller_env(0)) {
   n_nonzero <- diff(x@p)
 
   x_length <- nrow(x)
-  
+
   res <- list()
   start <- 1
   for (i in seq_along(n_nonzero)) {
@@ -218,10 +218,10 @@ coerce_to_sparse_data_frame <- function(x, call = rlang::caller_env(0)) {
         length = x_length
       )
       next
-    } 
+    }
 
     index <- seq(start, start + n_nonzero[i] - 1)
-  
+
     res[[i]] <- sparse_double(
       values = values[index],
       positions = x_positions[index] + 1,
@@ -229,8 +229,7 @@ coerce_to_sparse_data_frame <- function(x, call = rlang::caller_env(0)) {
     )
     start <- start + n_nonzero[i]
   }
-  
+
   names(res) <- colnames(x)
   res
 }
-

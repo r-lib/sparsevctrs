@@ -10,7 +10,7 @@
 #' @return A logical vector.
 #'
 #' @seealso [sparse_is_na()]
-#' 
+#'
 #' @examples
 #' sparse_which_na(
 #'   sparse_double(c(10, NA, 11), c(1, 50, 111), 1000)

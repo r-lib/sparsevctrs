@@ -34,7 +34,18 @@ test_that("as_sparse_integer works", {
 })
 
 test_that("as_sparse_logical works", {
-  x_dense <- c(FALSE, FALSE, FALSE, FALSE, NA, FALSE, FALSE, FALSE, FALSE, FALSE)
+  x_dense <- c(
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    NA,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE
+  )
   x_sparse <- as_sparse_logical(x_dense)
 
   expect_true(is_sparse_logical(x_sparse))
