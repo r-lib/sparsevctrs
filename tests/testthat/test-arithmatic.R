@@ -531,66 +531,82 @@ test_that("vector multiplication works - non-zero defaults", {
   sparse_dbl_1 <- sparse_double(c(4.3, 7.8), c(1, 10), 10, default = 1)
 
   res <- sparse_multiplication(sparse_int_0, sparse_int_0)
+  expect_identical(res, sparse_int_0 * sparse_int_0)
   expect_true(is_sparse_vector(res))
   expect_true(is.integer(res))
 
   res <- sparse_multiplication(sparse_int_0, sparse_int_1)
+  expect_identical(res, sparse_int_0 * sparse_int_1)
   expect_true(is_sparse_vector(res))
   expect_true(is.integer(res))
 
   res <- sparse_multiplication(sparse_int_0, sparse_dbl_0)
+  expect_identical(res, sparse_int_0 * sparse_dbl_0)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_int_0, sparse_dbl_1)
+  expect_identical(res, sparse_int_0 * sparse_dbl_1)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_int_1, sparse_int_0)
+  expect_identical(res, sparse_int_1 * sparse_int_0)
   expect_true(is_sparse_vector(res))
   expect_true(is.integer(res))
 
   res <- sparse_multiplication(sparse_int_1, sparse_int_1)
+  expect_identical(res, sparse_int_1 * sparse_int_1)
   expect_false(is_sparse_vector(res))
   expect_true(is.integer(res))
 
   res <- sparse_multiplication(sparse_int_1, sparse_dbl_0)
+  expect_identical(res, sparse_int_1 * sparse_dbl_0)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_int_1, sparse_dbl_1)
+  expect_identical(res, sparse_int_1 * sparse_dbl_1)
   expect_false(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_dbl_0, sparse_int_0)
+  expect_identical(res, sparse_dbl_0 * sparse_int_0)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_dbl_0, sparse_int_1)
+  expect_identical(res, sparse_dbl_0 * sparse_int_1)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_dbl_0, sparse_dbl_0)
+  expect_identical(res, sparse_dbl_0 * sparse_dbl_0)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_dbl_0, sparse_dbl_1)
+  expect_identical(res, sparse_dbl_0 * sparse_dbl_1)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_dbl_1, sparse_int_0)
+  expect_identical(res, sparse_dbl_1 * sparse_int_0)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_dbl_1, sparse_int_1)
+  expect_identical(res, sparse_dbl_1 * sparse_int_1)
   expect_false(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_dbl_1, sparse_dbl_0)
+  expect_identical(res, sparse_dbl_1 * sparse_dbl_0)
   expect_true(is_sparse_vector(res))
   expect_true(is.double(res))
 
   res <- sparse_multiplication(sparse_dbl_1, sparse_dbl_1)
+  expect_identical(res, sparse_dbl_1 * sparse_dbl_1)
   expect_false(is_sparse_vector(res))
   expect_true(is.double(res))
 })
