@@ -14,7 +14,8 @@
 #'
 #' `sparse_division_scalar()` always produces double vectors, regardless of
 #' whether they could be represented as integers or not. Expect when `val = 1`
-#' as the input is returned unchanged.
+#' as the input is returned unchanged, or `val = NA` as the input returned will
+#' be `NA` or the appropiate type.
 #'
 #' @return A sparse vector of same type.
 #'
@@ -31,6 +32,14 @@ NULL
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_division_scalar <- function(x, val) {
+  if (is.na(val)) {
+    if (is.integer(x)) {
+      return(rep(NA_integer_, length(x)))
+    } else {
+      return(rep(NA_real_, length(x)))
+    }
+  }
+
   if (val == 0) {
     return(rep(Inf, length(x)))
   }
@@ -52,6 +61,14 @@ sparse_division_scalar <- function(x, val) {
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_multiplication_scalar <- function(x, val) {
+  if (is.na(val)) {
+    if (is.integer(x)) {
+      return(rep(NA_integer_, length(x)))
+    } else {
+      return(rep(NA_real_, length(x)))
+    }
+  }
+
   if (val == 1) {
     return(x)
   }
@@ -97,6 +114,14 @@ sparse_multiplication_scalar <- function(x, val) {
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_addition_scalar <- function(x, val) {
+  if (is.na(val)) {
+    if (is.integer(x)) {
+      return(rep(NA_integer_, length(x)))
+    } else {
+      return(rep(NA_real_, length(x)))
+    }
+  }
+
   if (val == 0) {
     return(x)
   }
@@ -124,6 +149,14 @@ sparse_addition_scalar <- function(x, val) {
 #' @rdname sparse-arithmatic-scalar
 #' @export
 sparse_subtraction_scalar <- function(x, val) {
+  if (is.na(val)) {
+    if (is.integer(x)) {
+      return(rep(NA_integer_, length(x)))
+    } else {
+      return(rep(NA_real_, length(x)))
+    }
+  }
+
   if (val == 0) {
     return(x)
   }
