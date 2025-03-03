@@ -9,7 +9,7 @@ only multiplication and division preserves the default value."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">sparsevctrs</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9003</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,8 @@ only multiplication and division preserves the default value.</p>
 used ones, as they preserve the default, which is often what you want to do.</p>
 <p><code>sparse_division_scalar()</code> always produces double vectors, regardless of
 whether they could be represented as integers or not. Expect when <code>val = 1</code>
-as the input is returned unchanged.</p>
+as the input is returned unchanged, or <code>val = NA</code> as the input returned will
+be <code>NA</code> or the appropiate type.</p>
     </div>
 
     <div class="section level2">
