@@ -53,6 +53,15 @@ test_that("scalar multiplication works", {
   expect_true(
     is_sparse_double(sparse_multiplication_scalar(vec_double, 5))
   )
+
+  expect_identical(
+    sparse_multiplication_scalar(vec_int, NA),
+    rep(NA_integer_, length(vec_int))
+  )
+  expect_identical(
+    sparse_multiplication_scalar(vec_double, NA),
+    rep(NA_real_, length(vec_double))
+  )
 })
 
 test_that("scalar division works", {
@@ -102,6 +111,15 @@ test_that("scalar division works", {
   )
   expect_true(
     is_sparse_double(sparse_division_scalar(vec_double, 5))
+  )
+
+  expect_identical(
+    sparse_division_scalar(vec_int, NA),
+    rep(NA_integer_, length(vec_int))
+  )
+  expect_identical(
+    sparse_division_scalar(vec_double, NA),
+    rep(NA_real_, length(vec_double))
   )
 })
 
@@ -160,6 +178,15 @@ test_that("scalar addition works", {
   expect_true(
     is_sparse_double(sparse_addition_scalar(vec_double, 5))
   )
+
+  expect_identical(
+    sparse_addition_scalar(vec_int, NA),
+    rep(NA_integer_, length(vec_int))
+  )
+  expect_identical(
+    sparse_addition_scalar(vec_double, NA),
+    rep(NA_real_, length(vec_double))
+  )
 })
 
 test_that("scalar subtraction works", {
@@ -216,6 +243,15 @@ test_that("scalar subtraction works", {
   )
   expect_true(
     is_sparse_double(sparse_subtraction_scalar(vec_double, 5))
+  )
+
+  expect_identical(
+    sparse_subtraction_scalar(vec_int, NA),
+    rep(NA_integer_, length(vec_int))
+  )
+  expect_identical(
+    sparse_subtraction_scalar(vec_double, NA),
+    rep(NA_real_, length(vec_double))
   )
 })
 

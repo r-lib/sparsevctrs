@@ -36,7 +36,8 @@ used ones, as they preserve the default, which is often what you want to do.
 
 \code{sparse_division_scalar()} always produces double vectors, regardless of
 whether they could be represented as integers or not. Expect when \code{val = 1}
-as the input is returned unchanged.
+as the input is returned unchanged, or \code{val = NA} as the input returned will
+be \code{NA} or the appropiate type.
 }
 \examples{
 x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
