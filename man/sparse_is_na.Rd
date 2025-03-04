@@ -4,13 +4,17 @@
 \alias{sparse_is_na}
 \title{Detect Pressence of Missing Values}
 \usage{
-sparse_is_na(x)
+sparse_is_na(x, type = "logical")
 }
 \arguments{
 \item{x}{A sparse vector.}
+
+\item{type}{A single string. Most be one of \code{logical} or \code{integer}.
+Determines the resulting vector. If \code{type = integer} then a sparse vector is
+returned.}
 }
 \value{
-A logical vector.
+A logical vector or sparse integer vector.
 }
 \description{
 Detect Pressence of Missing Values
@@ -25,6 +29,11 @@ Note that the resulting vector will be not be a sparse vector.
 \examples{
 sparse_is_na(
   sparse_double(c(10, NA, 11), c(1, 50, 111), 1000)
+)
+
+sparse_is_na(
+  sparse_double(c(10, NA, 11), c(1, 50, 111), 1000),
+  type = "integer"
 )
 }
 \seealso{
