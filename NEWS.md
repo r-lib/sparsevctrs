@@ -12,6 +12,8 @@
 
 * Adding `wts` argument to `sparse_mean()`. (#95)
 
+* Adding `sparse_lag()`. (#99)
+
 # sparsevctrs 0.2.0
 
 ## New Functions
