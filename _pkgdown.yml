@@ -36,6 +36,7 @@ reference:
     - sparse_replace_na
     - sparse_is_na
     - sparse_which_na
+    - sparse_lag
     - sparse_dummy
     - sparsity
   
