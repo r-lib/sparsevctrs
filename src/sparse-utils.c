@@ -80,6 +80,14 @@ SEXP ffi_is_sparse_vector(SEXP x) {
   return Rf_ScalarLogical(altrep_package(x) == Rf_install("sparsevctrs"));
 }
 
+SEXP ffi_is_altrep_non_sparse_vector(SEXP x) {
+  if (!is_altrep(x)) {
+    return (Rf_ScalarLogical(FALSE));
+  }
+
+  return Rf_ScalarLogical(altrep_package(x) != Rf_install("sparsevctrs"));
+}
+
 static inline R_xlen_t midpoint(R_xlen_t lhs, R_xlen_t rhs) {
   return lhs + (rhs - lhs) / 2;
 }
