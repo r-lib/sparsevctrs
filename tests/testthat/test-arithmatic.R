@@ -642,3 +642,10 @@ test_that("vector multiplication works - non-zero defaults", {
   expect_false(is_sparse_vector(res))
   expect_true(is.double(res))
 })
+
+test_that("vector multiplication works - other altrep input", {
+  expect_identical(
+    sparse_multiplication(1:2, 1:2),
+    sparse_multiplication(c(1L, 2L), c(1L, 2L))
+  )
+})

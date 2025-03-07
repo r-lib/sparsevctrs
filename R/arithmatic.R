@@ -253,11 +253,11 @@ sparse_multiplication <- function(x, y) {
   x_default <- sparse_default(x)
   y_default <- sparse_default(y)
 
-  if (!is.na(x_default) && x_default != 0) {
+  if (is_altrep_non_sparse_vector(x) || (!is.na(x_default) && x_default != 0)) {
     x <- x[]
   }
 
-  if (!is.na(y_default) && y_default != 0) {
+  if (is_altrep_non_sparse_vector(y) || (!is.na(y_default) && y_default != 0)) {
     y <- y[]
   }
 

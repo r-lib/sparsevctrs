@@ -37,6 +37,10 @@ is_sparse_vector <- function(x) {
   .Call(ffi_is_sparse_vector, x)
 }
 
+is_altrep_non_sparse_vector <- function(x) {
+  .Call(ffi_is_altrep_non_sparse_vector, x)
+}
+
 #' @rdname type-predicates
 #' @export
 is_sparse_numeric <- function(x) {
