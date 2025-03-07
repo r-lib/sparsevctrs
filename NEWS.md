@@ -1,18 +1,26 @@
 # sparsevctrs (development version)
 
+## New Functions
+
 * Adding the scalar arithmatic functions `sparse_division_scalar()`, `sparse_multiplication_scalar()`, `sparse_addition_scalar()`, `sparse_subtraction_scalar()`. (#87)
 
-* Fixed bug in `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` where they didn't work with ngCMatrix. (#89)
+* Adding the arithmatic function `sparse_multiplication()`. (#93)
+
+* Helper function `sparse_lag()` bas been added. (#99)
 
 * Helper function `sparse_sqrt()` has been added. (#90)
 
 * Helper function `sparse_replace_na()` has been added. (#91)
 
-* Adding the arithmatic function `sparse_multiplication()`. (#93)
+* Helper functions `sparse_is_na()` and `sparse_which_na()` have been added. (#92)
+
+## Improvements
 
 * Adding `wts` argument to `sparse_mean()`. (#95)
 
-* Adding `sparse_lag()`. (#99)
+## Bug Fixes
+
+* Fixed bug in `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` where they didn't work with ngCMatrix. (#89)
 
 # sparsevctrs 0.2.0
 
