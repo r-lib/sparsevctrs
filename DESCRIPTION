@@ -5,7 +5,7 @@ Authors@R: c(
     person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0679-1945")),
     person("Davis", "Vaughan", , "davis@posit.co", role = "ctb"),
-    person("Posit Software, PBC", role = c("cph", "fnd"))
+    person("Posit Software, PBC", role = c("cph", "fnd"), comment = c(ROR = "03wc8by49"))
   )
 Description: Provides sparse vectors powered by ALTREP (Alternative
     Representations for R Objects) that behave like regular vectors, and
