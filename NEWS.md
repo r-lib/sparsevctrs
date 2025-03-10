@@ -1,4 +1,4 @@
-# sparsevctrs (development version)
+# sparsevctrs 0.3.0
 
 ## New Functions
 
