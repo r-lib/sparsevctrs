@@ -69,7 +69,7 @@ SEXP alrep_sparse_double_Materialize(SEXP x) {
 // ALTVEC
 
 void* altrep_sparse_double_Dataptr(SEXP x, Rboolean writeable) {
-  return DATAPTR(alrep_sparse_double_Materialize(x));
+  return SVCTRS_DATAPTR(alrep_sparse_double_Materialize(x));
 }
 
 const void* altrep_sparse_double_Dataptr_or_null(SEXP x) {
@@ -78,7 +78,7 @@ const void* altrep_sparse_double_Dataptr_or_null(SEXP x) {
   if (out == R_NilValue) {
     return NULL;
   } else {
-    return DATAPTR(out);
+    return SVCTRS_DATAPTR(out);
   }
 }
 
