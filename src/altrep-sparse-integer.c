@@ -69,7 +69,7 @@ SEXP alrep_sparse_integer_Materialize(SEXP x) {
 // ALTVEC
 
 void* altrep_sparse_integer_Dataptr(SEXP x, Rboolean writeable) {
-  return STDVEC_DATAPTR(alrep_sparse_integer_Materialize(x));
+  return SVCTRS_DATAPTR(alrep_sparse_integer_Materialize(x));
 }
 
 const void* altrep_sparse_integer_Dataptr_or_null(SEXP x) {
@@ -78,7 +78,7 @@ const void* altrep_sparse_integer_Dataptr_or_null(SEXP x) {
   if (out == R_NilValue) {
     return NULL;
   } else {
-    return STDVEC_DATAPTR(out);
+    return SVCTRS_DATAPTR(out);
   }
 }
 

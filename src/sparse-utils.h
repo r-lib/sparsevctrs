@@ -5,6 +5,8 @@
 #include <Rinternals.h>
 #include <stdbool.h>
 
+#define SVCTRS_DATAPTR(x) (void*) DATAPTR_RO(x);
+
 SEXP extract_val(SEXP x);
 
 SEXP extract_pos(SEXP x);
