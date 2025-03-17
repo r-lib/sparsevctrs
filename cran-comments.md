@@ -1,3 +1,7 @@
+## CRAN notes
+
+- Fixed undefined behaviour bug caught by CRAN clang-UBSAN and gcc-UBSAN.
+
 ## R CMD check results
 
 0 errors | 0 warnings | 0 note
