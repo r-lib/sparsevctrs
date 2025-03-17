@@ -1,3 +1,5 @@
+# sparsevctrs (development version)
+
 # sparsevctrs 0.3.1
 
 * Fixed bug where sparse multiplication caused undefined behaviour. ($103)
