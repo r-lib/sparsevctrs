@@ -485,12 +485,15 @@ SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
       SET_INTEGER_ELT(
           out_pos, i, INTEGER_ELT(x_pos, INTEGER_ELT(x_pos_idx, i))
       );
-      SET_INTEGER_ELT(
-          out_val,
-          out_idx,
-          INTEGER_ELT(x_val, INTEGER_ELT(x_pos_idx, i)) *
-              INTEGER_ELT(y_val, INTEGER_ELT(y_pos_idx, i))
-      );
+      int cur_x_val = INTEGER_ELT(x_val, INTEGER_ELT(x_pos_idx, i));
+      int cur_y_val = INTEGER_ELT(y_val, INTEGER_ELT(y_pos_idx, i));
+
+      if (cur_x_val == NA_INTEGER || cur_y_val == NA_INTEGER) {
+        SET_INTEGER_ELT(out_val, out_idx, NA_INTEGER);
+      } else {
+        SET_INTEGER_ELT(out_val, out_idx, cur_x_val * cur_y_val);
+      }
+
       out_idx++;
     }
   }
@@ -604,7 +607,11 @@ SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
     if (y_val != 0) {
       SET_INTEGER_ELT(out_pos, idx, cur_pos);
       int cur_val = INTEGER_ELT(x_val, i);
-      SET_INTEGER_ELT(out_val, idx, y_val * cur_val);
+      if (y_val == NA_INTEGER || cur_val == NA_INTEGER) {
+        SET_INTEGER_ELT(out_val, idx, NA_INTEGER);
+      } else {
+        SET_INTEGER_ELT(out_val, idx, y_val * cur_val);
+      }
       idx++;
     }
   }
