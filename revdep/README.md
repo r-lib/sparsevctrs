@@ -10,7 +10,7 @@
 |collate  |en_US.UTF-8                              |
 |ctype    |en_US.UTF-8                              |
 |tz       |America/Los_Angeles                      |
-|date     |2025-03-07                               |
+|date     |2025-03-17                               |
 |pandoc   |3.6.1 @ /usr/local/bin/ (via rmarkdown)  |
 |quarto   |1.6.42 @ /Applications/quarto/bin/quarto |
 
@@ -18,7 +18,7 @@
 
 |package     |old   |new        |Δ  |
 |:-----------|:-----|:----------|:--|
-|sparsevctrs |0.2.0 |0.2.0.9006 |*  |
+|sparsevctrs |0.3.0 |0.3.0.9000 |*  |
 |cli         |3.6.4 |3.6.4      |   |
 |glue        |1.8.0 |1.8.0      |   |
 |lifecycle   |1.0.4 |1.0.4      |   |
