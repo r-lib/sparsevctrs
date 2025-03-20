@@ -179,8 +179,8 @@ void sort_pos_and_val(SEXP pos, SEXP val) {
     return;
   }
 
-  SEXP index = Rf_allocVector(INTSXP, len);
-  SEXP sorted_pos = Rf_allocVector(INTSXP, len);
+  SEXP index = PROTECT(Rf_allocVector(INTSXP, len));
+  SEXP sorted_pos = PROTECT(Rf_allocVector(INTSXP, len));
 
   // Initialize pairs array
   for (R_xlen_t i = 0; i < len; i++) {
@@ -210,7 +210,7 @@ void sort_pos_and_val(SEXP pos, SEXP val) {
   }
 
   if (Rf_isInteger(val)) {
-    SEXP sorted_val = Rf_allocVector(INTSXP, len);
+    SEXP sorted_val = PROTECT(Rf_allocVector(INTSXP, len));
 
     for (R_xlen_t i = 0; i < len; i++) {
       int cur_index = INTEGER_ELT(index, i);
@@ -222,7 +222,7 @@ void sort_pos_and_val(SEXP pos, SEXP val) {
       SET_INTEGER_ELT(val, i, INTEGER_ELT(sorted_val, i));
     }
   } else {
-    SEXP sorted_val = Rf_allocVector(REALSXP, len);
+    SEXP sorted_val = PROTECT(Rf_allocVector(REALSXP, len));
 
     for (R_xlen_t i = 0; i < len; i++) {
       int cur_index = INTEGER_ELT(index, i);
@@ -234,4 +234,5 @@ void sort_pos_and_val(SEXP pos, SEXP val) {
       SET_REAL_ELT(val, i, REAL_ELT(sorted_val, i));
     }
   }
+  UNPROTECT(3);
 }
