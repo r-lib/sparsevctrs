@@ -34,6 +34,79 @@ test_that("works with non-numeric data.frames", {
   )
 })
 
+test_that("works with numeric classes in data.frames (#106)", {
+  vs <- mtcars$vs
+  mtcars$vs <- 4
+  mtcars_exp_sparsity <- mean(mtcars == 0)
+
+  class(vs) <- "something"
+  mtcars$vs <- vs
+
+  expect_identical(
+    sparsity(mtcars),
+    mtcars_exp_sparsity
+  )
+})
+
+structure(
+  c(
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    5
+  ),
+  class = c("hardhat_importance_weights", "hardhat_case_weights", "vctrs_vctr")
+)
+
 test_that("works with data.frames sample arg", {
   set.seed(1234)
   exp <- mean(mtcars[sample(32, 10), ] == 0)

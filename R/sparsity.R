@@ -73,7 +73,7 @@ input_type <- function(x, call = rlang::caller_env()) {
 }
 
 count_zeroes <- function(x) {
-  if (!is.numeric(x)) {
+  if (!inherits(x, c("numeric", "integer"))) {
     return(0)
   }
 
