@@ -353,6 +353,25 @@ test_that("coerce_to_sparse_matrix() can pass through error call", {
   )
 })
 
+test_that("coerce_to_sparse_matrix() works with NA input (#109)", {
+  skip_if_not_installed("Matrix")
+
+  tbl <- data.frame(
+    a = c(NA, 5),
+    b = sparse_integer(integer(), integer(), 2)
+  )
+
+  exp <- as.matrix(tbl)
+  exp <- Matrix::Matrix(exp, sparse = TRUE)
+  exp <- as(exp, "generalMatrix")
+  exp <- as(exp, "CsparseMatrix")
+
+  expect_identical(
+    coerce_to_sparse_matrix(tbl),
+    exp
+  )
+})
+
 ### coerce_to_sparse_data_frame ------------------------------------------------
 
 test_that("coerce_to_sparse_data_frame() works", {

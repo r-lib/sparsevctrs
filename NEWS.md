@@ -1,5 +1,9 @@
 # sparsevctrs (development version)
 
+## Bug Fixes
+
+* Fixed bug where `coerce_to_sparse_matrix()` would sometimes error if input had NA values. (#109)
+
 # sparsevctrs 0.3.2
 
 ## Bug Fixes
