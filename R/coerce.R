@@ -68,7 +68,7 @@ coerce_to_sparse_matrix <- function(x, call = rlang::caller_env(0)) {
   all_values <- unlist(all_values, use.names = FALSE)
 
   # TODO: maybe faster to do this above?
-  non_zero <- all_values != 0
+  non_zero <- all_values != 0 | is.na(all_values)
   all_rows <- all_rows[non_zero]
   all_positions <- all_positions[non_zero]
   all_values <- all_values[non_zero]
