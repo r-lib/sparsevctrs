@@ -1,5 +1,7 @@
 # sparsevctrs (development version)
 
+* Fixed bug where `sparse_multiplication()` had a stack imbalence when returning all 0s. (#113)
+
 # sparsevctrs 0.3.3
 
 ## Bug Fixes
