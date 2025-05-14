@@ -239,6 +239,7 @@ SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
   int y_na_count = Rf_length(y_na_pos);
 
   if (overlap == R_NilValue && x_na_count == 0 && y_na_count == 0) {
+    UNPROTECT(1);
     return empty_sparse_double(extract_len(x));
   }
 
@@ -467,6 +468,7 @@ SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
   int y_na_count = Rf_length(y_na_pos);
 
   if (overlap == R_NilValue && x_na_count == 0 && y_na_count == 0) {
+    UNPROTECT(1);
     return empty_sparse_integer(extract_len(x));
   }
 
