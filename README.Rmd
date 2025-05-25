@@ -4,7 +4,8 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -18,7 +19,7 @@ set.seed(1234)
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/r-lib/sparsevctrs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/sparsevctrs/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/r-lib/sparsevctrs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/sparsevctrs?branch=main)
+[![Codecov test coverage](https://codecov.io/gh/r-lib/sparsevctrs/graph/badge.svg)](https://app.codecov.io/gh/r-lib/sparsevctrs)
 <!-- badges: end -->
 
 The goal of sparsevctrs is to provide a sparse vector [ALTREP](https://svn.r-project.org/R/branches/ALTREP/ALTREP.html) class. With this, you can have sparse data in the form of sparse columns in `data.frame` or [tibble](https://tibble.tidyverse.org/). Due to the nature of how ALTREP vectors work, these sparse vectors will behave like the normal dense vectors you are used you. The vectors will contain their sparseness as much as they can, and only materialize when they have to.

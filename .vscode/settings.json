@@ -1,12 +1,13 @@
 {
-  "[c]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
-  },
-  "clangd.arguments": [
-    "-header-insertion=never"
-  ],
-  "[r]": {
-    "editor.formatOnSave": true
-  }
+    "[c]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "clangd.arguments": [
+        "-header-insertion=never"
+    ],
+    "[r]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "Posit.air-vscode"
+    }
 }

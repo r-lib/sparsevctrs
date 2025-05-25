@@ -7,7 +7,7 @@
 
 [![R-CMD-check](https://github.com/r-lib/sparsevctrs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/sparsevctrs/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/r-lib/sparsevctrs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/sparsevctrs?branch=main)
+coverage](https://codecov.io/gh/r-lib/sparsevctrs/graph/badge.svg)](https://app.codecov.io/gh/r-lib/sparsevctrs)
 <!-- badges: end -->
 
 The goal of sparsevctrs is to provide a sparse vector
