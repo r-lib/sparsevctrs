@@ -1,5 +1,7 @@
 # sparsevctrs (development version)
 
+## Bug Fixes
+
 * Fixed bug where `sparse_multiplication()` had a stack imbalence when returning all 0s. (#113)
 
 * Fixed bug where `sparse_is_na(type = "integer")` would error on character vectors. (#116)
