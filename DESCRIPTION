@@ -5,8 +5,7 @@ Authors@R: c(
     person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0679-1945")),
     person("Davis", "Vaughan", , "davis@posit.co", role = "ctb"),
-    person("Posit Software, PBC", role = c("cph", "fnd"),
-           comment = c(ROR = "03wc8by49"))
+    person("Posit Software, PBC", role = c("cph", "fnd"), comment = c(ROR = "03wc8by49"))
   )
 Description: Provides sparse vectors powered by ALTREP (Alternative
     Representations for R Objects) that behave like regular vectors, and
@@ -36,7 +35,7 @@ VignetteBuilder:
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown, lobstr, ggplot2,
     bench, tidyr, ggbeeswarm
 Config/testthat/edition: 3
-Config/usethis/last-upkeep: 2025-05-25
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Config/usethis/last-upkeep: 2025-05-25
