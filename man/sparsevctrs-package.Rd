@@ -25,7 +25,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Davis Vaughan \email{davis@posit.co} [contributor]
-  \item Posit Software, PBC [copyright holder, funder]
+  \item Posit Software, PBC (03wc8by49) [copyright holder, funder]
 }
 
 }
