@@ -44,7 +44,7 @@ sparse_is_na <- function(x, type = "logical") {
       rep(1, length(positions)),
       positions,
       length(x),
-      sparse_default(x)
+      0L
     )
   }
 
