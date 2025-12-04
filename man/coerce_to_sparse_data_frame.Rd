@@ -24,7 +24,7 @@ Turning a sparse matrix into a data frame
 The only requirement from the sparse matrix is that it contains column names.
 }
 \examples{
-\dontshow{if (rlang::is_installed("Matrix")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("Matrix")) withAutoprint(\{ # examplesIf}
 set.seed(1234)
 mat <- matrix(sample(0:1, 100, TRUE, c(0.9, 0.1)), nrow = 10)
 colnames(mat) <- letters[1:10]

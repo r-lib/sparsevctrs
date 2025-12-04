@@ -27,7 +27,7 @@ columns or not. Thus it works with any data frame. Needless to say, creating
 a sparse matrix out of a dense data frame is not ideal.
 }
 \examples{
-\dontshow{if (rlang::is_installed("Matrix")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("Matrix")) withAutoprint(\{ # examplesIf}
 sparse_tbl <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
 names(sparse_tbl) <- letters[1:10]
 sparse_tbl <- as.data.frame(sparse_tbl)

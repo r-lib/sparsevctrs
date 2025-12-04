@@ -25,7 +25,7 @@ This function does not test whether \code{x} is a data.frame, tibble or list. It
 simply iterates over the elements and sees if they are sparse vectors.
 }
 \examples{
-\dontshow{if (rlang::is_installed("Matrix")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("Matrix")) withAutoprint(\{ # examplesIf}
 set.seed(1234)
 n_cols <- 10000
 mat <- matrix(sample(0:1, n_cols * 10, TRUE, c(0.9, 0.1)), ncol = n_cols)
