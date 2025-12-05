@@ -12,11 +12,6 @@ SEXP ffi_altrep_new_sparse_string(SEXP x) {
   return R_new_altrep(altrep_sparse_string_class, x, R_NilValue);
 }
 
-// // sparse_string_materialize(x)
-// SEXP ffi_altrep_sparse_string_materialize(SEXP x) {
-//   return alrep_sparse_string_Materialize(x);
-// }
-
 SEXP alrep_sparse_string_Materialize(SEXP x) {
   SEXP out = R_altrep_data2(x);
 
@@ -54,6 +49,11 @@ SEXP alrep_sparse_string_Materialize(SEXP x) {
 
   UNPROTECT(1);
   return out;
+}
+
+// sparse_string_materialize(x)
+SEXP ffi_altrep_sparse_string_materialize(SEXP x) {
+  return alrep_sparse_string_Materialize(x);
 }
 
 // -----------------------------------------------------------------------------
