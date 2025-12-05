@@ -4,8 +4,12 @@
 #define R_NO_REMAP
 #include <Rinternals.h>
 #include <stdbool.h>
+#include <Rversion.h>
 
-#define SVCTRS_DATAPTR(x) (void*) DATAPTR_RO(x);
+// Backport DATAPTR_RW for R < 4.6.0 (as recommended in Writing R Extensions)
+#if R_VERSION < R_Version(4, 6, 0)
+# define DATAPTR_RW(x) DATAPTR(x)
+#endif
 
 SEXP extract_val(SEXP x);
 
