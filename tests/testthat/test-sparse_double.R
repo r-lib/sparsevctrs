@@ -447,16 +447,16 @@ test_that("verbose testing", {
 
   x <- sparse_double(1, 1, 1)
   expect_snapshot({
-    tmp <- x[]
-    tmp <- x[]
+    tmp <- sparse_double_materialize(x)
+    tmp <- sparse_double_materialize(x)
   })
 
   withr::local_options("sparsevctrs.verbose_materialize" = 2)
 
   x <- sparse_double(1, 1, 1)
   expect_snapshot({
-    tmp <- x[]
-    tmp <- x[]
+    tmp <- sparse_double_materialize(x)
+    tmp <- sparse_double_materialize(x)
   })
 
   withr::local_options("sparsevctrs.verbose_materialize" = 3)
@@ -465,7 +465,7 @@ test_that("verbose testing", {
   expect_snapshot(
     error = TRUE,
     {
-      tmp <- x[]
+      tmp <- sparse_double_materialize(x)
     }
   )
 })

@@ -51,7 +51,6 @@ SEXP alrep_sparse_string_Materialize(SEXP x) {
   return out;
 }
 
-// sparse_string_materialize(x)
 SEXP ffi_altrep_sparse_string_materialize(SEXP x) {
   return alrep_sparse_string_Materialize(x);
 }

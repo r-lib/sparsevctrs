@@ -51,6 +51,10 @@ SEXP alrep_sparse_logical_Materialize(SEXP x) {
   return out;
 }
 
+SEXP ffi_altrep_sparse_logical_materialize(SEXP x) {
+  return alrep_sparse_logical_Materialize(x);
+}
+
 // -----------------------------------------------------------------------------
 // ALTVEC
 

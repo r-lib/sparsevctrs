@@ -65,6 +65,10 @@ SEXP alrep_sparse_double_Materialize(SEXP x) {
   return out;
 }
 
+SEXP ffi_altrep_sparse_double_materialize(SEXP x) {
+  return alrep_sparse_double_Materialize(x);
+}
+
 // -----------------------------------------------------------------------------
 // ALTVEC
 
