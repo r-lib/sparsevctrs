@@ -90,3 +90,7 @@ new_sparse_double <- function(values, positions, length, default) {
 
   .Call(ffi_altrep_new_sparse_double, x)
 }
+
+sparse_double_materialize <- function(x) {
+  .Call(ffi_altrep_sparse_double_materialize, x)
+}

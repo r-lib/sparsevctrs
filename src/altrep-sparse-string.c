@@ -45,9 +45,14 @@ SEXP alrep_sparse_string_Materialize(SEXP x) {
   }
 
   R_set_altrep_data2(x, out);
+  // R_set_altrep_data1(x, R_NilValue);
 
   UNPROTECT(1);
   return out;
+}
+
+SEXP ffi_altrep_sparse_string_materialize(SEXP x) {
+  return alrep_sparse_string_Materialize(x);
 }
 
 // -----------------------------------------------------------------------------
@@ -204,6 +209,12 @@ SEXP altrep_sparse_string_Duplicate(SEXP x, Rboolean deep) {
 // ALTSTRING
 
 static SEXP altrep_sparse_string_Elt(SEXP x, R_xlen_t i) {
+  SEXP data2 = R_altrep_data2(x);
+
+  if (data2 != R_NilValue) {
+    return STRING_ELT(data2, i);
+  }
+
   SEXP val = extract_val(x);
 
   SEXP pos = extract_pos(x);

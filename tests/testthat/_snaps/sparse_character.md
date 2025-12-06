@@ -285,28 +285,28 @@
 # verbose testing
 
     Code
-      tmp <- x[]
+      tmp <- sparse_string_materialize(x)
     Output
       sparsevctrs: Sparse vector materialized
     Code
-      tmp <- x[]
+      tmp <- sparse_string_materialize(x)
 
 ---
 
     Code
-      tmp <- x[]
+      tmp <- sparse_string_materialize(x)
     Condition
-      Warning:
+      Warning in `sparse_string_materialize()`:
       sparsevctrs: Sparse vector materialized
     Code
-      tmp <- x[]
+      tmp <- sparse_string_materialize(x)
 
 ---
 
     Code
-      tmp <- x[]
+      tmp <- sparse_string_materialize(x)
     Condition
-      Error:
+      Error in `sparse_string_materialize()`:
       ! sparsevctrs: Sparse vector materialized
 
 # printing works #48

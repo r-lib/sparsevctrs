@@ -90,3 +90,7 @@ new_sparse_integer <- function(values, positions, length, default) {
 
   .Call(ffi_altrep_new_sparse_integer, x)
 }
+
+sparse_integer_materialize <- function(x) {
+  .Call(ffi_altrep_sparse_integer_materialize, x)
+}

@@ -7,18 +7,22 @@
 // Defined in altrep-sparse-double.c
 extern SEXP ffi_altrep_new_sparse_double(SEXP);
 extern void sparsevctrs_init_altrep_sparse_double(DllInfo*);
+extern SEXP ffi_altrep_sparse_double_materialize(SEXP);
 
 // Defined in altrep-sparse-integer.c
 extern SEXP ffi_altrep_new_sparse_integer(SEXP);
 extern void sparsevctrs_init_altrep_sparse_integer(DllInfo*);
+extern SEXP ffi_altrep_sparse_integer_materialize(SEXP);
 
 // Defined in altrep-sparse-string.c
 extern SEXP ffi_altrep_new_sparse_string(SEXP);
 extern void sparsevctrs_init_altrep_sparse_string(DllInfo*);
+extern SEXP ffi_altrep_sparse_string_materialize(SEXP);
 
 // Defined in altrep-sparse-logical.c
 extern SEXP ffi_altrep_new_sparse_logical(SEXP);
 extern void sparsevctrs_init_altrep_sparse_logical(DllInfo*);
+extern SEXP ffi_altrep_sparse_logical_materialize(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"ffi_altrep_new_sparse_double", (DL_FUNC) &ffi_altrep_new_sparse_double, 1
@@ -30,6 +34,18 @@ static const R_CallMethodDef CallEntries[] = {
     },
     {"ffi_altrep_new_sparse_logical",
      (DL_FUNC) &ffi_altrep_new_sparse_logical,
+     1},
+    {"ffi_altrep_sparse_double_materialize",
+     (DL_FUNC) &ffi_altrep_sparse_double_materialize,
+     1},
+    {"ffi_altrep_sparse_integer_materialize",
+     (DL_FUNC) &ffi_altrep_sparse_integer_materialize,
+     1},
+    {"ffi_altrep_sparse_string_materialize",
+     (DL_FUNC) &ffi_altrep_sparse_string_materialize,
+     1},
+    {"ffi_altrep_sparse_logical_materialize",
+     (DL_FUNC) &ffi_altrep_sparse_logical_materialize,
      1},
     {"ffi_altrep_sparse_positions", (DL_FUNC) &ffi_altrep_sparse_positions, 1},
     {"ffi_altrep_sparse_values", (DL_FUNC) &ffi_altrep_sparse_values, 1},
