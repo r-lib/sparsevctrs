@@ -1,3 +1,5 @@
+# sparsevctrs (development version)
+
 # sparsevctrs 0.3.5
 
 * Fixed bug with sparse character vectors that occurred on R devel. (#122)
