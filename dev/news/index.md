@@ -2,6 +2,11 @@
 
 ## sparsevctrs (development version)
 
+## sparsevctrs 0.3.5
+
+- Fixed bug with sparse character vectors that occurred on R devel.
+  ([\#122](https://github.com/r-lib/sparsevctrs/issues/122))
+
 ## sparsevctrs 0.3.4
 
 CRAN release: 2025-05-25
