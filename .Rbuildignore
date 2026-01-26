@@ -17,3 +17,4 @@
 ^CRAN-SUBMISSION$
 ^revdep$
 ^[\.]?air\.toml$
+^\.claude$
