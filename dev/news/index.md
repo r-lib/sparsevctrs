@@ -2,7 +2,12 @@
 
 ## sparsevctrs (development version)
 
+- Replaced deprecated `ATTRIB()` macro with `R_altrep_class_name()` and
+  `R_altrep_class_package()` for R 4.6.0 compatibility.
+
 ## sparsevctrs 0.3.5
+
+CRAN release: 2025-12-09
 
 - Fixed bug with sparse character vectors that occurred on R devel.
   ([\#122](https://github.com/r-lib/sparsevctrs/issues/122))

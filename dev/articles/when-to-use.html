@@ -206,7 +206,7 @@ go back.</p>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="when-to-use_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
+<p><img src="when-to-use_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
 <p>staying dense the whole time is faster no matter the speed.</p>
 <p>As a comparison, we can look at how much time it takes if we don’t
 force materialization.</p>
@@ -232,7 +232,7 @@ force materialization.</p>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="when-to-use_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700"></p>
+<p><img src="when-to-use_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
 <p>What we are really seeing here is that creating a sparse vector takes
 a near-constant amount of time. So once the length is high enough it
 wins. But this by itself isn’t a good comparison because these vectors
@@ -266,7 +266,7 @@ quite well.</p>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="when-to-use_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="700"></p>
+<p><img src="when-to-use_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
 <p>These functions do well because they calculate the sum over the
 non-default values instead of all values. For truly sparse vectors this
 will be fast. On the other hand, some methods don’t have ALTREP support.
@@ -296,7 +296,7 @@ progress. Once such unsupported method is <code><a href="https://rdrr.io/r/base/
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="when-to-use_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="700"></p>
+<p><img src="when-to-use_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
 <p>And we see that the sparse is always slower. But this can be handled
 by doing sparse-aware calculations. The helper functions
 <code><a href="../reference/extractors.html">sparse_positions()</a></code> and <code><a href="../reference/extractors.html">sparse_values()</a></code> can be
@@ -334,7 +334,7 @@ materialization.</p>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="when-to-use_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="700"></p>
+<p><img src="when-to-use_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="700"></p>
 <p>The ideal usage of sparse vectors is to keep them in a data.frame or
 tibble, and use <code><a href="../reference/coerce_to_sparse_matrix.html">coerce_to_sparse_matrix()</a></code> at the end to
 create a sparse matrix that is understood by downstream functions.</p>

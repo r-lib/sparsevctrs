@@ -16,14 +16,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/r-lib/sparsevctrs/blob/main/DESCRIPTION)
 
-Hvitfeldt E (2025). *sparsevctrs: Sparse Vectors for Use in Data
+Hvitfeldt E (2026). *sparsevctrs: Sparse Vectors for Use in Data
 Frames*. R package version 0.3.5.9000,
 <https://github.com/r-lib/sparsevctrs>.
 
     @Manual{,
       title = {sparsevctrs: Sparse Vectors for Use in Data Frames},
       author = {Emil Hvitfeldt},
-      year = {2025},
+      year = {2026},
       note = {R package version 0.3.5.9000},
       url = {https://github.com/r-lib/sparsevctrs},
     }
