@@ -65,11 +65,11 @@ SEXP ffi_extract_altrep_class(SEXP x) {
     return (R_NilValue);
   }
 
-  return ATTRIB(ALTREP_CLASS(x));
+  return R_altrep_class_name(x);
 }
 
 static inline SEXP altrep_package(SEXP x) {
-  return VECTOR_ELT(Rf_PairToVectorList(ATTRIB(ALTREP_CLASS(x))), 1);
+  return R_altrep_class_package(x);
 }
 
 SEXP ffi_is_sparse_vector(SEXP x) {

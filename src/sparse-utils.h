@@ -11,6 +11,16 @@
 # define DATAPTR_RW(x) DATAPTR(x)
 #endif
 
+// Backport R_altrep_class_name and R_altrep_class_package for R < 4.6.0
+#if R_VERSION < R_Version(4, 6, 0)
+static inline SEXP R_altrep_class_name(SEXP x) {
+  return ALTREP(x) ? CAR(ATTRIB(ALTREP_CLASS(x))) : R_NilValue;
+}
+static inline SEXP R_altrep_class_package(SEXP x) {
+  return ALTREP(x) ? CADR(ATTRIB(ALTREP_CLASS(x))) : R_NilValue;
+}
+#endif
+
 SEXP extract_val(SEXP x);
 
 SEXP extract_pos(SEXP x);

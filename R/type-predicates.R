@@ -49,7 +49,7 @@ is_sparse_numeric <- function(x) {
     return(FALSE)
   }
 
-  res <- as.character(res[[1]])
+  res <- as.character(res)
 
   res == "altrep_sparse_double" || res == "altrep_sparse_integer"
 }
@@ -62,7 +62,7 @@ is_sparse_double <- function(x) {
     return(FALSE)
   }
 
-  res <- as.character(res[[1]])
+  res <- as.character(res)
 
   res == "altrep_sparse_double"
 }
@@ -75,7 +75,7 @@ is_sparse_integer <- function(x) {
     return(FALSE)
   }
 
-  res <- as.character(res[[1]])
+  res <- as.character(res)
 
   res == "altrep_sparse_integer"
 }
@@ -88,7 +88,7 @@ is_sparse_character <- function(x) {
     return(FALSE)
   }
 
-  res <- as.character(res[[1]])
+  res <- as.character(res)
 
   res == "altrep_sparse_string"
 }
@@ -101,7 +101,7 @@ is_sparse_logical <- function(x) {
     return(FALSE)
   }
 
-  res <- as.character(res[[1]])
+  res <- as.character(res)
 
   res == "altrep_sparse_logical"
 }
