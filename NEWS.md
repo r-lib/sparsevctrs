@@ -1,4 +1,4 @@
-# sparsevctrs (development version)
+# sparsevctrs 0.3.6
 
 * Replaced deprecated `ATTRIB()` macro with `R_altrep_class_name()` and `R_altrep_class_package()` for R 4.6.0 compatibility.
 
