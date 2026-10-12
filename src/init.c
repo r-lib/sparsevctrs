@@ -24,7 +24,11 @@ extern SEXP ffi_altrep_new_sparse_logical(SEXP);
 extern void sparsevctrs_init_altrep_sparse_logical(DllInfo*);
 extern SEXP ffi_altrep_sparse_logical_materialize(SEXP);
 
+// Defined in sparse-coerce.c
+extern SEXP ffi_sparse_matrix_to_list(SEXP, SEXP, SEXP, SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
+    {"ffi_sparse_matrix_to_list", (DL_FUNC) &ffi_sparse_matrix_to_list, 4},
     {"ffi_altrep_new_sparse_double", (DL_FUNC) &ffi_altrep_new_sparse_double, 1
     },
     {"ffi_altrep_new_sparse_integer",

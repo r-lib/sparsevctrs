@@ -192,43 +192,25 @@ coerce_to_sparse_data_frame <- function(x, call = rlang::caller_env(0)) {
   }
 
   res <- .sparse_matrix_to_list(x)
-  res <- as.data.frame(res)
+  names(res) <- make.names(names(res), unique = TRUE)
+  attr(res, "row.names") <- .set_row_names(nrow(x))
+  class(res) <- "data.frame"
   res
 }
 
 .sparse_matrix_to_list <- function(x) {
   if (methods::is(x, "ngCMatrix")) {
-    values <- rep(1, length(x@i))
+    values <- NULL
   } else {
+    if (any(x@x == 0, na.rm = TRUE)) {
+      x <- Matrix::drop0(x)
+    }
     values <- x@x
   }
 
-  x_positions <- x@i
-  n_nonzero <- diff(x@p)
-
-  x_length <- nrow(x)
-
-  res <- list()
-  start <- 1
-  for (i in seq_along(n_nonzero)) {
-    if (n_nonzero[i] == 0) {
-      res[[i]] <- sparse_double(
-        values = double(),
-        positions = double(),
-        length = x_length
-      )
-      next
-    }
-
-    index <- seq(start, start + n_nonzero[i] - 1)
-
-    res[[i]] <- sparse_double(
-      values = values[index],
-      positions = x_positions[index] + 1,
-      length = x_length
-    )
-    start <- start + n_nonzero[i]
-  }
+  # Matrix guarantees sorted, unique, in-range positions, so we skip the
+  # validation in sparse_double().
+  res <- .Call(ffi_sparse_matrix_to_list, x@i, x@p, values, nrow(x))
 
   names(res) <- colnames(x)
   res
