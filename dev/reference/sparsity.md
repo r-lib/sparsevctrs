@@ -33,6 +33,7 @@ values, logical vectors and then string `"0"` aren't counted.
 ## Examples
 
 ``` r
+
 # data frame
 sparsity(mtcars)
 #> [1] 0.1051136

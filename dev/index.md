@@ -14,6 +14,7 @@ have to.
 You can install the development version of sparsevctrs like so:
 
 ``` r
+
 remotes::install_github("r-lib/sparsevctrs")
 ```
 
@@ -24,6 +25,7 @@ identical to its dense counterpart, often with a smaller memory
 footprint.
 
 ``` r
+
 library(sparsevctrs)
 library(lobstr)
 
@@ -49,6 +51,7 @@ who has a much smaller constant, but increases according to the length
 of the values.
 
 ``` r
+
 x_sparse_0 <- sparse_double(numeric(), integer(), length = 0)
 x_sparse_1000 <- sparse_double(numeric(), integer(), length = 1000)
 x_sparse_1000000 <- sparse_double(numeric(), integer(), length = 10000000)
@@ -75,6 +78,7 @@ obj_size(x_dense_1000000)
 These sparse vectors are compatible with tibbles and data frames.
 
 ``` r
+
 library(tibble)
 set.seed(1234)
 

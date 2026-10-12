@@ -1,6 +1,7 @@
 # Design behind sparsevctrs
 
 ``` r
+
 library(sparsevctrs)
 ```
 
@@ -104,6 +105,7 @@ force materialization, and then calculate the mean. This is memory
 inefficient as it could have been calculated like so.
 
 ``` r
+
 sum(sparse_values(x)) / length(x)
 ```
 
