@@ -1,5 +1,7 @@
 # sparsevctrs (development version)
 
+* `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` are now much faster. (#66)
+
 # sparsevctrs 0.3.6
 
 * Replaced deprecated `ATTRIB()` macro with `R_altrep_class_name()` and `R_altrep_class_package()` for R 4.6.0 compatibility.

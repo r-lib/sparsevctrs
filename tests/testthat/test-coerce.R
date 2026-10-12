@@ -538,3 +538,34 @@ test_that(".sparse_matrix_to_list() handles fully sparse columns (#69)", {
     x_df
   )
 })
+
+test_that(".sparse_matrix_to_list() handles explicit zeros", {
+  skip_if_not_installed("Matrix")
+
+  x <- Matrix::sparseMatrix(
+    i = c(1, 2),
+    j = c(1, 2),
+    x = c(1, 0),
+    dims = c(3, 2),
+    dimnames = list(NULL, c("a", "b"))
+  )
+
+  expect_identical(
+    coerce_to_sparse_data_frame(x),
+    data.frame(a = c(1, 0, 0), b = c(0, 0, 0))
+  )
+})
+
+test_that("coerce_to_sparse_data_frame() repairs column names", {
+  skip_if_not_installed("Matrix")
+
+  x <- Matrix::sparseMatrix(
+    i = c(1, 1),
+    j = 1:2,
+    x = 1,
+    dims = c(2, 2),
+    dimnames = list(NULL, c("a b", "a b"))
+  )
+
+  expect_named(coerce_to_sparse_data_frame(x), c("a.b", "a.b.1"))
+})
