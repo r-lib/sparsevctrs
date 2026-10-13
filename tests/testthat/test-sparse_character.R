@@ -251,6 +251,18 @@ test_that("is.unsorted() works with sparse_character()", {
   expect_identical(is.unsorted(gap), is.unsorted(gap[]))
   expect_true(is.unsorted(gap))
 
+  trailing <- sparse_character(c("b", "c"), c(1, 2), 3, default = "a")
+  expect_identical(is.unsorted(trailing), is.unsorted(trailing[]))
+  expect_true(is.unsorted(trailing))
+
+  single <- sparse_character("b", 1, 3, default = "a")
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_true(is.unsorted(single))
+
+  single <- sparse_character("b", 3, 3, default = "a")
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_false(is.unsorted(single))
+
   non_ascii <- sparse_character(c("é", "z"), c(3, 4), 4, default = "a")
   expect_identical(is.unsorted(non_ascii), is.unsorted(non_ascii[]))
 

@@ -264,16 +264,6 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
     return TRUE;
   }
 
-  // 1 length vector are by def sorted
-  if (pos_len == 1) {
-    if (STRING_ELT(val, 0) == NA_STRING) {
-      // unless equal to NA
-      return FALSE;
-    } else {
-      return TRUE;
-    }
-  }
-
   SEXP current_value;
 
   if (v_pos[0] == 1) {
@@ -304,6 +294,13 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
       }
 
       current_value = v_default_val;
+    }
+  }
+
+  // Trailing default values after the last stored value
+  if (v_pos[pos_len - 1] < extract_len(x)) {
+    if (compare_strings(v_default_val, current_value) < 0) {
+      return FALSE;
     }
   }
 
