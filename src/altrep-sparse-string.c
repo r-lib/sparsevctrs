@@ -1,8 +1,14 @@
 #define R_NO_REMAP
 #include <Rinternals.h>
 #include <R_ext/Altrep.h>
+#include <string.h>
 
 #include "sparse-utils.h"
+
+// Locale-aware comparison, matching what `is.unsorted()` does for strings
+static int compare_strings(SEXP a, SEXP b) {
+  return strcoll(Rf_translateChar(a), Rf_translateChar(b));
+}
 
 // Initialised at load time
 
@@ -244,7 +250,6 @@ static SEXP altrep_sparse_string_Elt(SEXP x, R_xlen_t i) {
 }
 
 int altrep_sparse_string_Is_sorted(SEXP x) {
-  Rprintf("const char *, ...");
   SEXP pos = extract_pos(x);
   const int* v_pos = INTEGER_RO(pos);
 
@@ -257,16 +262,6 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
   // zero length vector are by def sorted
   if (pos_len == 0) {
     return TRUE;
-  }
-
-  // 1 length vector are by def sorted
-  if (pos_len == 1) {
-    if (STRING_ELT(val, 0) == NA_STRING) {
-      // unless equal to NA
-      return FALSE;
-    } else {
-      return TRUE;
-    }
   }
 
   SEXP current_value;
@@ -282,7 +277,7 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
       return FALSE;
     }
 
-    if (STRING_ELT(val, i) < current_value) {
+    if (compare_strings(STRING_ELT(val, i), current_value) < 0) {
       return FALSE;
     }
 
@@ -294,11 +289,18 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
 
     // If there is a gap between values check against default
     if ((v_pos[i + 1] - v_pos[i]) > 1) {
-      if (v_default_val < current_value) {
+      if (compare_strings(v_default_val, current_value) < 0) {
         return FALSE;
       }
 
       current_value = v_default_val;
+    }
+  }
+
+  // Trailing default values after the last stored value
+  if (v_pos[pos_len - 1] < extract_len(x)) {
+    if (compare_strings(v_default_val, current_value) < 0) {
+      return FALSE;
     }
   }
 

@@ -257,6 +257,21 @@ test_that("sorting works with sparse_logical()", {
   expect_true(is_sparse_logical(sort(x_sparse)))
 })
 
+test_that("sum works with sparse_logical() and non-FALSE default", {
+  expect_identical(
+    sum(sparse_logical(FALSE, 2, 5, default = TRUE)),
+    4L
+  )
+  expect_identical(
+    sum(sparse_logical(c(FALSE, FALSE), c(1, 3), 5, default = TRUE)),
+    3L
+  )
+  expect_identical(
+    sum(sparse_logical(TRUE, 2, 5)),
+    1L
+  )
+})
+
 test_that("default argument is working", {
   expect_snapshot(
     error = TRUE,
