@@ -345,7 +345,7 @@ static SEXP altrep_sparse_logical_Sum_method(SEXP x, Rboolean na_rm) {
   }
 
   // default can be non-zero
-  const int v_default_val = extract_default_integer(x);
+  const int v_default_val = extract_default_logical(x);
 
   if (v_default_val != 0) {
     sum = sum + (len - val_len) * v_default_val;
