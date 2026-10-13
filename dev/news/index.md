@@ -2,6 +2,14 @@
 
 ## sparsevctrs (development version)
 
+- Fixed bug where
+  [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html) on sparse
+  character vectors compared string pointers instead of string contents,
+  and ignored default values after the last non-default value.
+
+- Fixed bug where [`sum()`](https://rdrr.io/r/base/sum.html) on sparse
+  logical vectors used the wrong default value.
+
 - [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
   and
   [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)

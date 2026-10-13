@@ -38,8 +38,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="sparsevctrs-development-version">sparsevctrs (development version)<a class="anchor" aria-label="anchor" href="#sparsevctrs-development-version"></a></h2>
-<ul><li>
-<code><a href="../reference/coerce_to_sparse_data_frame.html">coerce_to_sparse_data_frame()</a></code> and <code><a href="../reference/coerce_to_sparse_tibble.html">coerce_to_sparse_tibble()</a></code> are now much faster. (<a href="https://github.com/r-lib/sparsevctrs/issues/66" class="external-link">#66</a>)</li>
+<ul><li><p>Fixed bug where <code><a href="https://rdrr.io/r/base/is.unsorted.html" class="external-link">is.unsorted()</a></code> on sparse character vectors compared string pointers instead of string contents, and ignored default values after the last non-default value.</p></li>
+<li><p>Fixed bug where <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code> on sparse logical vectors used the wrong default value.</p></li>
+<li><p><code><a href="../reference/coerce_to_sparse_data_frame.html">coerce_to_sparse_data_frame()</a></code> and <code><a href="../reference/coerce_to_sparse_tibble.html">coerce_to_sparse_tibble()</a></code> are now much faster. (<a href="https://github.com/r-lib/sparsevctrs/issues/66" class="external-link">#66</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.6" id="sparsevctrs-036">sparsevctrs 0.3.6<a class="anchor" aria-label="anchor" href="#sparsevctrs-036"></a></h2><p class="text-muted">CRAN release: 2026-01-27</p>
