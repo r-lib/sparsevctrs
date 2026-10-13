@@ -1,8 +1,14 @@
 #define R_NO_REMAP
 #include <Rinternals.h>
 #include <R_ext/Altrep.h>
+#include <string.h>
 
 #include "sparse-utils.h"
+
+// Locale-aware comparison, matching what `is.unsorted()` does for strings
+static int compare_strings(SEXP a, SEXP b) {
+  return strcoll(Rf_translateChar(a), Rf_translateChar(b));
+}
 
 // Initialised at load time
 
@@ -281,7 +287,7 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
       return FALSE;
     }
 
-    if (STRING_ELT(val, i) < current_value) {
+    if (compare_strings(STRING_ELT(val, i), current_value) < 0) {
       return FALSE;
     }
 
@@ -293,7 +299,7 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
 
     // If there is a gap between values check against default
     if ((v_pos[i + 1] - v_pos[i]) > 1) {
-      if (v_default_val < current_value) {
+      if (compare_strings(v_default_val, current_value) < 0) {
         return FALSE;
       }
 
