@@ -275,16 +275,6 @@ int altrep_sparse_double_Is_sorted(SEXP x) {
     return TRUE;
   }
 
-  // 1 length vector are by def sorted
-  if (pos_len == 1) {
-    if (R_IsNA(v_val[0])) {
-      // unless equal to NA
-      return FALSE;
-    } else {
-      return TRUE;
-    }
-  }
-
   double current_value;
 
   if (v_pos[0] == 1) {
@@ -315,6 +305,13 @@ int altrep_sparse_double_Is_sorted(SEXP x) {
       }
 
       current_value = v_default_val;
+    }
+  }
+
+  // Trailing default values after the last stored value
+  if (v_pos[pos_len - 1] < extract_len(x)) {
+    if (v_default_val < current_value) {
+      return FALSE;
     }
   }
 

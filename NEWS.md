@@ -2,6 +2,8 @@
 
 * Fixed bug where `is.unsorted()` on sparse character vectors compared string pointers instead of string contents, and ignored default values after the last non-default value.
 
+* Fixed bug where `is.unsorted()` on sparse integer, sparse double, and sparse logical vectors ignored default values after the last non-default value, and returned `FALSE` for vectors with a single non-default value without comparing it against the default. (#133)
+
 * Fixed bug where `min()` and `max()` on sparse integer and sparse double vectors included the default value even when every position was a non-default value. (#132)
 
 * Fixed bug where `sum()` on sparse logical vectors used the wrong default value.
