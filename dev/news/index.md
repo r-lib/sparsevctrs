@@ -7,6 +7,14 @@
   character vectors compared string pointers instead of string contents,
   and ignored default values after the last non-default value.
 
+- Fixed bug where
+  [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html) on sparse
+  integer, sparse double, and sparse logical vectors ignored default
+  values after the last non-default value, and returned `FALSE` for
+  vectors with a single non-default value without comparing it against
+  the default.
+  ([\#133](https://github.com/r-lib/sparsevctrs/issues/133))
+
 - Fixed bug where [`min()`](https://rdrr.io/r/base/Extremes.html) and
   [`max()`](https://rdrr.io/r/base/Extremes.html) on sparse integer and
   sparse double vectors included the default value even when every
