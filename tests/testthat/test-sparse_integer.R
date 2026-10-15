@@ -305,6 +305,11 @@ test_that("min method works with sparse_integer()", {
     min(sparse_integer(c(-10, 11:19, NA), 10:20, 1000000000), na.rm = TRUE),
     -10L
   )
+
+  expect_identical(
+    min(sparse_integer(c(5L, 6L), 1:2, 2)),
+    5L
+  )
 })
 
 test_that("max method works with sparse_integer()", {
@@ -351,6 +356,11 @@ test_that("max method works with sparse_integer()", {
   expect_identical(
     max(sparse_integer(c(-10, 11:19, NA), 10:20, 1000000000), na.rm = TRUE),
     19L
+  )
+
+  expect_identical(
+    max(sparse_integer(c(-5L, -6L), 1:2, 2)),
+    -5L
   )
 })
 
