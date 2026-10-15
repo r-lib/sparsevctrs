@@ -257,6 +257,28 @@ test_that("sorting works with sparse_logical()", {
   expect_true(is_sparse_logical(sort(x_sparse)))
 })
 
+test_that("is.unsorted() works with sparse_logical()", {
+  sorted <- sparse_logical(TRUE, 3, 3)
+  expect_identical(is.unsorted(sorted), is.unsorted(sorted[]))
+  expect_false(is.unsorted(sorted))
+
+  trailing <- sparse_logical(TRUE, 1, 3)
+  expect_identical(is.unsorted(trailing), is.unsorted(trailing[]))
+  expect_true(is.unsorted(trailing))
+
+  trailing <- sparse_logical(c(TRUE, TRUE), c(1, 2), 4)
+  expect_identical(is.unsorted(trailing), is.unsorted(trailing[]))
+  expect_true(is.unsorted(trailing))
+
+  gap <- sparse_logical(c(FALSE, FALSE), c(1, 5), 5, default = TRUE)
+  expect_identical(is.unsorted(gap), is.unsorted(gap[]))
+  expect_true(is.unsorted(gap))
+
+  single <- sparse_logical(FALSE, 3, 3, default = TRUE)
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_true(is.unsorted(single))
+})
+
 test_that("sum works with sparse_logical() and non-FALSE default", {
   expect_identical(
     sum(sparse_logical(FALSE, 2, 5, default = TRUE)),
