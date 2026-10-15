@@ -260,6 +260,36 @@ test_that("sorting works with sparse_integer()", {
   expect_true(is_sparse_integer(sort(x_sparse)))
 })
 
+test_that("is.unsorted() works with sparse_integer()", {
+  sorted <- sparse_integer(c(1L, 2L), c(3, 4), 4)
+  expect_identical(is.unsorted(sorted), is.unsorted(sorted[]))
+  expect_false(is.unsorted(sorted))
+
+  unsorted <- sparse_integer(c(2L, 1L), c(2, 3), 4)
+  expect_identical(is.unsorted(unsorted), is.unsorted(unsorted[]))
+  expect_true(is.unsorted(unsorted))
+
+  gap <- sparse_integer(c(1L, 2L), c(1, 5), 5, default = 3L)
+  expect_identical(is.unsorted(gap), is.unsorted(gap[]))
+  expect_true(is.unsorted(gap))
+
+  trailing <- sparse_integer(c(1L, 5L), c(1, 2), 10)
+  expect_identical(is.unsorted(trailing), is.unsorted(trailing[]))
+  expect_true(is.unsorted(trailing))
+
+  single <- sparse_integer(5L, 1, 10)
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_true(is.unsorted(single))
+
+  single <- sparse_integer(-1L, 10, 10)
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_true(is.unsorted(single))
+
+  single <- sparse_integer(1L, 10, 10)
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_false(is.unsorted(single))
+})
+
 test_that("min method works with sparse_integer()", {
   expect_snapshot(
     res <- min(sparse_integer(integer(), integer(), 0))

@@ -256,6 +256,36 @@ test_that("sorting works with sparse_double()", {
   expect_true(is_sparse_double(sort(x_sparse)))
 })
 
+test_that("is.unsorted() works with sparse_double()", {
+  sorted <- sparse_double(c(1, 2), c(3, 4), 4)
+  expect_identical(is.unsorted(sorted), is.unsorted(sorted[]))
+  expect_false(is.unsorted(sorted))
+
+  unsorted <- sparse_double(c(2, 1), c(2, 3), 4)
+  expect_identical(is.unsorted(unsorted), is.unsorted(unsorted[]))
+  expect_true(is.unsorted(unsorted))
+
+  gap <- sparse_double(c(1, 2), c(1, 5), 5, default = 3)
+  expect_identical(is.unsorted(gap), is.unsorted(gap[]))
+  expect_true(is.unsorted(gap))
+
+  trailing <- sparse_double(c(1, 5), c(1, 2), 10)
+  expect_identical(is.unsorted(trailing), is.unsorted(trailing[]))
+  expect_true(is.unsorted(trailing))
+
+  single <- sparse_double(5, 1, 10)
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_true(is.unsorted(single))
+
+  single <- sparse_double(-1, 10, 10)
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_true(is.unsorted(single))
+
+  single <- sparse_double(1, 10, 10)
+  expect_identical(is.unsorted(single), is.unsorted(single[]))
+  expect_false(is.unsorted(single))
+})
+
 test_that("min method works with sparse_double()", {
   expect_snapshot(
     res <- min(sparse_double(integer(), integer(), 0))
