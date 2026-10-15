@@ -7,6 +7,12 @@
   character vectors compared string pointers instead of string contents,
   and ignored default values after the last non-default value.
 
+- Fixed bug where [`min()`](https://rdrr.io/r/base/Extremes.html) and
+  [`max()`](https://rdrr.io/r/base/Extremes.html) on sparse integer and
+  sparse double vectors included the default value even when every
+  position was a non-default value.
+  ([\#132](https://github.com/r-lib/sparsevctrs/issues/132))
+
 - Fixed bug where [`sum()`](https://rdrr.io/r/base/sum.html) on sparse
   logical vectors used the wrong default value.
 
