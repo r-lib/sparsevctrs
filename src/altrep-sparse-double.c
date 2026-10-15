@@ -335,11 +335,8 @@ static SEXP altrep_sparse_double_Min_method(SEXP x, Rboolean na_rm) {
 
   const double v_default_val = extract_default_double(x);
 
-  if (val_len == 0) {
-    min = v_default_val;
-  }
-
-  if (v_default_val < min) {
+  // The default only appears if some positions are not explicitly stored
+  if (val_len < extract_len(x) && v_default_val < min) {
     min = v_default_val;
   }
 
@@ -369,11 +366,8 @@ static SEXP altrep_sparse_double_Max_method(SEXP x, Rboolean na_rm) {
 
   const double v_default_val = extract_default_double(x);
 
-  if (val_len == 0) {
-    max = v_default_val;
-  }
-
-  if (v_default_val > max) {
+  // The default only appears if some positions are not explicitly stored
+  if (val_len < extract_len(x) && v_default_val > max) {
     max = v_default_val;
   }
 
