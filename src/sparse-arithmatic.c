@@ -5,10 +5,10 @@
 
 SEXP empty_sparse_integer(R_xlen_t len) {
   SEXP out = new_sparse_integer(
-      PROTECT(Rf_allocVector(INTSXP, 0)),
-      PROTECT(Rf_allocVector(INTSXP, 0)),
-      PROTECT(Rf_ScalarInteger((int) len)),
-      PROTECT(Rf_ScalarInteger(0))
+    PROTECT(Rf_allocVector(INTSXP, 0)),
+    PROTECT(Rf_allocVector(INTSXP, 0)),
+    PROTECT(Rf_ScalarInteger((int) len)),
+    PROTECT(Rf_ScalarInteger(0))
   );
 
   UNPROTECT(4);
@@ -17,10 +17,10 @@ SEXP empty_sparse_integer(R_xlen_t len) {
 
 SEXP empty_sparse_double(R_xlen_t len) {
   SEXP out = new_sparse_double(
-      PROTECT(Rf_allocVector(REALSXP, 0)),
-      PROTECT(Rf_allocVector(INTSXP, 0)),
-      PROTECT(Rf_ScalarInteger((int) len)),
-      PROTECT(Rf_ScalarReal(0))
+    PROTECT(Rf_allocVector(REALSXP, 0)),
+    PROTECT(Rf_allocVector(INTSXP, 0)),
+    PROTECT(Rf_ScalarInteger((int) len)),
+    PROTECT(Rf_ScalarReal(0))
   );
 
   UNPROTECT(4);
@@ -262,14 +262,16 @@ SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
 
     for (R_xlen_t i = 0; i < n_overlap; i++) {
       SET_INTEGER_ELT(
-          out_pos, i, INTEGER_ELT(x_pos, INTEGER_ELT(x_pos_idx, i))
+        out_pos,
+        i,
+        INTEGER_ELT(x_pos, INTEGER_ELT(x_pos_idx, i))
       );
 
       SET_REAL_ELT(
-          out_val,
-          out_idx,
-          REAL_ELT(x_val, INTEGER_ELT(x_pos_idx, i)) *
-              REAL_ELT(y_val, INTEGER_ELT(y_pos_idx, i))
+        out_val,
+        out_idx,
+        REAL_ELT(x_val, INTEGER_ELT(x_pos_idx, i)) *
+          REAL_ELT(y_val, INTEGER_ELT(y_pos_idx, i))
       );
       out_idx++;
     }
@@ -278,7 +280,9 @@ SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
   // set x NA values
   for (R_xlen_t i = 0; i < x_na_count; i++) {
     SET_INTEGER_ELT(
-        out_pos, out_idx, INTEGER_ELT(x_pos, INTEGER_ELT(x_na_pos, i))
+      out_pos,
+      out_idx,
+      INTEGER_ELT(x_pos, INTEGER_ELT(x_na_pos, i))
     );
     SET_REAL_ELT(out_val, out_idx, NA_REAL);
     out_idx++;
@@ -287,7 +291,9 @@ SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
   // set y NA values
   for (R_xlen_t i = 0; i < y_na_count; i++) {
     SET_INTEGER_ELT(
-        out_pos, out_idx, INTEGER_ELT(y_pos, INTEGER_ELT(y_na_pos, i))
+      out_pos,
+      out_idx,
+      INTEGER_ELT(y_pos, INTEGER_ELT(y_na_pos, i))
     );
     SET_REAL_ELT(out_val, out_idx, NA_REAL);
     out_idx++;
@@ -491,7 +497,9 @@ SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
 
     for (R_xlen_t i = 0; i < n_overlap; i++) {
       SET_INTEGER_ELT(
-          out_pos, i, INTEGER_ELT(x_pos, INTEGER_ELT(x_pos_idx, i))
+        out_pos,
+        i,
+        INTEGER_ELT(x_pos, INTEGER_ELT(x_pos_idx, i))
       );
       int cur_x_val = INTEGER_ELT(x_val, INTEGER_ELT(x_pos_idx, i));
       int cur_y_val = INTEGER_ELT(y_val, INTEGER_ELT(y_pos_idx, i));
@@ -509,7 +517,9 @@ SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
   // set x NA values
   for (R_xlen_t i = 0; i < x_na_count; i++) {
     SET_INTEGER_ELT(
-        out_pos, out_idx, INTEGER_ELT(x_pos, INTEGER_ELT(x_na_pos, i))
+      out_pos,
+      out_idx,
+      INTEGER_ELT(x_pos, INTEGER_ELT(x_na_pos, i))
     );
     SET_INTEGER_ELT(out_val, out_idx, NA_INTEGER);
     out_idx++;
@@ -518,7 +528,9 @@ SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
   // set y NA values
   for (R_xlen_t i = 0; i < y_na_count; i++) {
     SET_INTEGER_ELT(
-        out_pos, out_idx, INTEGER_ELT(y_pos, INTEGER_ELT(y_na_pos, i))
+      out_pos,
+      out_idx,
+      INTEGER_ELT(y_pos, INTEGER_ELT(y_na_pos, i))
     );
     SET_INTEGER_ELT(out_val, out_idx, NA_INTEGER);
     out_idx++;

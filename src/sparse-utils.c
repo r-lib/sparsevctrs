@@ -98,7 +98,7 @@ R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size) {
 
   while (loc_lower_bound <= loc_upper_bound) {
     const R_xlen_t loc_middle_bound =
-        midpoint(loc_lower_bound, loc_upper_bound);
+      midpoint(loc_lower_bound, loc_upper_bound);
     const R_xlen_t haystack = v_haystack[loc_middle_bound];
 
     if (needle == haystack) {

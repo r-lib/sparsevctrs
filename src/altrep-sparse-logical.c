@@ -181,16 +181,16 @@ R_xlen_t altrep_sparse_logical_Length(SEXP x) {
 
 // What gets printed when .Internal(inspect()) is used
 Rboolean altrep_sparse_logical_Inspect(
-    SEXP x,
-    int pre,
-    int deep,
-    int pvec,
-    void (*inspect_subtree)(SEXP, int, int, int)
+  SEXP x,
+  int pre,
+  int deep,
+  int pvec,
+  void (*inspect_subtree)(SEXP, int, int, int)
 ) {
   Rprintf(
-      "sparsevctrs_altrep_sparse_logical (materialized=%s, length=%i)\n",
-      R_altrep_data2(x) != R_NilValue ? "T" : "F",
-      (int) extract_len(x)
+    "sparsevctrs_altrep_sparse_logical (materialized=%s, length=%i)\n",
+    R_altrep_data2(x) != R_NilValue ? "T" : "F",
+    (int) extract_len(x)
   );
   return TRUE;
 }
@@ -355,41 +355,51 @@ static SEXP altrep_sparse_logical_Sum_method(SEXP x, Rboolean na_rm) {
 
 void sparsevctrs_init_altrep_sparse_logical(DllInfo* dll) {
   altrep_sparse_logical_class =
-      R_make_altlogical_class("altrep_sparse_logical", "sparsevctrs", dll);
+    R_make_altlogical_class("altrep_sparse_logical", "sparsevctrs", dll);
 
   // ALTVEC
   R_set_altvec_Dataptr_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Dataptr
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Dataptr
   );
   R_set_altvec_Dataptr_or_null_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Dataptr_or_null
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Dataptr_or_null
   );
   R_set_altvec_Extract_subset_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Extract_subset
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Extract_subset
   );
 
   // ALTREP
   R_set_altrep_Length_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Length
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Length
   );
   R_set_altrep_Inspect_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Inspect
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Inspect
   );
   R_set_altrep_Duplicate_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Duplicate
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Duplicate
   );
 
   // ALTLOGICAL
   R_set_altlogical_Elt_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Elt
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Elt
   );
   R_set_altlogical_Is_sorted_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Is_sorted
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Is_sorted
   );
   R_set_altlogical_No_NA_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_No_NA_method
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_No_NA_method
   );
   R_set_altlogical_Sum_method(
-      altrep_sparse_logical_class, altrep_sparse_logical_Sum_method
+    altrep_sparse_logical_class,
+    altrep_sparse_logical_Sum_method
   );
 }
