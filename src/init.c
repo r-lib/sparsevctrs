@@ -1,47 +1,47 @@
 #include "sparsevctrs-core.h"
 
 // Defined in altrep-sparse-double.c
-extern SEXP ffi_sparse_altrep_new_sparse_double(SEXP);
+extern r_obj* ffi_sparse_altrep_new_sparse_double(r_obj*);
 extern void sparsevctrs_init_altrep_sparse_double(DllInfo*);
-extern SEXP ffi_sparse_altrep_sparse_double_materialize(SEXP);
+extern r_obj* ffi_sparse_altrep_sparse_double_materialize(r_obj*);
 
 // Defined in altrep-sparse-integer.c
-extern SEXP ffi_sparse_altrep_new_sparse_integer(SEXP);
+extern r_obj* ffi_sparse_altrep_new_sparse_integer(r_obj*);
 extern void sparsevctrs_init_altrep_sparse_integer(DllInfo*);
-extern SEXP ffi_sparse_altrep_sparse_integer_materialize(SEXP);
+extern r_obj* ffi_sparse_altrep_sparse_integer_materialize(r_obj*);
 
 // Defined in altrep-sparse-string.c
-extern SEXP ffi_sparse_altrep_new_sparse_string(SEXP);
+extern r_obj* ffi_sparse_altrep_new_sparse_string(r_obj*);
 extern void sparsevctrs_init_altrep_sparse_string(DllInfo*);
-extern SEXP ffi_sparse_altrep_sparse_string_materialize(SEXP);
+extern r_obj* ffi_sparse_altrep_sparse_string_materialize(r_obj*);
 
 // Defined in altrep-sparse-logical.c
-extern SEXP ffi_sparse_altrep_new_sparse_logical(SEXP);
+extern r_obj* ffi_sparse_altrep_new_sparse_logical(r_obj*);
 extern void sparsevctrs_init_altrep_sparse_logical(DllInfo*);
-extern SEXP ffi_sparse_altrep_sparse_logical_materialize(SEXP);
+extern r_obj* ffi_sparse_altrep_sparse_logical_materialize(r_obj*);
 
 // Defined in sparse-coerce.c
-extern SEXP ffi_sparse_matrix_to_list(SEXP, SEXP, SEXP, SEXP);
+extern r_obj* ffi_sparse_matrix_to_list(r_obj*, r_obj*, r_obj*, r_obj*);
 
 // Defined in sparse-extractors.c
-extern SEXP ffi_sparse_altrep_sparse_positions(SEXP);
-extern SEXP ffi_sparse_altrep_sparse_values(SEXP);
-extern SEXP ffi_sparse_altrep_sparse_default(SEXP);
+extern r_obj* ffi_sparse_altrep_sparse_positions(r_obj*);
+extern r_obj* ffi_sparse_altrep_sparse_values(r_obj*);
+extern r_obj* ffi_sparse_altrep_sparse_default(r_obj*);
 
 // Defined in sparse-utils.c
-extern SEXP ffi_sparse_extract_altrep_class(SEXP);
-extern SEXP ffi_sparse_is_sparse_vector(SEXP);
-extern SEXP ffi_sparse_is_altrep_non_sparse_vector(SEXP);
+extern r_obj* ffi_sparse_extract_altrep_class(r_obj*);
+extern r_obj* ffi_sparse_is_sparse_vector(r_obj*);
+extern r_obj* ffi_sparse_is_altrep_non_sparse_vector(r_obj*);
 
 // Defined in sparse-dummy.c
-extern SEXP ffi_sparse_dummy(SEXP, SEXP, SEXP, SEXP);
-extern SEXP ffi_sparse_dummy_na(SEXP, SEXP, SEXP, SEXP);
+extern r_obj* ffi_sparse_dummy(r_obj*, r_obj*, r_obj*, r_obj*);
+extern r_obj* ffi_sparse_dummy_na(r_obj*, r_obj*, r_obj*, r_obj*);
 
 // Defined in sparse-arithmetic.c
-extern SEXP ffi_sparse_multiplication(SEXP, SEXP);
+extern r_obj* ffi_sparse_multiplication(r_obj*, r_obj*);
 
 // Defined below
-extern SEXP ffi_init_library(SEXP);
+extern r_obj* ffi_init_library(r_obj*);
 
 static const R_CallMethodDef CallEntries[] = {
   {"ffi_init_library", (DL_FUNC) &ffi_init_library, 1},
@@ -92,9 +92,9 @@ static const R_CallMethodDef CallEntries[] = {
   {NULL, NULL, 0}
 };
 
-SEXP ffi_init_library(SEXP ns) {
-  r_init_library(ns);
-  return R_NilValue;
+r_obj* ffi_init_library(r_obj* ffi_ns) {
+  r_init_library(ffi_ns);
+  return r_null;
 }
 
 attribute_visible void R_init_sparsevctrs(DllInfo* dll) {
