@@ -5,7 +5,7 @@
 #include "decl/sparse-utils-decl.h"
 
 SEXP ffi_sparse_extract_altrep_class(SEXP x) {
-  if (!is_altrep(x)) {
+  if (!sparse_is_altrep(x)) {
     return (R_NilValue);
   }
 
@@ -13,7 +13,7 @@ SEXP ffi_sparse_extract_altrep_class(SEXP x) {
 }
 
 SEXP ffi_sparse_is_sparse_vector(SEXP x) {
-  if (!is_altrep(x)) {
+  if (!sparse_is_altrep(x)) {
     return (Rf_ScalarLogical(FALSE));
   }
 
@@ -21,14 +21,14 @@ SEXP ffi_sparse_is_sparse_vector(SEXP x) {
 }
 
 SEXP ffi_sparse_is_altrep_non_sparse_vector(SEXP x) {
-  if (!is_altrep(x)) {
+  if (!sparse_is_altrep(x)) {
     return (Rf_ScalarLogical(FALSE));
   }
 
   return Rf_ScalarLogical(altrep_package(x) != Rf_install("sparsevctrs"));
 }
 
-bool is_altrep(SEXP x) {
+bool sparse_is_altrep(SEXP x) {
   return (bool) ALTREP(x);
 }
 
@@ -36,19 +36,19 @@ static inline SEXP altrep_package(SEXP x) {
   return R_altrep_class_package(x);
 }
 
-SEXP extract_val(SEXP x) {
+SEXP sparse_extract_val(SEXP x) {
   SEXP data1 = R_altrep_data1(x);
   SEXP out = VECTOR_ELT(data1, 0);
   return out;
 }
 
-SEXP extract_pos(SEXP x) {
+SEXP sparse_extract_pos(SEXP x) {
   SEXP data1 = R_altrep_data1(x);
   SEXP out = VECTOR_ELT(data1, 1);
   return out;
 }
 
-R_xlen_t extract_len(SEXP x) {
+R_xlen_t sparse_extract_len(SEXP x) {
   SEXP data1 = R_altrep_data1(x);
   SEXP len = VECTOR_ELT(data1, 2);
 
@@ -57,42 +57,46 @@ R_xlen_t extract_len(SEXP x) {
   return out;
 }
 
-SEXP extract_default(SEXP x) {
+SEXP sparse_extract_default(SEXP x) {
   SEXP data1 = R_altrep_data1(x);
   SEXP out = VECTOR_ELT(data1, 3);
 
   return out;
 }
 
-double extract_default_double(SEXP x) {
-  SEXP default_val = extract_default(x);
+double sparse_extract_default_double(SEXP x) {
+  SEXP default_val = sparse_extract_default(x);
   double out = REAL_ELT(default_val, 0);
 
   return out;
 }
 
-int extract_default_integer(SEXP x) {
-  SEXP default_val = extract_default(x);
+int sparse_extract_default_integer(SEXP x) {
+  SEXP default_val = sparse_extract_default(x);
   int out = INTEGER_ELT(default_val, 0);
 
   return out;
 }
 
-SEXP extract_default_string(SEXP x) {
-  SEXP default_val = extract_default(x);
+SEXP sparse_extract_default_string(SEXP x) {
+  SEXP default_val = sparse_extract_default(x);
   SEXP out = STRING_ELT(default_val, 0);
 
   return out;
 }
 
-Rboolean extract_default_logical(SEXP x) {
-  SEXP default_val = extract_default(x);
+Rboolean sparse_extract_default_logical(SEXP x) {
+  SEXP default_val = sparse_extract_default(x);
   Rboolean out = LOGICAL_ELT(default_val, 0);
 
   return out;
 }
 
-R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size) {
+R_xlen_t sparse_binary_search(
+  int needle,
+  const int* v_haystack,
+  R_xlen_t size
+) {
   R_xlen_t loc_lower_bound = 0;
   R_xlen_t loc_upper_bound = size - 1;
 
@@ -118,7 +122,7 @@ static inline R_xlen_t midpoint(R_xlen_t lhs, R_xlen_t rhs) {
   return lhs + (rhs - lhs) / 2;
 }
 
-bool is_index_handleable(SEXP x) {
+bool sparse_is_index_handleable(SEXP x) {
   if (TYPEOF(x) != INTSXP) {
     // i.e. can't handle indexing for long vectors
     return false;
@@ -147,7 +151,7 @@ bool is_index_handleable(SEXP x) {
   return true;
 }
 
-void verbose_materialize(void) {
+void sparse_verbose_materialize(void) {
   SEXP option = Rf_GetOption1(Rf_install("sparsevctrs.verbose_materialize"));
 
   if (!Rf_isNull(option)) {
@@ -175,7 +179,7 @@ void verbose_materialize(void) {
   }
 }
 
-void sort_pos_and_val(SEXP pos, SEXP val) {
+void sparse_sort_pos_and_val(SEXP pos, SEXP val) {
   R_xlen_t len = Rf_length(pos);
 
   // nothing to sort -> stop early

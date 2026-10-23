@@ -44,8 +44,8 @@ reference:
 - title: Utility Functions
   contents:
   - type-predicates
-  - sparse-arithmatic-scalar
-  - sparse-arithmatic
+  - sparse-arithmetic-scalar
+  - sparse-arithmetic
   - extractors
   - has_sparse_elements
   - sparsevctrs_options

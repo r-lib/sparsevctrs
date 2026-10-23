@@ -1,4 +1,4 @@
-static SEXP alrep_sparse_string_Materialize(SEXP x);
+static SEXP altrep_sparse_string_Materialize(SEXP x);
 
 static void* altrep_sparse_string_Dataptr(SEXP x, Rboolean writeable);
 

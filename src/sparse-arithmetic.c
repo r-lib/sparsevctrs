@@ -1,11 +1,11 @@
 #include "sparsevctrs-core.h"
 
-#include "sparse-arithmatic.h"
+#include "sparse-arithmetic.h"
 #include "sparse-utils.h"
 #include "altrep-sparse-double.h"
 #include "altrep-sparse-integer.h"
 
-#include "decl/sparse-arithmatic-decl.h"
+#include "decl/sparse-arithmetic-decl.h"
 
 SEXP ffi_sparse_multiplication(SEXP x, SEXP y) {
   SEXP out;
@@ -20,14 +20,14 @@ SEXP ffi_sparse_multiplication(SEXP x, SEXP y) {
 }
 
 static SEXP multiplication_integers(SEXP x, SEXP y) {
-  if (is_altrep(x)) {
-    if (is_altrep(y)) {
+  if (sparse_is_altrep(x)) {
+    if (sparse_is_altrep(y)) {
       return multiplication_integers_sparse_sparse(x, y);
     } else {
       return multiplication_integers_sparse_dense(x, y);
     }
   } else {
-    if (is_altrep(y)) {
+    if (sparse_is_altrep(y)) {
       return multiplication_integers_sparse_dense(y, x);
     } else {
       return multiplication_integers_dense_dense(x, y);
@@ -40,10 +40,10 @@ static SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
   SEXP overlap = PROTECT(find_overlap(x, y));
   SEXP nas = find_nas_with_no_overlap(x, y);
 
-  SEXP x_val = extract_val(x);
-  SEXP x_pos = extract_pos(x);
-  SEXP y_val = extract_val(y);
-  SEXP y_pos = extract_pos(y);
+  SEXP x_val = sparse_extract_val(x);
+  SEXP x_pos = sparse_extract_pos(x);
+  SEXP y_val = sparse_extract_val(y);
+  SEXP y_pos = sparse_extract_pos(y);
 
   SEXP x_na_pos = VECTOR_ELT(nas, 0);
   SEXP y_na_pos = VECTOR_ELT(nas, 1);
@@ -53,7 +53,7 @@ static SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
 
   if (overlap == R_NilValue && x_na_count == 0 && y_na_count == 0) {
     UNPROTECT(1);
-    return empty_sparse_integer(extract_len(x));
+    return empty_sparse_integer(sparse_extract_len(x));
   }
 
   R_xlen_t n_overlap = 0;
@@ -71,7 +71,7 @@ static SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
     SEXP x_pos_idx = VECTOR_ELT(overlap, 0);
     SEXP y_pos_idx = VECTOR_ELT(overlap, 1);
 
-    SEXP x_pos = extract_pos(x);
+    SEXP x_pos = sparse_extract_pos(x);
 
     for (R_xlen_t i = 0; i < n_overlap; i++) {
       SET_INTEGER_ELT(
@@ -114,9 +114,9 @@ static SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
     out_idx++;
   }
 
-  sort_pos_and_val(out_pos, out_val);
+  sparse_sort_pos_and_val(out_pos, out_val);
 
-  SEXP out_length = PROTECT(Rf_ScalarInteger((int) extract_len(x)));
+  SEXP out_length = PROTECT(Rf_ScalarInteger((int) sparse_extract_len(x)));
   SEXP out_default = PROTECT(Rf_ScalarInteger(0));
 
   SEXP out = new_sparse_integer(out_val, out_pos, out_length, out_default);
@@ -127,9 +127,9 @@ static SEXP multiplication_integers_sparse_sparse(SEXP x, SEXP y) {
 }
 
 static SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
-  SEXP x_pos = extract_pos(x);
-  SEXP x_val = extract_val(x);
-  R_xlen_t x_len = extract_len(x);
+  SEXP x_pos = sparse_extract_pos(x);
+  SEXP x_val = sparse_extract_val(x);
+  R_xlen_t x_len = sparse_extract_len(x);
   R_xlen_t n_values = Rf_length(x_pos);
 
   R_xlen_t n_zero = 0;
@@ -235,7 +235,7 @@ static SEXP multiplication_integers_sparse_dense(SEXP x, SEXP y) {
     idx++;
   }
 
-  sort_pos_and_val(out_pos, out_val);
+  sparse_sort_pos_and_val(out_pos, out_val);
 
   SEXP out_length = PROTECT(Rf_ScalarInteger((int) x_len));
   SEXP out_default = PROTECT(Rf_ScalarInteger(0));
@@ -265,14 +265,14 @@ static SEXP multiplication_integers_dense_dense(SEXP x, SEXP y) {
 }
 
 static SEXP multiplication_doubles(SEXP x, SEXP y) {
-  if (is_altrep(x)) {
-    if (is_altrep(y)) {
+  if (sparse_is_altrep(x)) {
+    if (sparse_is_altrep(y)) {
       return multiplication_doubles_sparse_sparse(x, y);
     } else {
       return multiplication_doubles_sparse_dense(x, y);
     }
   } else {
-    if (is_altrep(y)) {
+    if (sparse_is_altrep(y)) {
       return multiplication_doubles_sparse_dense(y, x);
     } else {
       return multiplication_doubles_dense_dense(x, y);
@@ -285,10 +285,10 @@ static SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
   SEXP overlap = PROTECT(find_overlap(x, y));
   SEXP nas = find_nas_with_no_overlap(x, y);
 
-  SEXP x_val = extract_val(x);
-  SEXP x_pos = extract_pos(x);
-  SEXP y_val = extract_val(y);
-  SEXP y_pos = extract_pos(y);
+  SEXP x_val = sparse_extract_val(x);
+  SEXP x_pos = sparse_extract_pos(x);
+  SEXP y_val = sparse_extract_val(y);
+  SEXP y_pos = sparse_extract_pos(y);
 
   SEXP x_na_pos = VECTOR_ELT(nas, 0);
   SEXP y_na_pos = VECTOR_ELT(nas, 1);
@@ -298,7 +298,7 @@ static SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
 
   if (overlap == R_NilValue && x_na_count == 0 && y_na_count == 0) {
     UNPROTECT(1);
-    return empty_sparse_double(extract_len(x));
+    return empty_sparse_double(sparse_extract_len(x));
   }
 
   R_xlen_t n_overlap = 0;
@@ -316,7 +316,7 @@ static SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
     SEXP x_pos_idx = VECTOR_ELT(overlap, 0);
     SEXP y_pos_idx = VECTOR_ELT(overlap, 1);
 
-    SEXP x_pos = extract_pos(x);
+    SEXP x_pos = sparse_extract_pos(x);
 
     for (R_xlen_t i = 0; i < n_overlap; i++) {
       SET_INTEGER_ELT(
@@ -357,9 +357,9 @@ static SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
     out_idx++;
   }
 
-  sort_pos_and_val(out_pos, out_val);
+  sparse_sort_pos_and_val(out_pos, out_val);
 
-  SEXP out_length = PROTECT(Rf_ScalarInteger((int) extract_len(x)));
+  SEXP out_length = PROTECT(Rf_ScalarInteger((int) sparse_extract_len(x)));
   SEXP out_default = PROTECT(Rf_ScalarReal(0));
 
   SEXP out = new_sparse_double(out_val, out_pos, out_length, out_default);
@@ -370,9 +370,9 @@ static SEXP multiplication_doubles_sparse_sparse(SEXP x, SEXP y) {
 }
 
 static SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
-  SEXP x_pos = extract_pos(x);
-  SEXP x_val = extract_val(x);
-  R_xlen_t x_len = extract_len(x);
+  SEXP x_pos = sparse_extract_pos(x);
+  SEXP x_val = sparse_extract_val(x);
+  R_xlen_t x_len = sparse_extract_len(x);
   R_xlen_t n_values = Rf_length(x_pos);
 
   R_xlen_t n_zero = 0;
@@ -474,7 +474,7 @@ static SEXP multiplication_doubles_sparse_dense(SEXP x, SEXP y) {
     idx++;
   }
 
-  sort_pos_and_val(out_pos, out_val);
+  sparse_sort_pos_and_val(out_pos, out_val);
 
   SEXP out_length = PROTECT(Rf_ScalarInteger((int) x_len));
   SEXP out_default = PROTECT(Rf_ScalarReal(0));
@@ -500,8 +500,8 @@ static SEXP multiplication_doubles_dense_dense(SEXP x, SEXP y) {
 }
 
 static SEXP find_overlap(SEXP x, SEXP y) {
-  SEXP x_pos = extract_pos(x);
-  SEXP y_pos = extract_pos(y);
+  SEXP x_pos = sparse_extract_pos(x);
+  SEXP y_pos = sparse_extract_pos(y);
   R_xlen_t x_len = Rf_length(x_pos);
   R_xlen_t y_len = Rf_length(y_pos);
 
@@ -574,10 +574,10 @@ static SEXP find_overlap(SEXP x, SEXP y) {
 }
 
 static SEXP find_nas_with_no_overlap(SEXP x, SEXP y) {
-  SEXP x_pos = extract_pos(x);
-  SEXP x_val = extract_val(x);
-  SEXP y_pos = extract_pos(y);
-  SEXP y_val = extract_val(y);
+  SEXP x_pos = sparse_extract_pos(x);
+  SEXP x_val = sparse_extract_val(x);
+  SEXP y_pos = sparse_extract_pos(y);
+  SEXP y_val = sparse_extract_val(y);
   R_xlen_t x_len = Rf_length(x_pos);
   R_xlen_t y_len = Rf_length(y_pos);
 

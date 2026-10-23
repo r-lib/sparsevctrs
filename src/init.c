@@ -37,7 +37,7 @@ extern SEXP ffi_sparse_is_altrep_non_sparse_vector(SEXP);
 extern SEXP ffi_sparse_dummy(SEXP, SEXP, SEXP, SEXP);
 extern SEXP ffi_sparse_dummy_na(SEXP, SEXP, SEXP, SEXP);
 
-// Defined in sparse-arithmatic.c
+// Defined in sparse-arithmetic.c
 extern SEXP ffi_sparse_multiplication(SEXP, SEXP);
 
 // Defined below

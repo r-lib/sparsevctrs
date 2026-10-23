@@ -15,7 +15,7 @@ SEXP ffi_sparse_altrep_new_sparse_string(SEXP ffi_x) {
 }
 
 SEXP ffi_sparse_altrep_sparse_string_materialize(SEXP x) {
-  return alrep_sparse_string_Materialize(x);
+  return altrep_sparse_string_Materialize(x);
 }
 
 // -----------------------------------------------------------------------------
@@ -71,23 +71,23 @@ SEXP new_altrep_sparse_string(SEXP data1) {
   return R_new_altrep(altrep_sparse_string_class, data1, R_NilValue);
 }
 
-static SEXP alrep_sparse_string_Materialize(SEXP x) {
+static SEXP altrep_sparse_string_Materialize(SEXP x) {
   SEXP out = R_altrep_data2(x);
 
   if (out != R_NilValue) {
     return out;
   }
 
-  verbose_materialize();
+  sparse_verbose_materialize();
 
-  SEXP val = extract_val(x);
+  SEXP val = sparse_extract_val(x);
 
-  SEXP pos = extract_pos(x);
+  SEXP pos = sparse_extract_pos(x);
   const int* v_pos = INTEGER_RO(pos);
 
-  const R_xlen_t len = extract_len(x);
+  const R_xlen_t len = sparse_extract_len(x);
 
-  const SEXP v_default_val = extract_default_string(x);
+  const SEXP v_default_val = sparse_extract_default_string(x);
 
   out = PROTECT(Rf_allocVector(STRSXP, len));
 
@@ -114,7 +114,7 @@ static SEXP alrep_sparse_string_Materialize(SEXP x) {
 // ALTVEC
 
 static void* altrep_sparse_string_Dataptr(SEXP x, Rboolean writeable) {
-  return DATAPTR_RW(alrep_sparse_string_Materialize(x));
+  return DATAPTR_RW(altrep_sparse_string_Materialize(x));
 }
 
 static const void* altrep_sparse_string_Dataptr_or_null(SEXP x) {
@@ -128,15 +128,15 @@ static const void* altrep_sparse_string_Dataptr_or_null(SEXP x) {
 }
 
 static SEXP altrep_sparse_string_Extract_subset(SEXP x, SEXP indx, SEXP call) {
-  if (!is_index_handleable(indx)) {
+  if (!sparse_is_index_handleable(indx)) {
     return NULL;
   }
 
-  const R_xlen_t len = extract_len(x);
+  const R_xlen_t len = sparse_extract_len(x);
 
-  SEXP val = extract_val(x);
+  SEXP val = sparse_extract_val(x);
 
-  SEXP pos = extract_pos(x);
+  SEXP pos = sparse_extract_pos(x);
   const int* v_pos = INTEGER_RO(pos);
   const R_xlen_t n_pos = Rf_xlength(pos);
 
@@ -166,7 +166,7 @@ static SEXP altrep_sparse_string_Extract_subset(SEXP x, SEXP indx, SEXP call) {
       continue;
     }
 
-    const R_xlen_t loc = binary_search(index, v_pos, n_pos);
+    const R_xlen_t loc = sparse_binary_search(index, v_pos, n_pos);
 
     if (loc == n_pos) {
       // Not in `pos`, gets default value
@@ -191,7 +191,7 @@ static SEXP altrep_sparse_string_Extract_subset(SEXP x, SEXP indx, SEXP call) {
   SEXP out_length = Rf_ScalarInteger((int) size);
   SET_VECTOR_ELT(out, 2, out_length);
 
-  SEXP out_default = extract_default(x);
+  SEXP out_default = sparse_extract_default(x);
   SET_VECTOR_ELT(out, 3, out_default);
 
   R_xlen_t i_out = 0;
@@ -227,7 +227,7 @@ static SEXP altrep_sparse_string_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 // ALTREP
 
 static R_xlen_t altrep_sparse_string_Length(SEXP x) {
-  R_xlen_t out = extract_len(x);
+  R_xlen_t out = sparse_extract_len(x);
 
   return out;
 }
@@ -243,7 +243,7 @@ static Rboolean altrep_sparse_string_Inspect(
   Rprintf(
     "sparsevctrs_altrep_sparse_string (materialized=%s, length=%i)\n",
     R_altrep_data2(x) != R_NilValue ? "T" : "F",
-    (int) extract_len(x)
+    (int) sparse_extract_len(x)
   );
   return TRUE;
 }
@@ -270,15 +270,15 @@ static SEXP altrep_sparse_string_Elt(SEXP x, R_xlen_t i) {
     return STRING_ELT(data2, i);
   }
 
-  SEXP val = extract_val(x);
+  SEXP val = sparse_extract_val(x);
 
-  SEXP pos = extract_pos(x);
+  SEXP pos = sparse_extract_pos(x);
   const int* v_pos = INTEGER_RO(pos);
   const R_xlen_t size = Rf_xlength(pos);
 
-  const R_xlen_t len = extract_len(x);
+  const R_xlen_t len = sparse_extract_len(x);
 
-  SEXP v_default_val = extract_default_string(x);
+  SEXP v_default_val = sparse_extract_default_string(x);
 
   if (i > len) {
     // OOB of vector itself
@@ -287,7 +287,7 @@ static SEXP altrep_sparse_string_Elt(SEXP x, R_xlen_t i) {
 
   // TODO: Add `r_xlen_t_to_int()`
   const int needle = (int) i + 1;
-  const R_xlen_t loc = binary_search(needle, v_pos, size);
+  const R_xlen_t loc = sparse_binary_search(needle, v_pos, size);
 
   if (loc == size) {
     // Can't find it, must be the default value
@@ -299,14 +299,14 @@ static SEXP altrep_sparse_string_Elt(SEXP x, R_xlen_t i) {
 }
 
 static int altrep_sparse_string_Is_sorted(SEXP x) {
-  SEXP pos = extract_pos(x);
+  SEXP pos = sparse_extract_pos(x);
   const int* v_pos = INTEGER_RO(pos);
 
   const R_xlen_t pos_len = Rf_xlength(pos);
 
-  SEXP val = extract_val(x);
+  SEXP val = sparse_extract_val(x);
 
-  SEXP v_default_val = extract_default_string(x);
+  SEXP v_default_val = sparse_extract_default_string(x);
 
   // zero length vector are by def sorted
   if (pos_len == 0) {
@@ -347,7 +347,7 @@ static int altrep_sparse_string_Is_sorted(SEXP x) {
   }
 
   // Trailing default values after the last stored value
-  if (v_pos[pos_len - 1] < extract_len(x)) {
+  if (v_pos[pos_len - 1] < sparse_extract_len(x)) {
     if (compare_strings(v_default_val, current_value) < 0) {
       return FALSE;
     }
@@ -365,7 +365,7 @@ static void altrep_sparse_string_Set_elt(SEXP x, R_xlen_t i, SEXP value) {
   SEXP out = R_altrep_data2(x);
 
   if (out == R_NilValue) {
-    out = alrep_sparse_string_Materialize(x);
+    out = altrep_sparse_string_Materialize(x);
   }
 
   SET_STRING_ELT(out, i, value);

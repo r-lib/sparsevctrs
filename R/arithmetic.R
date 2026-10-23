@@ -1,6 +1,6 @@
-#' Scalar arithmatic with sparse vectors
+#' Scalar arithmetic with sparse vectors
 #'
-#' Do Arithmatic on sparse vectors without destroying the sparsity. Note that
+#' Do Arithmetic on sparse vectors without destroying the sparsity. Note that
 #' only multiplication and division preserves the default value.
 #'
 #' @param x A sparse vector.
@@ -26,10 +26,10 @@
 #' sparse_multiplication_scalar(x_sparse, 2)
 #' sparse_addition_scalar(x_sparse, 2)
 #' sparse_subtraction_scalar(x_sparse, 2)
-#' @name sparse-arithmatic-scalar
+#' @name sparse-arithmetic-scalar
 NULL
 
-#' @rdname sparse-arithmatic-scalar
+#' @rdname sparse-arithmetic-scalar
 #' @export
 sparse_division_scalar <- function(x, val) {
   if (is.na(val)) {
@@ -58,7 +58,7 @@ sparse_division_scalar <- function(x, val) {
   res
 }
 
-#' @rdname sparse-arithmatic-scalar
+#' @rdname sparse-arithmetic-scalar
 #' @export
 sparse_multiplication_scalar <- function(x, val) {
   if (is.na(val)) {
@@ -111,7 +111,7 @@ sparse_multiplication_scalar <- function(x, val) {
   res
 }
 
-#' @rdname sparse-arithmatic-scalar
+#' @rdname sparse-arithmetic-scalar
 #' @export
 sparse_addition_scalar <- function(x, val) {
   if (is.na(val)) {
@@ -146,7 +146,7 @@ sparse_addition_scalar <- function(x, val) {
   res
 }
 
-#' @rdname sparse-arithmatic-scalar
+#' @rdname sparse-arithmetic-scalar
 #' @export
 sparse_subtraction_scalar <- function(x, val) {
   if (is.na(val)) {
@@ -181,9 +181,9 @@ sparse_subtraction_scalar <- function(x, val) {
   res
 }
 
-#' Vector arithmatic with sparse vectors
+#' Vector arithmetic with sparse vectors
 #'
-#' Do arithmatic operations on sparse vectors while trying to void destroying
+#' Do arithmetic operations on sparse vectors while trying to void destroying
 #' the sparsity.
 #'
 #' @param x A numeric vector.
@@ -210,10 +210,10 @@ sparse_subtraction_scalar <- function(x, val) {
 #' x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
 #'
 #' sparse_multiplication(x_sparse, x_sparse)
-#' @name sparse-arithmatic
+#' @name sparse-arithmetic
 NULL
 
-#' @rdname sparse-arithmatic
+#' @rdname sparse-arithmetic
 #' @export
 sparse_multiplication <- function(x, y) {
   if (!is.numeric(x)) {
