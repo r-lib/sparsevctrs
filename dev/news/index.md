@@ -51,7 +51,7 @@ CRAN release: 2025-05-25
 ### Bug Fixes
 
 - Fixed bug where
-  [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmatic.md)
+  [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
   had a stack imbalence when returning all 0s.
   ([\#113](https://github.com/r-lib/sparsevctrs/issues/113))
 
@@ -94,15 +94,15 @@ CRAN release: 2025-03-10
 
 ### New Functions
 
-- Adding the scalar arithmatic functions
-  [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmatic-scalar.md),
-  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmatic-scalar.md),
-  [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmatic-scalar.md),
-  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmatic-scalar.md).
+- Adding the scalar arithmetic functions
+  [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md).
   ([\#87](https://github.com/r-lib/sparsevctrs/issues/87))
 
-- Adding the arithmatic function
-  [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmatic.md).
+- Adding the arithmetic function
+  [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md).
   ([\#93](https://github.com/r-lib/sparsevctrs/issues/93))
 
 - Helper function
