@@ -6,6 +6,7 @@
 docs
 compile_commands.json
 .cache
+.clangd
 debug.R
 inst/doc
 revdep/checks.noindex

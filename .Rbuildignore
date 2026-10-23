@@ -18,3 +18,4 @@
 ^revdep$
 ^[\.]?air\.toml$
 ^\.claude$
+\.clangd$

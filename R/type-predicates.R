@@ -34,17 +34,17 @@ NULL
 #' @rdname type-predicates
 #' @export
 is_sparse_vector <- function(x) {
-  .Call(ffi_is_sparse_vector, x)
+  .Call(ffi_sparse_is_sparse_vector, x)
 }
 
 is_altrep_non_sparse_vector <- function(x) {
-  .Call(ffi_is_altrep_non_sparse_vector, x)
+  .Call(ffi_sparse_is_altrep_non_sparse_vector, x)
 }
 
 #' @rdname type-predicates
 #' @export
 is_sparse_numeric <- function(x) {
-  res <- .Call(ffi_extract_altrep_class, x)
+  res <- .Call(ffi_sparse_extract_altrep_class, x)
   if (is.null(res)) {
     return(FALSE)
   }
@@ -57,7 +57,7 @@ is_sparse_numeric <- function(x) {
 #' @rdname type-predicates
 #' @export
 is_sparse_double <- function(x) {
-  res <- .Call(ffi_extract_altrep_class, x)
+  res <- .Call(ffi_sparse_extract_altrep_class, x)
   if (is.null(res)) {
     return(FALSE)
   }
@@ -70,7 +70,7 @@ is_sparse_double <- function(x) {
 #' @rdname type-predicates
 #' @export
 is_sparse_integer <- function(x) {
-  res <- .Call(ffi_extract_altrep_class, x)
+  res <- .Call(ffi_sparse_extract_altrep_class, x)
   if (is.null(res)) {
     return(FALSE)
   }
@@ -83,7 +83,7 @@ is_sparse_integer <- function(x) {
 #' @rdname type-predicates
 #' @export
 is_sparse_character <- function(x) {
-  res <- .Call(ffi_extract_altrep_class, x)
+  res <- .Call(ffi_sparse_extract_altrep_class, x)
   if (is.null(res)) {
     return(FALSE)
   }
@@ -96,7 +96,7 @@ is_sparse_character <- function(x) {
 #' @rdname type-predicates
 #' @export
 is_sparse_logical <- function(x) {
-  res <- .Call(ffi_extract_altrep_class, x)
+  res <- .Call(ffi_sparse_extract_altrep_class, x)
   if (is.null(res)) {
     return(FALSE)
   }

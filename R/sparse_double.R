@@ -88,9 +88,9 @@ new_sparse_double <- function(values, positions, length, default) {
     default
   )
 
-  .Call(ffi_altrep_new_sparse_double, x)
+  .Call(ffi_sparse_altrep_new_sparse_double, x)
 }
 
 sparse_double_materialize <- function(x) {
-  .Call(ffi_altrep_sparse_double_materialize, x)
+  .Call(ffi_sparse_altrep_sparse_double_materialize, x)
 }

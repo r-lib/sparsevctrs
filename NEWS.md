@@ -46,9 +46,9 @@
 
 ## New Functions
 
-* Adding the scalar arithmatic functions `sparse_division_scalar()`, `sparse_multiplication_scalar()`, `sparse_addition_scalar()`, `sparse_subtraction_scalar()`. (#87)
+* Adding the scalar arithmetic functions `sparse_division_scalar()`, `sparse_multiplication_scalar()`, `sparse_addition_scalar()`, `sparse_subtraction_scalar()`. (#87)
 
-* Adding the arithmatic function `sparse_multiplication()`. (#93)
+* Adding the arithmetic function `sparse_multiplication()`. (#93)
 
 * Helper function `sparse_lag()` bas been added. (#99)
 

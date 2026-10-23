@@ -39,7 +39,7 @@ sparse_positions <- function(x) {
     return(seq_along(x))
   }
 
-  .Call(ffi_altrep_sparse_positions, x)
+  .Call(ffi_sparse_altrep_sparse_positions, x)
 }
 
 #' @rdname extractors
@@ -49,7 +49,7 @@ sparse_values <- function(x) {
     return(x)
   }
 
-  .Call(ffi_altrep_sparse_values, x)
+  .Call(ffi_sparse_altrep_sparse_values, x)
 }
 
 #' @rdname extractors
@@ -59,5 +59,5 @@ sparse_default <- function(x) {
     return(NA)
   }
 
-  .Call(ffi_altrep_sparse_default, x)
+  .Call(ffi_sparse_altrep_sparse_default, x)
 }

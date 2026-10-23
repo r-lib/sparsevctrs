@@ -1,56 +1,30 @@
 #ifndef SPARSEVCTRS_SPARSE_UTILS_H
 #define SPARSEVCTRS_SPARSE_UTILS_H
 
-#define R_NO_REMAP
-#include <Rinternals.h>
-#include <stdbool.h>
-#include <Rversion.h>
+r_obj* sparse_extract_val(r_obj* x);
 
-// Backport DATAPTR_RW for R < 4.6.0 (as recommended in Writing R Extensions)
-#if R_VERSION < R_Version(4, 6, 0)
-# define DATAPTR_RW(x) DATAPTR(x)
-#endif
+r_obj* sparse_extract_pos(r_obj* x);
 
-// Backport R_altrep_class_name and R_altrep_class_package for R < 4.6.0
-#if R_VERSION < R_Version(4, 6, 0)
-static inline SEXP R_altrep_class_name(SEXP x) {
-  return ALTREP(x) ? CAR(ATTRIB(ALTREP_CLASS(x))) : R_NilValue;
-}
-static inline SEXP R_altrep_class_package(SEXP x) {
-  return ALTREP(x) ? CADR(ATTRIB(ALTREP_CLASS(x))) : R_NilValue;
-}
-#endif
+r_ssize sparse_extract_len(r_obj* x);
 
-SEXP extract_val(SEXP x);
+r_obj* sparse_extract_default(r_obj* x);
 
-SEXP extract_pos(SEXP x);
+double sparse_extract_default_double(r_obj* x);
 
-R_xlen_t extract_len(SEXP x);
+int sparse_extract_default_integer(r_obj* x);
 
-SEXP extract_default(SEXP x);
+r_obj* sparse_extract_default_string(r_obj* x);
 
-double extract_default_double(SEXP x);
+int sparse_extract_default_logical(r_obj* x);
 
-int extract_default_integer(SEXP x);
+bool sparse_is_altrep(r_obj* x);
 
-SEXP extract_default_string(SEXP x);
+r_ssize sparse_binary_search(int needle, const int* v_haystack, r_ssize size);
 
-Rboolean extract_default_logical(SEXP x);
+bool sparse_is_index_handleable(r_obj* x);
 
-bool is_altrep(SEXP x);
+void sparse_verbose_materialize(void);
 
-SEXP ffi_extract_altrep_class(SEXP x);
-
-SEXP ffi_is_sparse_vector(SEXP x);
-
-SEXP ffi_is_altrep_non_sparse_vector(SEXP x);
-
-R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size);
-
-bool is_index_handleable(SEXP x);
-
-void verbose_materialize(void);
-
-void sort_pos_and_val(SEXP pos, SEXP val);
+void sparse_sort_pos_and_val(r_obj* pos, r_obj* val);
 
 #endif
