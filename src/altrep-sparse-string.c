@@ -2,21 +2,76 @@
 #include <string.h>
 
 #include "sparse-utils.h"
+#include "altrep-sparse-string.h"
 
-// Locale-aware comparison, matching what `is.unsorted()` does for strings
-static int compare_strings(SEXP a, SEXP b) {
-  return strcoll(Rf_translateChar(a), Rf_translateChar(b));
-}
+#include "decl/altrep-sparse-string-decl.h"
 
 // Initialised at load time
 
 R_altrep_class_t altrep_sparse_string_class;
 
-SEXP ffi_sparse_altrep_new_sparse_string(SEXP x) {
-  return R_new_altrep(altrep_sparse_string_class, x, R_NilValue);
+SEXP ffi_sparse_altrep_new_sparse_string(SEXP ffi_x) {
+  return new_altrep_sparse_string(ffi_x);
 }
 
-SEXP alrep_sparse_string_Materialize(SEXP x) {
+SEXP ffi_sparse_altrep_sparse_string_materialize(SEXP x) {
+  return alrep_sparse_string_Materialize(x);
+}
+
+// -----------------------------------------------------------------------------
+
+void sparsevctrs_init_altrep_sparse_string(DllInfo* dll) {
+  altrep_sparse_string_class =
+    R_make_altstring_class("altrep_sparse_string", "sparsevctrs", dll);
+
+  // ALTVEC
+  R_set_altvec_Dataptr_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Dataptr
+  );
+  R_set_altvec_Dataptr_or_null_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Dataptr_or_null
+  );
+  R_set_altvec_Extract_subset_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Extract_subset
+  );
+
+  // ALTREP
+  R_set_altrep_Length_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Length
+  );
+  R_set_altrep_Inspect_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Inspect
+  );
+  R_set_altrep_Duplicate_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Duplicate
+  );
+
+  // ALTSTRING
+  R_set_altstring_Elt_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Elt
+  );
+  R_set_altstring_Is_sorted_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Is_sorted
+  );
+  R_set_altstring_Set_elt_method(
+    altrep_sparse_string_class,
+    altrep_sparse_string_Set_elt
+  );
+}
+
+SEXP new_altrep_sparse_string(SEXP data1) {
+  return R_new_altrep(altrep_sparse_string_class, data1, R_NilValue);
+}
+
+static SEXP alrep_sparse_string_Materialize(SEXP x) {
   SEXP out = R_altrep_data2(x);
 
   if (out != R_NilValue) {
@@ -55,10 +110,6 @@ SEXP alrep_sparse_string_Materialize(SEXP x) {
   return out;
 }
 
-SEXP ffi_sparse_altrep_sparse_string_materialize(SEXP x) {
-  return alrep_sparse_string_Materialize(x);
-}
-
 // -----------------------------------------------------------------------------
 // ALTVEC
 
@@ -66,7 +117,7 @@ static void* altrep_sparse_string_Dataptr(SEXP x, Rboolean writeable) {
   return DATAPTR_RW(alrep_sparse_string_Materialize(x));
 }
 
-const void* altrep_sparse_string_Dataptr_or_null(SEXP x) {
+static const void* altrep_sparse_string_Dataptr_or_null(SEXP x) {
   SEXP out = R_altrep_data2(x);
 
   if (out == R_NilValue) {
@@ -166,7 +217,7 @@ static SEXP altrep_sparse_string_Extract_subset(SEXP x, SEXP indx, SEXP call) {
     ++i_out;
   }
 
-  SEXP altrep = ffi_sparse_altrep_new_sparse_string(out);
+  SEXP altrep = new_altrep_sparse_string(out);
 
   UNPROTECT(2);
   return altrep;
@@ -175,14 +226,14 @@ static SEXP altrep_sparse_string_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 // -----------------------------------------------------------------------------
 // ALTREP
 
-R_xlen_t altrep_sparse_string_Length(SEXP x) {
+static R_xlen_t altrep_sparse_string_Length(SEXP x) {
   R_xlen_t out = extract_len(x);
 
   return out;
 }
 
 // What gets printed when .Internal(inspect()) is used
-Rboolean altrep_sparse_string_Inspect(
+static Rboolean altrep_sparse_string_Inspect(
   SEXP x,
   int pre,
   int deep,
@@ -197,7 +248,7 @@ Rboolean altrep_sparse_string_Inspect(
   return TRUE;
 }
 
-SEXP altrep_sparse_string_Duplicate(SEXP x, Rboolean deep) {
+static SEXP altrep_sparse_string_Duplicate(SEXP x, Rboolean deep) {
   SEXP data1 = R_altrep_data1(x);
   SEXP data2 = R_altrep_data2(x);
 
@@ -206,7 +257,7 @@ SEXP altrep_sparse_string_Duplicate(SEXP x, Rboolean deep) {
     return NULL;
   }
 
-  return ffi_sparse_altrep_new_sparse_string(data1);
+  return new_altrep_sparse_string(data1);
 }
 
 // -----------------------------------------------------------------------------
@@ -247,7 +298,7 @@ static SEXP altrep_sparse_string_Elt(SEXP x, R_xlen_t i) {
   }
 }
 
-int altrep_sparse_string_Is_sorted(SEXP x) {
+static int altrep_sparse_string_Is_sorted(SEXP x) {
   SEXP pos = extract_pos(x);
   const int* v_pos = INTEGER_RO(pos);
 
@@ -305,7 +356,12 @@ int altrep_sparse_string_Is_sorted(SEXP x) {
   return TRUE;
 }
 
-void altrep_sparse_string_Set_elt(SEXP x, R_xlen_t i, SEXP value) {
+// Locale-aware comparison, matching what `is.unsorted()` does for strings
+static int compare_strings(SEXP a, SEXP b) {
+  return strcoll(Rf_translateChar(a), Rf_translateChar(b));
+}
+
+static void altrep_sparse_string_Set_elt(SEXP x, R_xlen_t i, SEXP value) {
   SEXP out = R_altrep_data2(x);
 
   if (out == R_NilValue) {
@@ -313,53 +369,4 @@ void altrep_sparse_string_Set_elt(SEXP x, R_xlen_t i, SEXP value) {
   }
 
   SET_STRING_ELT(out, i, value);
-}
-
-// -----------------------------------------------------------------------------
-
-void sparsevctrs_init_altrep_sparse_string(DllInfo* dll) {
-  altrep_sparse_string_class =
-    R_make_altstring_class("altrep_sparse_string", "sparsevctrs", dll);
-
-  // ALTVEC
-  R_set_altvec_Dataptr_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Dataptr
-  );
-  R_set_altvec_Dataptr_or_null_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Dataptr_or_null
-  );
-  R_set_altvec_Extract_subset_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Extract_subset
-  );
-
-  // ALTREP
-  R_set_altrep_Length_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Length
-  );
-  R_set_altrep_Inspect_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Inspect
-  );
-  R_set_altrep_Duplicate_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Duplicate
-  );
-
-  // ALTSTRING
-  R_set_altstring_Elt_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Elt
-  );
-  R_set_altstring_Is_sorted_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Is_sorted
-  );
-  R_set_altstring_Set_elt_method(
-    altrep_sparse_string_class,
-    altrep_sparse_string_Set_elt
-  );
 }

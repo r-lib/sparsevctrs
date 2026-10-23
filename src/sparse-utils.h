@@ -19,12 +19,6 @@ Rboolean extract_default_logical(SEXP x);
 
 bool is_altrep(SEXP x);
 
-SEXP ffi_sparse_extract_altrep_class(SEXP x);
-
-SEXP ffi_sparse_is_sparse_vector(SEXP x);
-
-SEXP ffi_sparse_is_altrep_non_sparse_vector(SEXP x);
-
 R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size);
 
 bool is_index_handleable(SEXP x);

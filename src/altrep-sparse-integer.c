@@ -1,13 +1,85 @@
 #include "sparsevctrs-core.h"
 
 #include "sparse-utils.h"
+#include "altrep-sparse-integer.h"
+
+#include "decl/altrep-sparse-integer-decl.h"
 
 // Initialised at load time
 
 R_altrep_class_t altrep_sparse_integer_class;
 
-SEXP ffi_sparse_altrep_new_sparse_integer(SEXP x) {
-  return R_new_altrep(altrep_sparse_integer_class, x, R_NilValue);
+SEXP ffi_sparse_altrep_new_sparse_integer(SEXP ffi_x) {
+  return new_altrep_sparse_integer(ffi_x);
+}
+
+SEXP ffi_sparse_altrep_sparse_integer_materialize(SEXP x) {
+  return alrep_sparse_integer_Materialize(x);
+}
+
+// -----------------------------------------------------------------------------
+
+void sparsevctrs_init_altrep_sparse_integer(DllInfo* dll) {
+  altrep_sparse_integer_class =
+    R_make_altinteger_class("altrep_sparse_integer", "sparsevctrs", dll);
+
+  // ALTVEC
+  R_set_altvec_Dataptr_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Dataptr
+  );
+  R_set_altvec_Dataptr_or_null_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Dataptr_or_null
+  );
+  R_set_altvec_Extract_subset_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Extract_subset
+  );
+
+  // ALTREP
+  R_set_altrep_Length_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Length
+  );
+  R_set_altrep_Inspect_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Inspect
+  );
+  R_set_altrep_Duplicate_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Duplicate
+  );
+
+  // ALTINTEGER
+  R_set_altinteger_Elt_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Elt
+  );
+  R_set_altinteger_Is_sorted_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Is_sorted
+  );
+  R_set_altinteger_Min_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Min_method
+  );
+  R_set_altinteger_Max_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Max_method
+  );
+  R_set_altinteger_No_NA_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_No_NA_method
+  );
+  R_set_altinteger_Sum_method(
+    altrep_sparse_integer_class,
+    altrep_sparse_integer_Sum_method
+  );
+}
+
+SEXP new_altrep_sparse_integer(SEXP data1) {
+  return R_new_altrep(altrep_sparse_integer_class, data1, R_NilValue);
 }
 
 SEXP new_sparse_integer(SEXP val, SEXP pos, SEXP len, SEXP def) {
@@ -18,13 +90,13 @@ SEXP new_sparse_integer(SEXP val, SEXP pos, SEXP len, SEXP def) {
   SET_VECTOR_ELT(list, 2, len);
   SET_VECTOR_ELT(list, 3, def);
 
-  SEXP out = ffi_sparse_altrep_new_sparse_integer(list);
+  SEXP out = new_altrep_sparse_integer(list);
 
   UNPROTECT(1);
   return out;
 }
 
-SEXP alrep_sparse_integer_Materialize(SEXP x) {
+static SEXP alrep_sparse_integer_Materialize(SEXP x) {
   SEXP out = R_altrep_data2(x);
 
   if (out != R_NilValue) {
@@ -63,18 +135,14 @@ SEXP alrep_sparse_integer_Materialize(SEXP x) {
   return out;
 }
 
-SEXP ffi_sparse_altrep_sparse_integer_materialize(SEXP x) {
-  return alrep_sparse_integer_Materialize(x);
-}
-
 // -----------------------------------------------------------------------------
 // ALTVEC
 
-void* altrep_sparse_integer_Dataptr(SEXP x, Rboolean writeable) {
+static void* altrep_sparse_integer_Dataptr(SEXP x, Rboolean writeable) {
   return DATAPTR_RW(alrep_sparse_integer_Materialize(x));
 }
 
-const void* altrep_sparse_integer_Dataptr_or_null(SEXP x) {
+static const void* altrep_sparse_integer_Dataptr_or_null(SEXP x) {
   SEXP out = R_altrep_data2(x);
 
   if (out == R_NilValue) {
@@ -176,7 +244,7 @@ static SEXP altrep_sparse_integer_Extract_subset(SEXP x, SEXP indx, SEXP call) {
     ++i_out;
   }
 
-  SEXP altrep = ffi_sparse_altrep_new_sparse_integer(out);
+  SEXP altrep = new_altrep_sparse_integer(out);
 
   UNPROTECT(2);
   return altrep;
@@ -185,14 +253,14 @@ static SEXP altrep_sparse_integer_Extract_subset(SEXP x, SEXP indx, SEXP call) {
 // -----------------------------------------------------------------------------
 // ALTREP
 
-R_xlen_t altrep_sparse_integer_Length(SEXP x) {
+static R_xlen_t altrep_sparse_integer_Length(SEXP x) {
   R_xlen_t out = extract_len(x);
 
   return out;
 }
 
 // What gets printed when .Internal(inspect()) is used
-Rboolean altrep_sparse_integer_Inspect(
+static Rboolean altrep_sparse_integer_Inspect(
   SEXP x,
   int pre,
   int deep,
@@ -207,7 +275,7 @@ Rboolean altrep_sparse_integer_Inspect(
   return TRUE;
 }
 
-SEXP altrep_sparse_integer_Duplicate(SEXP x, Rboolean deep) {
+static SEXP altrep_sparse_integer_Duplicate(SEXP x, Rboolean deep) {
   SEXP data1 = R_altrep_data1(x);
   SEXP data2 = R_altrep_data2(x);
 
@@ -216,7 +284,7 @@ SEXP altrep_sparse_integer_Duplicate(SEXP x, Rboolean deep) {
     return NULL;
   }
 
-  return ffi_sparse_altrep_new_sparse_integer(data1);
+  return new_altrep_sparse_integer(data1);
 }
 
 // -----------------------------------------------------------------------------
@@ -257,7 +325,7 @@ static int altrep_sparse_integer_Elt(SEXP x, R_xlen_t i) {
   }
 }
 
-int altrep_sparse_integer_Is_sorted(SEXP x) {
+static int altrep_sparse_integer_Is_sorted(SEXP x) {
   SEXP pos = extract_pos(x);
   const int* v_pos = INTEGER_RO(pos);
 
@@ -431,65 +499,4 @@ static SEXP altrep_sparse_integer_Sum_method(SEXP x, Rboolean na_rm) {
   }
 
   return Rf_ScalarInteger(sum);
-}
-
-// -----------------------------------------------------------------------------
-
-void sparsevctrs_init_altrep_sparse_integer(DllInfo* dll) {
-  altrep_sparse_integer_class =
-    R_make_altinteger_class("altrep_sparse_integer", "sparsevctrs", dll);
-
-  // ALTVEC
-  R_set_altvec_Dataptr_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Dataptr
-  );
-  R_set_altvec_Dataptr_or_null_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Dataptr_or_null
-  );
-  R_set_altvec_Extract_subset_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Extract_subset
-  );
-
-  // ALTREP
-  R_set_altrep_Length_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Length
-  );
-  R_set_altrep_Inspect_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Inspect
-  );
-  R_set_altrep_Duplicate_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Duplicate
-  );
-
-  // ALTINTEGER
-  R_set_altinteger_Elt_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Elt
-  );
-  R_set_altinteger_Is_sorted_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Is_sorted
-  );
-  R_set_altinteger_Min_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Min_method
-  );
-  R_set_altinteger_Max_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Max_method
-  );
-  R_set_altinteger_No_NA_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_No_NA_method
-  );
-  R_set_altinteger_Sum_method(
-    altrep_sparse_integer_class,
-    altrep_sparse_integer_Sum_method
-  );
 }

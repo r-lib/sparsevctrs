@@ -2,6 +2,40 @@
 
 #include "sparse-utils.h"
 
+#include "decl/sparse-utils-decl.h"
+
+SEXP ffi_sparse_extract_altrep_class(SEXP x) {
+  if (!is_altrep(x)) {
+    return (R_NilValue);
+  }
+
+  return R_altrep_class_name(x);
+}
+
+SEXP ffi_sparse_is_sparse_vector(SEXP x) {
+  if (!is_altrep(x)) {
+    return (Rf_ScalarLogical(FALSE));
+  }
+
+  return Rf_ScalarLogical(altrep_package(x) == Rf_install("sparsevctrs"));
+}
+
+SEXP ffi_sparse_is_altrep_non_sparse_vector(SEXP x) {
+  if (!is_altrep(x)) {
+    return (Rf_ScalarLogical(FALSE));
+  }
+
+  return Rf_ScalarLogical(altrep_package(x) != Rf_install("sparsevctrs"));
+}
+
+bool is_altrep(SEXP x) {
+  return (bool) ALTREP(x);
+}
+
+static inline SEXP altrep_package(SEXP x) {
+  return R_altrep_class_package(x);
+}
+
 SEXP extract_val(SEXP x) {
   SEXP data1 = R_altrep_data1(x);
   SEXP out = VECTOR_ELT(data1, 0);
@@ -58,42 +92,6 @@ Rboolean extract_default_logical(SEXP x) {
   return out;
 }
 
-bool is_altrep(SEXP x) {
-  return (bool) ALTREP(x);
-}
-
-SEXP ffi_sparse_extract_altrep_class(SEXP x) {
-  if (!is_altrep(x)) {
-    return (R_NilValue);
-  }
-
-  return R_altrep_class_name(x);
-}
-
-static inline SEXP altrep_package(SEXP x) {
-  return R_altrep_class_package(x);
-}
-
-SEXP ffi_sparse_is_sparse_vector(SEXP x) {
-  if (!is_altrep(x)) {
-    return (Rf_ScalarLogical(FALSE));
-  }
-
-  return Rf_ScalarLogical(altrep_package(x) == Rf_install("sparsevctrs"));
-}
-
-SEXP ffi_sparse_is_altrep_non_sparse_vector(SEXP x) {
-  if (!is_altrep(x)) {
-    return (Rf_ScalarLogical(FALSE));
-  }
-
-  return Rf_ScalarLogical(altrep_package(x) != Rf_install("sparsevctrs"));
-}
-
-static inline R_xlen_t midpoint(R_xlen_t lhs, R_xlen_t rhs) {
-  return lhs + (rhs - lhs) / 2;
-}
-
 R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size) {
   R_xlen_t loc_lower_bound = 0;
   R_xlen_t loc_upper_bound = size - 1;
@@ -114,6 +112,10 @@ R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size) {
   }
 
   return size;
+}
+
+static inline R_xlen_t midpoint(R_xlen_t lhs, R_xlen_t rhs) {
+  return lhs + (rhs - lhs) / 2;
 }
 
 bool is_index_handleable(SEXP x) {

@@ -3,6 +3,4 @@
 
 #include "sparse-utils.h"
 
-SEXP ffi_sparse_multiplication(SEXP x, SEXP y);
-
 #endif
