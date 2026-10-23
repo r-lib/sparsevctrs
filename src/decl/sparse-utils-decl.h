@@ -1,3 +1,3 @@
-static inline SEXP altrep_package(SEXP x);
+static inline r_obj* altrep_package(r_obj* x);
 
-static inline R_xlen_t midpoint(R_xlen_t lhs, R_xlen_t rhs);
+static inline r_ssize midpoint(r_ssize lhs, r_ssize rhs);

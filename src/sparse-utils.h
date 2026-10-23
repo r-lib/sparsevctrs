@@ -1,30 +1,30 @@
 #ifndef SPARSEVCTRS_SPARSE_UTILS_H
 #define SPARSEVCTRS_SPARSE_UTILS_H
 
-SEXP sparse_extract_val(SEXP x);
+r_obj* sparse_extract_val(r_obj* x);
 
-SEXP sparse_extract_pos(SEXP x);
+r_obj* sparse_extract_pos(r_obj* x);
 
-R_xlen_t sparse_extract_len(SEXP x);
+r_ssize sparse_extract_len(r_obj* x);
 
-SEXP sparse_extract_default(SEXP x);
+r_obj* sparse_extract_default(r_obj* x);
 
-double sparse_extract_default_double(SEXP x);
+double sparse_extract_default_double(r_obj* x);
 
-int sparse_extract_default_integer(SEXP x);
+int sparse_extract_default_integer(r_obj* x);
 
-SEXP sparse_extract_default_string(SEXP x);
+r_obj* sparse_extract_default_string(r_obj* x);
 
-Rboolean sparse_extract_default_logical(SEXP x);
+int sparse_extract_default_logical(r_obj* x);
 
-bool sparse_is_altrep(SEXP x);
+bool sparse_is_altrep(r_obj* x);
 
-R_xlen_t sparse_binary_search(int needle, const int* v_haystack, R_xlen_t size);
+r_ssize sparse_binary_search(int needle, const int* v_haystack, r_ssize size);
 
-bool sparse_is_index_handleable(SEXP x);
+bool sparse_is_index_handleable(r_obj* x);
 
 void sparse_verbose_materialize(void);
 
-void sparse_sort_pos_and_val(SEXP pos, SEXP val);
+void sparse_sort_pos_and_val(r_obj* pos, r_obj* val);
 
 #endif
