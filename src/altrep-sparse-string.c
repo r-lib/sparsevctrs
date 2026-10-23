@@ -1,6 +1,4 @@
-#define R_NO_REMAP
-#include <Rinternals.h>
-#include <R_ext/Altrep.h>
+#include "sparsevctrs-core.h"
 #include <string.h>
 
 #include "sparse-utils.h"
@@ -14,7 +12,7 @@ static int compare_strings(SEXP a, SEXP b) {
 
 R_altrep_class_t altrep_sparse_string_class;
 
-SEXP ffi_altrep_new_sparse_string(SEXP x) {
+SEXP ffi_sparse_altrep_new_sparse_string(SEXP x) {
   return R_new_altrep(altrep_sparse_string_class, x, R_NilValue);
 }
 
@@ -57,7 +55,7 @@ SEXP alrep_sparse_string_Materialize(SEXP x) {
   return out;
 }
 
-SEXP ffi_altrep_sparse_string_materialize(SEXP x) {
+SEXP ffi_sparse_altrep_sparse_string_materialize(SEXP x) {
   return alrep_sparse_string_Materialize(x);
 }
 
@@ -168,7 +166,7 @@ static SEXP altrep_sparse_string_Extract_subset(SEXP x, SEXP indx, SEXP call) {
     ++i_out;
   }
 
-  SEXP altrep = ffi_altrep_new_sparse_string(out);
+  SEXP altrep = ffi_sparse_altrep_new_sparse_string(out);
 
   UNPROTECT(2);
   return altrep;
@@ -208,7 +206,7 @@ SEXP altrep_sparse_string_Duplicate(SEXP x, Rboolean deep) {
     return NULL;
   }
 
-  return ffi_altrep_new_sparse_string(data1);
+  return ffi_sparse_altrep_new_sparse_string(data1);
 }
 
 // -----------------------------------------------------------------------------

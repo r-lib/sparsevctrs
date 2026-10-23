@@ -1,26 +1,6 @@
 #ifndef SPARSEVCTRS_SPARSE_UTILS_H
 #define SPARSEVCTRS_SPARSE_UTILS_H
 
-#define R_NO_REMAP
-#include <Rinternals.h>
-#include <stdbool.h>
-#include <Rversion.h>
-
-// Backport DATAPTR_RW for R < 4.6.0 (as recommended in Writing R Extensions)
-#if R_VERSION < R_Version(4, 6, 0)
-#define DATAPTR_RW(x) DATAPTR(x)
-#endif
-
-// Backport R_altrep_class_name and R_altrep_class_package for R < 4.6.0
-#if R_VERSION < R_Version(4, 6, 0)
-static inline SEXP R_altrep_class_name(SEXP x) {
-  return ALTREP(x) ? CAR(ATTRIB(ALTREP_CLASS(x))) : R_NilValue;
-}
-static inline SEXP R_altrep_class_package(SEXP x) {
-  return ALTREP(x) ? CADR(ATTRIB(ALTREP_CLASS(x))) : R_NilValue;
-}
-#endif
-
 SEXP extract_val(SEXP x);
 
 SEXP extract_pos(SEXP x);
@@ -39,11 +19,11 @@ Rboolean extract_default_logical(SEXP x);
 
 bool is_altrep(SEXP x);
 
-SEXP ffi_extract_altrep_class(SEXP x);
+SEXP ffi_sparse_extract_altrep_class(SEXP x);
 
-SEXP ffi_is_sparse_vector(SEXP x);
+SEXP ffi_sparse_is_sparse_vector(SEXP x);
 
-SEXP ffi_is_altrep_non_sparse_vector(SEXP x);
+SEXP ffi_sparse_is_altrep_non_sparse_vector(SEXP x);
 
 R_xlen_t binary_search(int needle, const int* v_haystack, R_xlen_t size);
 

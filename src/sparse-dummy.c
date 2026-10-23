@@ -1,7 +1,9 @@
+#include "sparsevctrs-core.h"
+
 #include "sparse-dummy.h"
 
 // Defined in altrep-sparse-integer.c
-extern SEXP ffi_altrep_new_sparse_integer(SEXP);
+extern SEXP ffi_sparse_altrep_new_sparse_integer(SEXP);
 extern void sparsevctrs_init_altrep_sparse_integer(DllInfo*);
 
 SEXP create_dummy(SEXP pos, R_xlen_t length) {
@@ -31,7 +33,7 @@ SEXP create_dummy(SEXP pos, R_xlen_t length) {
 
   UNPROTECT(1);
 
-  return ffi_altrep_new_sparse_integer(out);
+  return ffi_sparse_altrep_new_sparse_integer(out);
 }
 
 SEXP create_dummy_na(SEXP values, SEXP pos, R_xlen_t length) {
@@ -53,7 +55,7 @@ SEXP create_dummy_na(SEXP values, SEXP pos, R_xlen_t length) {
 
   UNPROTECT(1);
 
-  return ffi_altrep_new_sparse_integer(out);
+  return ffi_sparse_altrep_new_sparse_integer(out);
 }
 
 SEXP ffi_sparse_dummy(SEXP x, SEXP lvls, SEXP counts, SEXP one_hot) {

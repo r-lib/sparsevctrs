@@ -1,3 +1,5 @@
+#include "sparsevctrs-core.h"
+
 #include "sparse-arithmatic.h"
 #include "sparse-utils.h"
 #include "altrep-sparse-double.h"

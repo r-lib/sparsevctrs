@@ -1,6 +1,4 @@
-#define R_NO_REMAP
-#include <Rinternals.h>
-#include <R_ext/Altrep.h>
+#include "sparsevctrs-core.h"
 
 #include "sparse-utils.h"
 
@@ -8,7 +6,7 @@
 
 R_altrep_class_t altrep_sparse_double_class;
 
-SEXP ffi_altrep_new_sparse_double(SEXP x) {
+SEXP ffi_sparse_altrep_new_sparse_double(SEXP x) {
   return R_new_altrep(altrep_sparse_double_class, x, R_NilValue);
 }
 
@@ -20,7 +18,7 @@ SEXP new_sparse_double(SEXP val, SEXP pos, SEXP len, SEXP def) {
   SET_VECTOR_ELT(list, 2, len);
   SET_VECTOR_ELT(list, 3, def);
 
-  SEXP out = ffi_altrep_new_sparse_double(list);
+  SEXP out = ffi_sparse_altrep_new_sparse_double(list);
 
   UNPROTECT(1);
   return out;
@@ -65,7 +63,7 @@ SEXP alrep_sparse_double_Materialize(SEXP x) {
   return out;
 }
 
-SEXP ffi_altrep_sparse_double_materialize(SEXP x) {
+SEXP ffi_sparse_altrep_sparse_double_materialize(SEXP x) {
   return alrep_sparse_double_Materialize(x);
 }
 
@@ -178,7 +176,7 @@ static SEXP altrep_sparse_double_Extract_subset(SEXP x, SEXP indx, SEXP call) {
     ++i_out;
   }
 
-  SEXP altrep = ffi_altrep_new_sparse_double(out);
+  SEXP altrep = ffi_sparse_altrep_new_sparse_double(out);
 
   UNPROTECT(2);
   return altrep;
@@ -218,7 +216,7 @@ SEXP altrep_sparse_double_Duplicate(SEXP x, Rboolean deep) {
     return NULL;
   }
 
-  return ffi_altrep_new_sparse_double(data1);
+  return ffi_sparse_altrep_new_sparse_double(data1);
 }
 
 // -----------------------------------------------------------------------------

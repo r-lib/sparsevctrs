@@ -75,9 +75,9 @@ new_sparse_logical <- function(values, positions, length, default) {
     default
   )
 
-  .Call(ffi_altrep_new_sparse_logical, x)
+  .Call(ffi_sparse_altrep_new_sparse_logical, x)
 }
 
 sparse_logical_materialize <- function(x) {
-  .Call(ffi_altrep_sparse_logical_materialize, x)
+  .Call(ffi_sparse_altrep_sparse_logical_materialize, x)
 }

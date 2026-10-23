@@ -1,3 +1,5 @@
+#include "sparsevctrs-core.h"
+
 #include "sparse-utils.h"
 
 SEXP extract_val(SEXP x) {
@@ -60,7 +62,7 @@ bool is_altrep(SEXP x) {
   return (bool) ALTREP(x);
 }
 
-SEXP ffi_extract_altrep_class(SEXP x) {
+SEXP ffi_sparse_extract_altrep_class(SEXP x) {
   if (!is_altrep(x)) {
     return (R_NilValue);
   }
@@ -72,7 +74,7 @@ static inline SEXP altrep_package(SEXP x) {
   return R_altrep_class_package(x);
 }
 
-SEXP ffi_is_sparse_vector(SEXP x) {
+SEXP ffi_sparse_is_sparse_vector(SEXP x) {
   if (!is_altrep(x)) {
     return (Rf_ScalarLogical(FALSE));
   }
@@ -80,7 +82,7 @@ SEXP ffi_is_sparse_vector(SEXP x) {
   return Rf_ScalarLogical(altrep_package(x) == Rf_install("sparsevctrs"));
 }
 
-SEXP ffi_is_altrep_non_sparse_vector(SEXP x) {
+SEXP ffi_sparse_is_altrep_non_sparse_vector(SEXP x) {
   if (!is_altrep(x)) {
     return (Rf_ScalarLogical(FALSE));
   }

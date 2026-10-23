@@ -77,9 +77,9 @@ new_sparse_character <- function(values, positions, length, default) {
     default
   )
 
-  .Call(ffi_altrep_new_sparse_string, x)
+  .Call(ffi_sparse_altrep_new_sparse_string, x)
 }
 
 sparse_string_materialize <- function(x) {
-  .Call(ffi_altrep_sparse_string_materialize, x)
+  .Call(ffi_sparse_altrep_sparse_string_materialize, x)
 }

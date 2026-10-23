@@ -1,5 +1,4 @@
-#define R_NO_REMAP
-#include <Rinternals.h>
+#include "sparsevctrs-core.h"
 
 #include "altrep-sparse-double.h"
 

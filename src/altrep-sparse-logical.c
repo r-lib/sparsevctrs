@@ -1,6 +1,4 @@
-#define R_NO_REMAP
-#include <Rinternals.h>
-#include <R_ext/Altrep.h>
+#include "sparsevctrs-core.h"
 
 #include "sparse-utils.h"
 
@@ -8,7 +6,7 @@
 
 R_altrep_class_t altrep_sparse_logical_class;
 
-SEXP ffi_altrep_new_sparse_logical(SEXP x) {
+SEXP ffi_sparse_altrep_new_sparse_logical(SEXP x) {
   return R_new_altrep(altrep_sparse_logical_class, x, R_NilValue);
 }
 
@@ -51,7 +49,7 @@ SEXP alrep_sparse_logical_Materialize(SEXP x) {
   return out;
 }
 
-SEXP ffi_altrep_sparse_logical_materialize(SEXP x) {
+SEXP ffi_sparse_altrep_sparse_logical_materialize(SEXP x) {
   return alrep_sparse_logical_Materialize(x);
 }
 
@@ -164,7 +162,7 @@ static SEXP altrep_sparse_logical_Extract_subset(SEXP x, SEXP indx, SEXP call) {
     ++i_out;
   }
 
-  SEXP altrep = ffi_altrep_new_sparse_logical(out);
+  SEXP altrep = ffi_sparse_altrep_new_sparse_logical(out);
 
   UNPROTECT(2);
   return altrep;
@@ -204,7 +202,7 @@ SEXP altrep_sparse_logical_Duplicate(SEXP x, Rboolean deep) {
     return NULL;
   }
 
-  return ffi_altrep_new_sparse_logical(data1);
+  return ffi_sparse_altrep_new_sparse_logical(data1);
 }
 
 // -----------------------------------------------------------------------------
