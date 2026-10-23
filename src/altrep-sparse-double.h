@@ -3,8 +3,8 @@
 
 #include "sparse-utils.h"
 
-SEXP new_altrep_sparse_double(SEXP data1);
+r_obj* new_altrep_sparse_double(r_obj* data1);
 
-SEXP new_sparse_double(SEXP val, SEXP pos, SEXP len, SEXP def);
+r_obj* new_sparse_double(r_obj* val, r_obj* pos, r_obj* len, r_obj* def);
 
 #endif
