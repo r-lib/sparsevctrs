@@ -255,6 +255,18 @@ test_that("scalar subtraction works", {
   )
 })
 
+test_that("scalar arithmetic errors for non-numeric sparse vectors", {
+  vec_lgl <- sparse_logical(TRUE, 1, 3)
+  vec_chr <- sparse_character("a", 1, 3)
+
+  expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_lgl, 2))
+  expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_chr, 2))
+  expect_snapshot(error = TRUE, sparse_addition_scalar(vec_lgl, 2))
+  expect_snapshot(error = TRUE, sparse_addition_scalar(vec_chr, 2))
+  expect_snapshot(error = TRUE, sparse_subtraction_scalar(vec_lgl, 2))
+  expect_snapshot(error = TRUE, sparse_subtraction_scalar(vec_chr, 2))
+})
+
 test_that("vector multiplication works - integers", {
   sparse_int_1 <- sparse_integer(c(4, 78), c(1, 10), 10)
   sparse_int_2 <- sparse_integer(c(4, 78), c(1, 9), 10)
@@ -641,6 +653,11 @@ test_that("vector multiplication works - non-zero defaults", {
   expect_identical(res, sparse_dbl_1 * sparse_dbl_1)
   expect_false(is_sparse_vector(res))
   expect_true(is.double(res))
+})
+
+test_that("vector multiplication errors for non-numeric input", {
+  expect_snapshot(error = TRUE, sparse_multiplication("a", 1))
+  expect_snapshot(error = TRUE, sparse_multiplication(1, "a"))
 })
 
 test_that("vector multiplication works - other altrep input", {
