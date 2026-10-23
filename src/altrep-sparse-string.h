@@ -3,6 +3,6 @@
 
 #include "sparse-utils.h"
 
-SEXP new_altrep_sparse_string(SEXP data1);
+r_obj* new_altrep_sparse_string(r_obj* data1);
 
 #endif
