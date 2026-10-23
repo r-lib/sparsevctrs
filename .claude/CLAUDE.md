@@ -59,8 +59,30 @@ air format .
 - Any `r_obj*` returned by a C function that allocates must be protected with `KEEP()` / `FREE()` (rlang's wrappers around `PROTECT()` / `UNPROTECT()`) if used after any further allocation could occur.
 - Before calling any C change done: for every new or touched `r_obj*` in the diff, name the function it is next passed to or read by, and check whether that function allocates before it protects or consumes the value. A value is not safe just because it looks used immediately, the callee's own allocations count. Do this as an explicit, separate pass over the diff, the same way `clang-format` is a separate mandatory step.
 - Never use `gctorture()` or `gctorture2()` to look for protection problems. They are far too slow to be practical. The reading pass described above is the check.
+- ALTREP callbacks must keep the signatures R requires for `R_set_altrep_*_method()`, including `Rboolean` parameters. `r_obj*` is the same type as `SEXP`, so use `r_obj*` and `r_ssize` in them without casts.
+- Keep the raw R API only where rlang has no equivalent, e.g. `Rf_error()` for user facing errors, `Rf_warning()`, `Rf_GetOption1()`, `Rf_translateChar()` and the `R_set_altrep_*` functions.
+- Use `r_globals.*` (e.g. `r_globals.na_int`) only in code that runs after the package is loaded, never in `R_init_sparsevctrs()` or anything it calls. Use `r_null`, which is a plain macro and always safe.
+- Don't add comments to C code, and leave existing comments alone.
 - Never change code inside of `src/rlang/`, that is a vendored library.
 - Always run `clang-format -i src/*.c src/*.h` after generating C code. Always run it over all files, not just changed files. If `clang-format` is not on the PATH, use `/opt/homebrew/opt/llvm/bin/clang-format`.
+
+### C terminology
+
+Use these names in C code so they stay consistent across files:
+
+- `val`: the vector of stored (non-default) values of a sparse vector.
+- `pos`: the 1-indexed integer positions of the stored values.
+- `len`: the length of the sparse vector itself, not the number of stored values.
+- `default`: the value at every position not in `pos`.
+- `size`: the number of elements of the vector being searched or indexed with.
+- `n_{name}`: a count, e.g. `n_pos`, `n_hits`, `n_lvls`.
+- `v_{name}`: a pointer to the data of `{name}`, e.g. `v_val` for `val`.
+- `out_{name}`: part of the value being returned, e.g. `out_val`, `out_pos`.
+- `ffi_{name}`: a parameter of an FFI wrapper, before it is converted.
+
+### Git commits
+
+- Commit messages are one sentence of at most 80 characters, with no trailing period, and function names in backticks.
 
 ### Testing
 
