@@ -1,4 +1,5 @@
 #include <Rinternals.h>
+#include <rlang.h>
 #include "sparse-extractors.h"
 #include "sparse-utils.h"
 #include "sparse-dummy.h"
@@ -27,7 +28,11 @@ extern SEXP ffi_altrep_sparse_logical_materialize(SEXP);
 // Defined in sparse-coerce.c
 extern SEXP ffi_sparse_matrix_to_list(SEXP, SEXP, SEXP, SEXP);
 
+// Defined below
+extern SEXP ffi_init_library(SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
+    {"ffi_init_library", (DL_FUNC) &ffi_init_library, 1},
     {"ffi_sparse_matrix_to_list", (DL_FUNC) &ffi_sparse_matrix_to_list, 4},
     {"ffi_altrep_new_sparse_double", (DL_FUNC) &ffi_altrep_new_sparse_double, 1
     },
@@ -65,7 +70,12 @@ static const R_CallMethodDef CallEntries[] = {
     {NULL, NULL, 0}
 };
 
-void R_init_sparsevctrs(DllInfo* dll) {
+SEXP ffi_init_library(SEXP ns) {
+  r_init_library(ns);
+  return R_NilValue;
+}
+
+attribute_visible void R_init_sparsevctrs(DllInfo* dll) {
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
 
