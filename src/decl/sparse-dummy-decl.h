@@ -1,3 +1,3 @@
-static SEXP create_dummy(SEXP pos, R_xlen_t length);
+static r_obj* create_dummy(r_obj* pos, r_ssize length);
 
-static SEXP create_dummy_na(SEXP values, SEXP pos, R_xlen_t length);
+static r_obj* create_dummy_na(r_obj* values, r_obj* pos, r_ssize length);
