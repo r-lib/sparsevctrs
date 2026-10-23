@@ -54,3 +54,22 @@ test_that("sparse_replace() works - characters", {
   expect_identical(res, exp)
   expect_true(is_sparse_character(res))
 })
+
+test_that("sparse_replace() works - logicals", {
+  x <- sparse_logical(c(NA, TRUE), 1:2, 1000)
+
+  res <- sparse_replace_na(x, TRUE)
+  exp <- x
+  exp[is.na(exp)] <- TRUE
+
+  expect_identical(res, exp)
+  expect_true(is_sparse_logical(res))
+
+  # replace == default
+  res <- sparse_replace_na(x, FALSE)
+  exp <- x
+  exp[is.na(exp)] <- FALSE
+
+  expect_identical(res, exp)
+  expect_true(is_sparse_logical(res))
+})
