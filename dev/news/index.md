@@ -30,6 +30,18 @@
   are now much faster.
   ([\#66](https://github.com/r-lib/sparsevctrs/issues/66))
 
+- [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  and
+  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  now give an error when `x` is not a sparse integer or double vector,
+  instead of failing with an object not found error.
+  ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
+
+- [`sparse_replace_na()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_replace_na.md)
+  now works with sparse logical vectors.
+  ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
+
 ## sparsevctrs 0.3.6
 
 CRAN release: 2026-01-27
