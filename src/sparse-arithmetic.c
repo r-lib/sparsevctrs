@@ -592,11 +592,6 @@ static r_obj* find_nas_with_no_overlap(r_obj* x, r_obj* y) {
   const r_ssize x_len = r_length(x_pos);
   const r_ssize y_len = r_length(y_pos);
 
-  // special case if x or y have length zero
-  if (x_len == 0 || y_len == 0) {
-    return r_null;
-  }
-
   r_obj* x_matches = KEEP(r_alloc_integer(x_len));
   int* v_x_matches = r_int_begin(x_matches);
   r_obj* y_matches = KEEP(r_alloc_integer(y_len));
