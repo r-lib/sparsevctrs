@@ -311,7 +311,7 @@ static double altrep_sparse_double_Elt(r_obj* x, r_ssize i) {
 
   const double v_default_val = sparse_extract_default_double(x);
 
-  if (i > len) {
+  if (i >= len) {
     // OOB of vector itself
     return r_globals.na_dbl;
   }

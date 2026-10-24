@@ -284,7 +284,7 @@ static r_obj* altrep_sparse_string_Elt(r_obj* x, r_ssize i) {
 
   r_obj* v_default_val = sparse_extract_default_string(x);
 
-  if (i > len) {
+  if (i >= len) {
     // OOB of vector itself
     return r_globals.na_str;
   }
