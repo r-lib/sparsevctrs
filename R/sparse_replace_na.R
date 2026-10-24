@@ -69,6 +69,13 @@ sparse_replace_na <- function(x, replace) {
       length = length(x),
       default = default
     )
+  } else if (is.logical(values)) {
+    res <- sparse_logical(
+      values = values,
+      positions = positions,
+      length = length(x),
+      default = default
+    )
   }
 
   res

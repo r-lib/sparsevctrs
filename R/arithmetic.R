@@ -89,8 +89,7 @@ sparse_multiplication_scalar <- function(x, val) {
         default = sparse_default(x)
       )
     }
-  }
-  if (is_sparse_double(x)) {
+  } else if (is_sparse_double(x)) {
     if (val == 0) {
       res <- sparse_double(
         values = double(),
@@ -106,6 +105,8 @@ sparse_multiplication_scalar <- function(x, val) {
         default = sparse_default(x)
       )
     }
+  } else {
+    cli::cli_abort("{.arg x} must be a sparse integer or double vector.")
   }
 
   res
@@ -133,14 +134,15 @@ sparse_addition_scalar <- function(x, val) {
       length = length(x),
       default = sparse_default(x) + val
     )
-  }
-  if (is_sparse_double(x)) {
+  } else if (is_sparse_double(x)) {
     res <- sparse_double(
       values = sparse_values(x) + val,
       positions = sparse_positions(x),
       length = length(x),
       default = sparse_default(x) + val
     )
+  } else {
+    cli::cli_abort("{.arg x} must be a sparse integer or double vector.")
   }
 
   res
@@ -168,14 +170,15 @@ sparse_subtraction_scalar <- function(x, val) {
       length = length(x),
       default = sparse_default(x) - val
     )
-  }
-  if (is_sparse_double(x)) {
+  } else if (is_sparse_double(x)) {
     res <- sparse_double(
       values = sparse_values(x) - val,
       positions = sparse_positions(x),
       length = length(x),
       default = sparse_default(x) - val
     )
+  } else {
+    cli::cli_abort("{.arg x} must be a sparse integer or double vector.")
   }
 
   res
@@ -183,7 +186,7 @@ sparse_subtraction_scalar <- function(x, val) {
 
 #' Vector arithmetic with sparse vectors
 #'
-#' Do arithmetic operations on sparse vectors while trying to void destroying
+#' Do arithmetic operations on sparse vectors while trying to avoid destroying
 #' the sparsity.
 #'
 #' @param x A numeric vector.
@@ -217,10 +220,10 @@ NULL
 #' @export
 sparse_multiplication <- function(x, y) {
   if (!is.numeric(x)) {
-    cli::cli_abort("{.arg x} must me numeric, not {.obj_type_friendly {x}}.")
+    cli::cli_abort("{.arg x} must be numeric, not {.obj_type_friendly {x}}.")
   }
   if (!is.numeric(y)) {
-    cli::cli_abort("{.arg y} must me numeric not {.obj_type_friendly {x}}.")
+    cli::cli_abort("{.arg y} must be numeric, not {.obj_type_friendly {y}}.")
   }
 
   if (length(x) != length(y)) {

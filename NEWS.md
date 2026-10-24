@@ -10,6 +10,10 @@
 
 * `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` are now much faster. (#66)
 
+* `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now give an error when `x` is not a sparse integer or double vector, instead of failing with an object not found error. (#136)
+
+* `sparse_replace_na()` now works with sparse logical vectors. (#136)
+
 # sparsevctrs 0.3.6
 
 * Replaced deprecated `ATTRIB()` macro with `R_altrep_class_name()` and `R_altrep_class_package()` for R 4.6.0 compatibility.
