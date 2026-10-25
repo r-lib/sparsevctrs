@@ -1,6 +1,7 @@
 #include "sparsevctrs-core.h"
 
 #include "sparse-dummy.h"
+#include "sparse-utils.h"
 #include "altrep-sparse-integer.h"
 
 #include "decl/sparse-dummy-decl.h"
@@ -12,7 +13,7 @@ r_obj* ffi_sparse_dummy(
   r_obj* ffi_one_hot
 ) {
   const r_ssize n_lvls = r_length(ffi_lvls);
-  const r_ssize len = r_length(ffi_x);
+  const r_ssize len = sparse_ssize_as_int(r_length(ffi_x));
 
   const int* v_x = r_int_cbegin(ffi_x);
   const int* v_counts = r_int_cbegin(ffi_counts);
@@ -89,7 +90,7 @@ r_obj* ffi_sparse_dummy_na(
   r_obj* ffi_one_hot
 ) {
   const r_ssize n_lvls = r_length(ffi_lvls);
-  const r_ssize len = r_length(ffi_x);
+  const r_ssize len = sparse_ssize_as_int(r_length(ffi_x));
 
   const int* v_x = r_int_cbegin(ffi_x);
   const int* v_counts = r_int_cbegin(ffi_counts);

@@ -27,4 +27,6 @@ void sparse_verbose_materialize(void);
 
 void sparse_sort_pos_and_val(r_obj* pos, r_obj* val);
 
+int sparse_ssize_as_int(r_ssize x);
+
 #endif

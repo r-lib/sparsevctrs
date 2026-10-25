@@ -289,7 +289,7 @@ static int altrep_sparse_logical_Elt(r_obj* x, r_ssize i) {
 
   const int v_default_val = sparse_extract_default_logical(x);
 
-  if (i > len) {
+  if (i >= len) {
     // OOB of vector itself
     return r_globals.na_lgl;
   }

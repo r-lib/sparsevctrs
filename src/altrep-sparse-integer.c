@@ -311,7 +311,7 @@ static int altrep_sparse_integer_Elt(r_obj* x, r_ssize i) {
 
   const int v_default_val = sparse_extract_default_integer(x);
 
-  if (i > len) {
+  if (i >= len) {
     // OOB of vector itself
     return r_globals.na_int;
   }

@@ -655,6 +655,32 @@ test_that("vector multiplication works - non-zero defaults", {
   expect_true(is.double(res))
 })
 
+test_that("vector multiplication works - no stored values", {
+  empty_int <- sparse_integer(integer(), integer(), 5)
+  sparse_int <- sparse_integer(c(2L, NA), c(1, 3), 5)
+
+  expect_identical(
+    sparse_multiplication(empty_int, sparse_int)[],
+    empty_int[] * sparse_int[]
+  )
+  expect_identical(
+    sparse_multiplication(sparse_int, empty_int)[],
+    sparse_int[] * empty_int[]
+  )
+
+  empty_dbl <- sparse_double(double(), integer(), 5)
+  sparse_dbl <- sparse_double(c(2, NA), c(1, 3), 5)
+
+  expect_identical(
+    sparse_multiplication(empty_dbl, sparse_dbl)[],
+    empty_dbl[] * sparse_dbl[]
+  )
+  expect_identical(
+    sparse_multiplication(sparse_dbl, empty_dbl)[],
+    sparse_dbl[] * empty_dbl[]
+  )
+})
+
 test_that("vector multiplication errors for non-numeric input", {
   expect_snapshot(error = TRUE, sparse_multiplication("a", 1))
   expect_snapshot(error = TRUE, sparse_multiplication(1, "a"))

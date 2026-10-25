@@ -182,6 +182,16 @@ test_that("single subsetting works with sparse_logical()", {
   expect_identical(x_sparse[2.6], x_dense[2.6])
 })
 
+test_that("subsetting one past the end works with sparse_logical()", {
+  x_sparse <- sparse_logical(FALSE, 3, 3, default = TRUE)
+  x_dense <- c(TRUE, TRUE, FALSE)
+
+  expect_identical(x_sparse[4], x_dense[4])
+  expect_identical(x_sparse[3:4], x_dense[3:4])
+  expect_error(x_sparse[[4]], "subscript out of bounds")
+  expect_error(x_dense[[4]], "subscript out of bounds")
+})
+
 test_that("multiple subsetting works with sparse_logical()", {
   x_sparse <- sparse_logical(
     value = c(TRUE, NA, TRUE),

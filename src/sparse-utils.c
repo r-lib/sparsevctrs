@@ -249,3 +249,11 @@ void sparse_sort_pos_and_val(r_obj* pos, r_obj* val) {
   }
   FREE(3);
 }
+
+int sparse_ssize_as_int(r_ssize x) {
+  if (x > INT_MAX) {
+    Rf_error("Can't convert a length of %td to an integer.", (ptrdiff_t) x);
+  }
+
+  return (int) x;
+}

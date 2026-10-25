@@ -193,6 +193,16 @@ test_that("single subsetting works with sparse_integer()", {
   expect_identical(x_sparse[2.6], x_dense[2.6])
 })
 
+test_that("subsetting one past the end works with sparse_integer()", {
+  x_sparse <- sparse_integer(1L, 3, 3, default = 7L)
+  x_dense <- c(7L, 7L, 1L)
+
+  expect_identical(x_sparse[4], x_dense[4])
+  expect_identical(x_sparse[3:4], x_dense[3:4])
+  expect_error(x_sparse[[4]], "subscript out of bounds")
+  expect_error(x_dense[[4]], "subscript out of bounds")
+})
+
 test_that("multiple subsetting works with sparse_integer()", {
   x_sparse <- sparse_integer(value = c(10, NA, 20), position = c(1, 5, 8), 10)
   x_dense <- c(10L, 0L, 0L, 0L, NA, 0L, 0L, 20L, 0L, 0L)
