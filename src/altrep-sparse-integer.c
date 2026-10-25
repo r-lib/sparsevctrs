@@ -2,6 +2,7 @@
 
 #include "sparse-utils.h"
 #include "altrep-sparse-integer.h"
+#include "altrep-sparse-common.h"
 
 #include "decl/altrep-sparse-integer-decl.h"
 
@@ -83,17 +84,7 @@ r_obj* new_altrep_sparse_integer(r_obj* data1) {
 }
 
 r_obj* new_sparse_integer(r_obj* val, r_obj* pos, r_obj* len, r_obj* def) {
-  r_obj* list = KEEP(r_alloc_list(4));
-
-  r_list_poke(list, 0, val);
-  r_list_poke(list, 1, pos);
-  r_list_poke(list, 2, len);
-  r_list_poke(list, 3, def);
-
-  r_obj* out = new_altrep_sparse_integer(list);
-
-  FREE(1);
-  return out;
+  return sparse_new(val, pos, len, def, new_altrep_sparse_integer);
 }
 
 static r_obj* altrep_sparse_integer_Materialize(r_obj* x) {
@@ -143,13 +134,7 @@ static void* altrep_sparse_integer_Dataptr(r_obj* x, Rboolean writeable) {
 }
 
 static const void* altrep_sparse_integer_Dataptr_or_null(r_obj* x) {
-  r_obj* out = R_altrep_data2(x);
-
-  if (out == r_null) {
-    return NULL;
-  } else {
-    return DATAPTR_RW(out);
-  }
+  return sparse_dataptr_or_null(x);
 }
 
 static r_obj* altrep_sparse_integer_Extract_subset(
@@ -161,69 +146,22 @@ static r_obj* altrep_sparse_integer_Extract_subset(
     return NULL;
   }
 
-  const r_ssize len = sparse_extract_len(x);
-
   r_obj* val = sparse_extract_val(x);
   const int* v_val = r_int_cbegin(val);
 
-  r_obj* pos = sparse_extract_pos(x);
-  const int* v_pos = r_int_cbegin(pos);
-  const r_ssize n_pos = r_length(pos);
-
-  const int* v_indx = r_int_cbegin(indx);
+  const r_ssize n_pos = r_length(sparse_extract_pos(x));
 
   const r_ssize size = r_length(indx);
 
   r_ssize n_hits = 0;
-  r_obj* matches = KEEP(r_alloc_integer(size));
-  int* v_matches = r_int_begin(matches);
+  r_obj* matches = KEEP(sparse_subset_matches(x, indx, &n_hits));
+  const int* v_matches = r_int_cbegin(matches);
 
-  for (r_ssize i = 0; i < size; ++i) {
-    // 1 indexed!
-    const int index = v_indx[i];
-
-    if (index == r_globals.na_int) {
-      v_matches[i] = r_globals.na_int;
-      ++n_hits;
-      continue;
-    }
-
-    if (index > len) {
-      // (Uses `>` not `>=` because `index` is 1 indexed)
-      // OOB
-      v_matches[i] = r_globals.na_int;
-      ++n_hits;
-      continue;
-    }
-
-    const r_ssize loc = sparse_binary_search(index, v_pos, n_pos);
-
-    if (loc == n_pos) {
-      // Not in `pos`, gets default value
-      v_matches[i] = (int) n_pos;
-      continue;
-    }
-
-    // Did find in `pos`
-    v_matches[i] = (int) loc;
-    ++n_hits;
-  }
-
-  r_obj* out = KEEP(r_alloc_list(4));
-
-  r_obj* out_val = r_alloc_integer(n_hits);
-  r_list_poke(out, 0, out_val);
+  r_obj* out_val = KEEP(r_alloc_integer(n_hits));
   int* v_out_val = r_int_begin(out_val);
 
-  r_obj* out_pos = r_alloc_integer(n_hits);
-  r_list_poke(out, 1, out_pos);
-  int* v_out_pos = r_int_begin(out_pos);
-
-  r_obj* out_length = r_int((int) size);
-  r_list_poke(out, 2, out_length);
-
-  r_obj* out_default = sparse_extract_default(x);
-  r_list_poke(out, 3, out_default);
+  r_obj* out = KEEP(sparse_subset_list(x, size, out_val));
+  int* v_out_pos = r_int_begin(r_list_get(out, 1));
 
   r_ssize i_out = 0;
 
@@ -250,7 +188,7 @@ static r_obj* altrep_sparse_integer_Extract_subset(
 
   r_obj* altrep = new_altrep_sparse_integer(out);
 
-  FREE(2);
+  FREE(3);
   return altrep;
 }
 
@@ -271,24 +209,11 @@ static Rboolean altrep_sparse_integer_Inspect(
   int pvec,
   void (*inspect_subtree)(r_obj*, int, int, int)
 ) {
-  Rprintf(
-    "sparsevctrs_altrep_sparse_integer (materialized=%s, length=%i)\n",
-    R_altrep_data2(x) != r_null ? "T" : "F",
-    (int) sparse_extract_len(x)
-  );
-  return TRUE;
+  return sparse_inspect(x, "altrep_sparse_integer");
 }
 
 static r_obj* altrep_sparse_integer_Duplicate(r_obj* x, Rboolean deep) {
-  r_obj* data1 = R_altrep_data1(x);
-  r_obj* data2 = R_altrep_data2(x);
-
-  /* If deep or already materialized, do the default behavior */
-  if (deep || data2 != r_null) {
-    return NULL;
-  }
-
-  return new_altrep_sparse_integer(data1);
+  return sparse_duplicate(x, deep, new_altrep_sparse_integer);
 }
 
 // -----------------------------------------------------------------------------
@@ -301,91 +226,26 @@ static int altrep_sparse_integer_Elt(r_obj* x, r_ssize i) {
     return r_int_get(data2, i);
   }
 
-  r_obj* val = sparse_extract_val(x);
+  const r_ssize loc = sparse_elt_loc(x, i);
 
-  r_obj* pos = sparse_extract_pos(x);
-  const int* v_pos = r_int_cbegin(pos);
-  const r_ssize size = r_length(pos);
-
-  const r_ssize len = sparse_extract_len(x);
-
-  const int v_default_val = sparse_extract_default_integer(x);
-
-  if (i >= len) {
+  if (loc < 0) {
     // OOB of vector itself
     return r_globals.na_int;
   }
 
-  // TODO: Add `r_xlen_t_to_int()`
-  const int needle = (int) i + 1;
-  const r_ssize loc = sparse_binary_search(needle, v_pos, size);
-
-  if (loc == size) {
+  if (loc == r_length(sparse_extract_pos(x))) {
     // Can't find it, must be the default value
-    return v_default_val;
+    return sparse_extract_default_integer(x);
   } else {
     // Look it up in `val`
-    return r_int_get(val, loc);
+    return r_int_get(sparse_extract_val(x), loc);
   }
 }
 
 static int altrep_sparse_integer_Is_sorted(r_obj* x) {
-  r_obj* pos = sparse_extract_pos(x);
-  const int* v_pos = r_int_cbegin(pos);
+  const int* v_val = r_int_cbegin(sparse_extract_val(x));
 
-  const r_ssize pos_len = r_length(pos);
-
-  r_obj* val = sparse_extract_val(x);
-  const int* v_val = r_int_cbegin(val);
-
-  const int v_default_val = sparse_extract_default_integer(x);
-
-  // zero length vector are by def sorted
-  if (pos_len == 0) {
-    return TRUE;
-  }
-
-  int current_value;
-
-  if (v_pos[0] == 1) {
-    current_value = v_val[0];
-  } else {
-    current_value = v_default_val;
-  }
-
-  for (r_ssize i = 0; i < pos_len; i++) {
-    if (v_val[i] == r_globals.na_int) {
-      return FALSE;
-    }
-
-    if (v_val[i] < current_value) {
-      return FALSE;
-    }
-
-    current_value = v_val[i];
-
-    if (i + 1 == pos_len) {
-      break;
-    }
-
-    // If there is a gap between values check against default
-    if ((v_pos[i + 1] - v_pos[i]) > 1) {
-      if (v_default_val < current_value) {
-        return FALSE;
-      }
-
-      current_value = v_default_val;
-    }
-  }
-
-  // Trailing default values after the last stored value
-  if (v_pos[pos_len - 1] < sparse_extract_len(x)) {
-    if (v_default_val < current_value) {
-      return FALSE;
-    }
-  }
-
-  return TRUE;
+  return sparse_int_is_sorted(x, v_val, sparse_extract_default_integer(x));
 }
 
 static r_obj* altrep_sparse_integer_Min_method(r_obj* x, Rboolean na_rm) {
@@ -459,17 +319,9 @@ static r_obj* altrep_sparse_integer_Max_method(r_obj* x, Rboolean na_rm) {
 }
 
 static int altrep_sparse_integer_No_NA_method(r_obj* x) {
-  r_obj* val = sparse_extract_val(x);
-  const int* v_val = r_int_cbegin(val);
-  const r_ssize val_len = r_length(val);
+  const int* v_val = r_int_cbegin(sparse_extract_val(x));
 
-  for (r_ssize i = 0; i < val_len; i++) {
-    if (v_val[i] == r_globals.na_int) {
-      return FALSE;
-    }
-  }
-
-  return TRUE;
+  return sparse_int_no_na(x, v_val);
 }
 
 static r_obj* altrep_sparse_integer_Sum_method(r_obj* x, Rboolean na_rm) {
