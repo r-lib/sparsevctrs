@@ -38,6 +38,10 @@
   instead of failing with an object not found error.
   ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
 
+- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
+  no longer fails when one of two sparse inputs has no stored values.
+  ([\#137](https://github.com/r-lib/sparsevctrs/issues/137))
+
 - [`sparse_replace_na()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_replace_na.md)
   now works with sparse logical vectors.
   ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
