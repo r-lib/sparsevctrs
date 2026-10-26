@@ -497,6 +497,19 @@ test_that("vector multiplication works - doubles", {
   )
 })
 
+test_that("vector multiplication works - stored NA with fractional dense value", {
+  sparse_dbl <- sparse_double(c(NA, 2), c(1, 3), 4)
+  dense_dbl <- c(0.5, 1, 3, 4)
+
+  res <- sparse_multiplication(sparse_dbl, dense_dbl)
+  expect_identical(sparse_positions(res), c(1L, 3L))
+  expect_identical(res[], sparse_dbl[] * dense_dbl)
+
+  res <- sparse_multiplication(dense_dbl, sparse_dbl)
+  expect_identical(sparse_positions(res), c(1L, 3L))
+  expect_identical(res[], sparse_dbl[] * dense_dbl)
+})
+
 test_that("vector multiplication works - types", {
   sparse_int <- sparse_integer(c(4, 78), c(1, 10), 10)
   dense_int <- sparse_int[]
