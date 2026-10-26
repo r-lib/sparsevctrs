@@ -3,6 +3,7 @@
 
 #include "sparse-utils.h"
 #include "altrep-sparse-string.h"
+#include "altrep-sparse-common.h"
 
 #include "decl/altrep-sparse-string-decl.h"
 
@@ -118,13 +119,7 @@ static void* altrep_sparse_string_Dataptr(r_obj* x, Rboolean writeable) {
 }
 
 static const void* altrep_sparse_string_Dataptr_or_null(r_obj* x) {
-  r_obj* out = R_altrep_data2(x);
-
-  if (out == r_null) {
-    return NULL;
-  } else {
-    return DATAPTR_RW(out);
-  }
+  return sparse_dataptr_or_null(x);
 }
 
 static r_obj* altrep_sparse_string_Extract_subset(
@@ -136,67 +131,20 @@ static r_obj* altrep_sparse_string_Extract_subset(
     return NULL;
   }
 
-  const r_ssize len = sparse_extract_len(x);
-
   r_obj* val = sparse_extract_val(x);
 
-  r_obj* pos = sparse_extract_pos(x);
-  const int* v_pos = r_int_cbegin(pos);
-  const r_ssize n_pos = r_length(pos);
-
-  const int* v_indx = r_int_cbegin(indx);
+  const r_ssize n_pos = r_length(sparse_extract_pos(x));
 
   const r_ssize size = r_length(indx);
 
   r_ssize n_hits = 0;
-  r_obj* matches = KEEP(r_alloc_integer(size));
-  int* v_matches = r_int_begin(matches);
+  r_obj* matches = KEEP(sparse_subset_matches(x, indx, &n_hits));
+  const int* v_matches = r_int_cbegin(matches);
 
-  for (r_ssize i = 0; i < size; ++i) {
-    // 1 indexed!
-    const int index = v_indx[i];
+  r_obj* out_val = KEEP(r_alloc_character(n_hits));
 
-    if (index == r_globals.na_int) {
-      v_matches[i] = r_globals.na_int;
-      ++n_hits;
-      continue;
-    }
-
-    if (index > len) {
-      // (Uses `>` not `>=` because `index` is 1 indexed)
-      // OOB
-      v_matches[i] = r_globals.na_int;
-      ++n_hits;
-      continue;
-    }
-
-    const r_ssize loc = sparse_binary_search(index, v_pos, n_pos);
-
-    if (loc == n_pos) {
-      // Not in `pos`, gets default value
-      v_matches[i] = (int) n_pos;
-      continue;
-    }
-
-    // Did find in `pos`
-    v_matches[i] = (int) loc;
-    ++n_hits;
-  }
-
-  r_obj* out = KEEP(r_alloc_list(4));
-
-  r_obj* out_val = r_alloc_character(n_hits);
-  r_list_poke(out, 0, out_val);
-
-  r_obj* out_pos = r_alloc_integer(n_hits);
-  r_list_poke(out, 1, out_pos);
-  int* v_out_pos = r_int_begin(out_pos);
-
-  r_obj* out_length = r_int((int) size);
-  r_list_poke(out, 2, out_length);
-
-  r_obj* out_default = sparse_extract_default(x);
-  r_list_poke(out, 3, out_default);
+  r_obj* out = KEEP(sparse_subset_list(x, size, out_val));
+  int* v_out_pos = r_int_begin(r_list_get(out, 1));
 
   r_ssize i_out = 0;
 
@@ -223,7 +171,7 @@ static r_obj* altrep_sparse_string_Extract_subset(
 
   r_obj* altrep = new_altrep_sparse_string(out);
 
-  FREE(2);
+  FREE(3);
   return altrep;
 }
 
@@ -244,24 +192,11 @@ static Rboolean altrep_sparse_string_Inspect(
   int pvec,
   void (*inspect_subtree)(r_obj*, int, int, int)
 ) {
-  Rprintf(
-    "sparsevctrs_altrep_sparse_string (materialized=%s, length=%i)\n",
-    R_altrep_data2(x) != r_null ? "T" : "F",
-    (int) sparse_extract_len(x)
-  );
-  return TRUE;
+  return sparse_inspect(x, "altrep_sparse_string");
 }
 
 static r_obj* altrep_sparse_string_Duplicate(r_obj* x, Rboolean deep) {
-  r_obj* data1 = R_altrep_data1(x);
-  r_obj* data2 = R_altrep_data2(x);
-
-  /* If deep or already materialized, do the default behavior */
-  if (deep || data2 != r_null) {
-    return NULL;
-  }
-
-  return new_altrep_sparse_string(data1);
+  return sparse_duplicate(x, deep, new_altrep_sparse_string);
 }
 
 // -----------------------------------------------------------------------------
@@ -276,26 +211,16 @@ static r_obj* altrep_sparse_string_Elt(r_obj* x, r_ssize i) {
 
   r_obj* val = sparse_extract_val(x);
 
-  r_obj* pos = sparse_extract_pos(x);
-  const int* v_pos = r_int_cbegin(pos);
-  const r_ssize size = r_length(pos);
+  const r_ssize loc = sparse_elt_loc(x, i);
 
-  const r_ssize len = sparse_extract_len(x);
-
-  r_obj* v_default_val = sparse_extract_default_string(x);
-
-  if (i >= len) {
+  if (loc < 0) {
     // OOB of vector itself
     return r_globals.na_str;
   }
 
-  // TODO: Add `r_xlen_t_to_int()`
-  const int needle = (int) i + 1;
-  const r_ssize loc = sparse_binary_search(needle, v_pos, size);
-
-  if (loc == size) {
+  if (loc == r_length(sparse_extract_pos(x))) {
     // Can't find it, must be the default value
-    return v_default_val;
+    return sparse_extract_default_string(x);
   } else {
     // Look it up in `val`
     return r_chr_get(val, loc);
