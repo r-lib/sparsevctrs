@@ -510,6 +510,44 @@ test_that("vector multiplication works - stored NA with fractional dense value",
   expect_identical(res[], sparse_dbl[] * dense_dbl)
 })
 
+test_that("vector multiplication works - output positions are sorted", {
+  x <- sparse_integer(c(1L, NA, 3L), c(2, 5, 7), 8)
+  y <- sparse_integer(c(NA, 2L, 4L), c(1, 2, 7), 8)
+  res <- sparse_multiplication(x, y)
+  expect_identical(sparse_positions(res), c(1L, 2L, 5L, 7L))
+  expect_identical(res[], x[] * y[])
+
+  x <- sparse_integer(c(3L, NA, 1L), c(2, 5, 7), 8)
+  y <- sparse_integer(c(NA, 2L, 4L), c(1, 2, 7), 8)
+  res <- sparse_multiplication(x, y)
+  expect_identical(res[], x[] * y[])
+
+  set.seed(1234)
+  n <- 500
+  pos_x <- sort(sample.int(n, 200))
+  pos_y <- sort(sample.int(n, 200))
+
+  val_x <- sample(c(NA, 1:5), 200, replace = TRUE)
+  val_y <- sample(c(NA, 1:5), 200, replace = TRUE)
+  x <- sparse_integer(val_x, pos_x, n)
+  y <- sparse_integer(val_y, pos_y, n)
+  res <- sparse_multiplication(x, y)
+  expect_false(is.unsorted(sparse_positions(res)))
+  expect_identical(res[], x[] * y[])
+  res <- sparse_multiplication(x, y[])
+  expect_false(is.unsorted(sparse_positions(res)))
+  expect_identical(res[], x[] * y[])
+
+  x <- sparse_double(as.double(val_x), pos_x, n)
+  y <- sparse_double(as.double(val_y), pos_y, n)
+  res <- sparse_multiplication(x, y)
+  expect_false(is.unsorted(sparse_positions(res)))
+  expect_identical(res[], x[] * y[])
+  res <- sparse_multiplication(x, y[])
+  expect_false(is.unsorted(sparse_positions(res)))
+  expect_identical(res[], x[] * y[])
+})
+
 test_that("vector multiplication works - types", {
   sparse_int <- sparse_integer(c(4, 78), c(1, 10), 10)
   dense_int <- sparse_int[]

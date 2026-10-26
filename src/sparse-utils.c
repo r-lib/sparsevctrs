@@ -184,36 +184,31 @@ void sparse_sort_pos_and_val(r_obj* pos, r_obj* val) {
 
   int* v_pos = r_int_begin(pos);
 
+  if (pos_is_sorted(v_pos, len)) {
+    return;
+  }
+
   r_obj* index = KEEP(r_alloc_integer(len));
   int* v_index = r_int_begin(index);
-  r_obj* sorted_pos = KEEP(r_alloc_integer(len));
-  int* v_sorted_pos = r_int_begin(sorted_pos);
+  r_obj* buffer = KEEP(r_alloc_integer(len));
+  int* v_buffer = r_int_begin(buffer);
 
-  // Initialize pairs array
   for (r_ssize i = 0; i < len; i++) {
-    v_sorted_pos[i] = v_pos[i];
     v_index[i] = i;
   }
 
-  // Sort pairs based on values
-  for (r_ssize i = 0; i < len - 1; i++) {
-    for (r_ssize j = 0; j < len - i - 1; j++) {
-      if (v_sorted_pos[j] > v_sorted_pos[j + 1]) {
-        // Swap pairs
-        const int temp_pos = v_sorted_pos[j];
-        const int temp_index = v_index[j];
+  const int* v_order = merge_sort_index(v_pos, v_index, v_buffer, len);
 
-        v_sorted_pos[j] = v_sorted_pos[j + 1];
-        v_sorted_pos[j + 1] = temp_pos;
-
-        v_index[j] = v_index[j + 1];
-        v_index[j + 1] = temp_index;
-      }
-    }
+  for (r_ssize i = 0; i < len; i++) {
+    v_index[i] = v_order[i];
   }
 
   for (r_ssize i = 0; i < len; i++) {
-    v_pos[i] = v_sorted_pos[i];
+    v_buffer[i] = v_pos[v_index[i]];
+  }
+
+  for (r_ssize i = 0; i < len; i++) {
+    v_pos[i] = v_buffer[i];
   }
 
   if (r_typeof(val) == R_TYPE_integer) {
@@ -248,6 +243,56 @@ void sparse_sort_pos_and_val(r_obj* pos, r_obj* val) {
     }
   }
   FREE(3);
+}
+
+static bool pos_is_sorted(const int* v_pos, r_ssize len) {
+  for (r_ssize i = 1; i < len; i++) {
+    if (v_pos[i - 1] > v_pos[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+static const int* merge_sort_index(
+  const int* v_pos,
+  int* v_a,
+  int* v_b,
+  r_ssize len
+) {
+  const int* v_src = v_a;
+  int* v_dst = v_b;
+
+  for (r_ssize width = 1; width < len; width *= 2) {
+    for (r_ssize lo = 0; lo < len; lo += 2 * width) {
+      const r_ssize mid = lo + width < len ? lo + width : len;
+      const r_ssize hi = lo + 2 * width < len ? lo + 2 * width : len;
+
+      r_ssize i = lo;
+      r_ssize j = mid;
+      r_ssize k = lo;
+
+      while (i < mid && j < hi) {
+        if (v_pos[v_src[j]] < v_pos[v_src[i]]) {
+          v_dst[k++] = v_src[j++];
+        } else {
+          v_dst[k++] = v_src[i++];
+        }
+      }
+      while (i < mid) {
+        v_dst[k++] = v_src[i++];
+      }
+      while (j < hi) {
+        v_dst[k++] = v_src[j++];
+      }
+    }
+
+    const int* v_done = v_dst;
+    v_dst = v_dst == v_a ? v_b : v_a;
+    v_src = v_done;
+  }
+
+  return v_src;
 }
 
 int sparse_ssize_as_int(r_ssize x) {
