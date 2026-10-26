@@ -53,7 +53,7 @@ sparse_division_scalar <- function(x, val) {
     values = sparse_values(x) / val,
     positions = sparse_positions(x),
     length = length(x),
-    default = sparse_default(x)
+    default = sparse_default(x) / val
   )
 
   res
@@ -80,14 +80,14 @@ sparse_multiplication_scalar <- function(x, val) {
         values = integer(),
         positions = integer(),
         length = length(x),
-        default = sparse_default(x)
+        default = sparse_default(x) * val
       )
     } else {
       res <- sparse_integer(
         values = sparse_values(x) * val,
         positions = sparse_positions(x),
         length = length(x),
-        default = sparse_default(x)
+        default = sparse_default(x) * val
       )
     }
   } else if (is_sparse_double(x)) {
@@ -96,14 +96,14 @@ sparse_multiplication_scalar <- function(x, val) {
         values = double(),
         positions = integer(),
         length = length(x),
-        default = sparse_default(x)
+        default = sparse_default(x) * val
       )
     } else {
       res <- sparse_double(
         values = sparse_values(x) * val,
         positions = sparse_positions(x),
         length = length(x),
-        default = sparse_default(x)
+        default = sparse_default(x) * val
       )
     }
   } else {
