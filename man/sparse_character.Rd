@@ -7,13 +7,13 @@
 sparse_character(values, positions, length, default = "")
 }
 \arguments{
-\item{values}{integer vector, values of non-zero entries.}
+\item{values}{character vector, values of non-default entries.}
 
-\item{positions}{integer vector, indices of non-zero entries.}
+\item{positions}{integer vector, indices of non-default entries.}
 
 \item{length}{integer value, Length of vector.}
 
-\item{default}{integer value, value at indices not specified by \code{positions}.
+\item{default}{character value, value at indices not specified by \code{positions}.
 Defaults to \code{""}. Cannot be \code{NA}.}
 }
 \value{

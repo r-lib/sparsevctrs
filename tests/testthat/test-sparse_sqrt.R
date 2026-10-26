@@ -34,3 +34,13 @@ test_that("sparse_sqrt() works", {
   expect_true(is_sparse_double(sparse_sqrt(x)))
   expect_equal(sqrt(x), sparse_sqrt(x))
 })
+
+test_that("sparse_sqrt() errors for negative values", {
+  x <- sparse_double(c(-4, 9), c(2, 5), 10)
+
+  expect_snapshot(error = TRUE, sparse_sqrt(x))
+
+  x <- sparse_double(c(4, 9), c(2, 5), 10, default = -1)
+
+  expect_snapshot(error = TRUE, sparse_sqrt(x))
+})

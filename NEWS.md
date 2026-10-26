@@ -12,6 +12,8 @@
 
 * `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now give an error when `x` is not a sparse integer or double vector, instead of failing with an object not found error. (#136)
 
+* `sparse_division_scalar()` and `sparse_multiplication_scalar()` now also scale the default value of the sparse vector, so they give the right result when the default is not zero. (#141)
+
 * `sparse_multiplication()` no longer fails when one of two sparse inputs has no stored values. (#137)
 
 * `sparse_multiplication()` no longer returns duplicated positions when a sparse double vector with a stored `NA` is multiplied by a dense double vector with a fractional value at the same position. (#139)

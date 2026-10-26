@@ -255,6 +255,25 @@ test_that("scalar subtraction works", {
   )
 })
 
+test_that("scalar arithmetic works with non-zero defaults", {
+  vec_int <- sparse_integer(c(4L, 78L), c(1, 10), 10, default = 3L)
+  vec_dbl <- sparse_double(c(4, 78), c(1, 10), 10, default = 3)
+  empty_dbl <- sparse_double(numeric(), integer(), 5, default = 3)
+
+  expect_identical(sparse_multiplication_scalar(vec_int, 2), vec_int[] * 2L)
+  expect_identical(sparse_multiplication_scalar(vec_int, 0), vec_int[] * 0L)
+  expect_identical(sparse_multiplication_scalar(vec_dbl, 2), vec_dbl[] * 2)
+  expect_identical(sparse_multiplication_scalar(vec_dbl, 0), vec_dbl[] * 0)
+  expect_identical(sparse_multiplication_scalar(empty_dbl, 2), empty_dbl[] * 2)
+
+  expect_identical(sparse_division_scalar(vec_int, 2), vec_int[] / 2)
+  expect_identical(sparse_division_scalar(vec_dbl, 2), vec_dbl[] / 2)
+  expect_identical(sparse_division_scalar(empty_dbl, 2), empty_dbl[] / 2)
+
+  expect_identical(sparse_addition_scalar(empty_dbl, 2), empty_dbl[] + 2)
+  expect_identical(sparse_subtraction_scalar(empty_dbl, 2), empty_dbl[] - 2)
+})
+
 test_that("scalar arithmetic errors for non-numeric sparse vectors", {
   vec_lgl <- sparse_logical(TRUE, 1, 3)
   vec_chr <- sparse_character("a", 1, 3)

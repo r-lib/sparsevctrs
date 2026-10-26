@@ -12,7 +12,7 @@
 #' vector produced won't be sparse.
 #'
 #' A missing value at the `i`th element will produce missing values for all
-#' dummy variables at thr `i`th position.
+#' dummy variables at the `i`th position.
 #'
 #' @return A list of sparse integer dummy variables.
 #'

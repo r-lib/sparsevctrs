@@ -3,8 +3,8 @@
 #' @param x A sparse vector.
 #' @param n Positive integer of length 1, giving the number of positions to lag
 #'     by.
-#' @param default The value used to pad `x`` back to its original size after
-#'   the lag has been applied. The default, `NULL``, pads with a missing value.
+#' @param default The value used to pad `x` back to its original size after
+#'   the lag has been applied. The default, `NULL`, pads with a missing value.
 #'
 #' @details
 #' This function, as with any of the other helper functions assumes that the

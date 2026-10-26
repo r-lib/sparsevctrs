@@ -27,6 +27,7 @@
 #' sparse_addition_scalar(x_sparse, 2)
 #' sparse_subtraction_scalar(x_sparse, 2)
 #' @name sparse-arithmetic-scalar
+#' @aliases sparse-arithmatic-scalar
 NULL
 
 #' @rdname sparse-arithmetic-scalar
@@ -52,7 +53,7 @@ sparse_division_scalar <- function(x, val) {
     values = sparse_values(x) / val,
     positions = sparse_positions(x),
     length = length(x),
-    default = sparse_default(x)
+    default = sparse_default(x) / val
   )
 
   res
@@ -79,14 +80,14 @@ sparse_multiplication_scalar <- function(x, val) {
         values = integer(),
         positions = integer(),
         length = length(x),
-        default = sparse_default(x)
+        default = sparse_default(x) * val
       )
     } else {
       res <- sparse_integer(
         values = sparse_values(x) * val,
         positions = sparse_positions(x),
         length = length(x),
-        default = sparse_default(x)
+        default = sparse_default(x) * val
       )
     }
   } else if (is_sparse_double(x)) {
@@ -95,14 +96,14 @@ sparse_multiplication_scalar <- function(x, val) {
         values = double(),
         positions = integer(),
         length = length(x),
-        default = sparse_default(x)
+        default = sparse_default(x) * val
       )
     } else {
       res <- sparse_double(
         values = sparse_values(x) * val,
         positions = sparse_positions(x),
         length = length(x),
-        default = sparse_default(x)
+        default = sparse_default(x) * val
       )
     }
   } else {
@@ -214,6 +215,7 @@ sparse_subtraction_scalar <- function(x, val) {
 #'
 #' sparse_multiplication(x_sparse, x_sparse)
 #' @name sparse-arithmetic
+#' @aliases sparse-arithmatic
 NULL
 
 #' @rdname sparse-arithmetic

@@ -2,6 +2,7 @@
 % Please edit documentation in R/arithmetic.R
 \name{sparse-arithmetic-scalar}
 \alias{sparse-arithmetic-scalar}
+\alias{sparse-arithmatic-scalar}
 \alias{sparse_division_scalar}
 \alias{sparse_multiplication_scalar}
 \alias{sparse_addition_scalar}
