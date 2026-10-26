@@ -109,16 +109,14 @@ static r_obj* altrep_sparse_integer_Materialize(r_obj* x) {
   out = KEEP(r_alloc_integer(len));
   int* v_out = r_int_begin(out);
 
-  for (r_ssize i = 0; i < len; ++i) {
-    v_out[i] = v_default_val;
-  }
-
-  const r_ssize n_positions = r_length(pos);
-
-  for (r_ssize i = 0; i < n_positions; ++i) {
-    const int loc = v_pos[i] - 1;
-    v_out[loc] = v_val[i];
-  }
+  sparse_int_materialize(
+    v_out,
+    len,
+    v_default_val,
+    v_val,
+    v_pos,
+    r_length(pos)
+  );
 
   R_set_altrep_data2(x, out);
 
@@ -163,28 +161,15 @@ static r_obj* altrep_sparse_integer_Extract_subset(
   r_obj* out = KEEP(sparse_subset_list(x, size, out_val));
   int* v_out_pos = r_int_begin(r_list_get(out, 1));
 
-  r_ssize i_out = 0;
-
-  for (r_ssize i = 0; i < size; ++i) {
-    const int match = v_matches[i];
-
-    if (match == (int) n_pos) {
-      // Default value case
-      continue;
-    }
-
-    if (match == r_globals.na_int) {
-      v_out_val[i_out] = r_globals.na_int;
-      v_out_pos[i_out] = (int) i + 1;
-      ++i_out;
-      continue;
-    }
-
-    // Otherwise we have a hit from `pos`
-    v_out_val[i_out] = v_val[match];
-    v_out_pos[i_out] = (int) i + 1;
-    ++i_out;
-  }
+  sparse_int_subset(
+    v_val,
+    v_matches,
+    size,
+    n_pos,
+    r_globals.na_int,
+    v_out_val,
+    v_out_pos
+  );
 
   r_obj* altrep = new_altrep_sparse_integer(out);
 
@@ -249,48 +234,30 @@ static int altrep_sparse_integer_Is_sorted(r_obj* x) {
 }
 
 static r_obj* altrep_sparse_integer_Min_method(r_obj* x, Rboolean na_rm) {
-  int min = INT_MAX;
-
   if (sparse_extract_len(x) == 0) {
     Rf_warning("no non-missing arguments to min; returning Inf");
     return r_dbl(R_PosInf);
   }
 
-  r_obj* val = sparse_extract_val(x);
-  const int* v_val = r_int_cbegin(val);
-  const r_ssize val_len = r_length(val);
-
-  const int v_default_val = sparse_extract_default_integer(x);
-
-  // The default only appears if some positions are not explicitly stored
-  if (val_len < sparse_extract_len(x) && v_default_val < min) {
-    min = v_default_val;
-  }
-
-  for (r_ssize i = 0; i < val_len; i++) {
-    if (v_val[i] == r_globals.na_int) {
-      if (na_rm) {
-        continue;
-      } else {
-        return r_int(r_globals.na_int);
-      }
-    }
-
-    if (v_val[i] < min) {
-      min = v_val[i];
-    }
-  }
-  return r_int(min);
+  return altrep_sparse_integer_extreme(x, na_rm, false);
 }
 
 static r_obj* altrep_sparse_integer_Max_method(r_obj* x, Rboolean na_rm) {
-  int max = INT_MIN;
-
   if (sparse_extract_len(x) == 0) {
     Rf_warning("no non-missing arguments to max; returning -Inf");
     return r_dbl(R_NegInf);
   }
 
+  return altrep_sparse_integer_extreme(x, na_rm, true);
+}
+
+static r_obj* altrep_sparse_integer_extreme(
+  r_obj* x,
+  Rboolean na_rm,
+  bool is_max
+) {
+  int out = is_max ? INT_MIN : INT_MAX;
+
   r_obj* val = sparse_extract_val(x);
   const int* v_val = r_int_cbegin(val);
   const r_ssize val_len = r_length(val);
@@ -298,8 +265,11 @@ static r_obj* altrep_sparse_integer_Max_method(r_obj* x, Rboolean na_rm) {
   const int v_default_val = sparse_extract_default_integer(x);
 
   // The default only appears if some positions are not explicitly stored
-  if (val_len < sparse_extract_len(x) && v_default_val > max) {
-    max = v_default_val;
+  if (
+    val_len < sparse_extract_len(x) &&
+    (is_max ? v_default_val > out : v_default_val < out)
+  ) {
+    out = v_default_val;
   }
 
   for (r_ssize i = 0; i < val_len; i++) {
@@ -311,11 +281,11 @@ static r_obj* altrep_sparse_integer_Max_method(r_obj* x, Rboolean na_rm) {
       }
     }
 
-    if (v_val[i] > max) {
-      max = v_val[i];
+    if (is_max ? v_val[i] > out : v_val[i] < out) {
+      out = v_val[i];
     }
   }
-  return r_int(max);
+  return r_int(out);
 }
 
 static int altrep_sparse_integer_No_NA_method(r_obj* x) {

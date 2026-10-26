@@ -109,16 +109,14 @@ static r_obj* altrep_sparse_double_Materialize(r_obj* x) {
   out = KEEP(r_alloc_double(len));
   double* v_out = r_dbl_begin(out);
 
-  for (r_ssize i = 0; i < len; ++i) {
-    v_out[i] = v_default_val;
-  }
-
-  const r_ssize n_positions = r_length(pos);
-
-  for (r_ssize i = 0; i < n_positions; ++i) {
-    const int loc = v_pos[i] - 1;
-    v_out[loc] = v_val[i];
-  }
+  sparse_dbl_materialize(
+    v_out,
+    len,
+    v_default_val,
+    v_val,
+    v_pos,
+    r_length(pos)
+  );
 
   R_set_altrep_data2(x, out);
 
@@ -163,28 +161,7 @@ static r_obj* altrep_sparse_double_Extract_subset(
   r_obj* out = KEEP(sparse_subset_list(x, size, out_val));
   int* v_out_pos = r_int_begin(r_list_get(out, 1));
 
-  r_ssize i_out = 0;
-
-  for (r_ssize i = 0; i < size; ++i) {
-    const int match = v_matches[i];
-
-    if (match == (int) n_pos) {
-      // Default value case
-      continue;
-    }
-
-    if (match == r_globals.na_int) {
-      v_out_val[i_out] = r_globals.na_dbl;
-      v_out_pos[i_out] = (int) i + 1;
-      ++i_out;
-      continue;
-    }
-
-    // Otherwise we have a hit from `pos`
-    v_out_val[i_out] = v_val[match];
-    v_out_pos[i_out] = (int) i + 1;
-    ++i_out;
-  }
+  sparse_dbl_subset(v_val, v_matches, size, n_pos, v_out_val, v_out_pos);
 
   r_obj* altrep = new_altrep_sparse_double(out);
 
@@ -302,43 +279,29 @@ static int altrep_sparse_double_Is_sorted(r_obj* x) {
 }
 
 static r_obj* altrep_sparse_double_Min_method(r_obj* x, Rboolean na_rm) {
-  double min = R_PosInf;
-
   if (sparse_extract_len(x) == 0) {
     Rf_warning("no non-missing arguments to min; returning Inf");
-    return r_dbl(min);
+    return r_dbl(R_PosInf);
   }
 
-  r_obj* val = sparse_extract_val(x);
-  const double* v_val = r_dbl_cbegin(val);
-  const r_ssize val_len = r_length(val);
-
-  const double v_default_val = sparse_extract_default_double(x);
-
-  // The default only appears if some positions are not explicitly stored
-  if (val_len < sparse_extract_len(x) && v_default_val < min) {
-    min = v_default_val;
-  }
-
-  for (r_ssize i = 0; i < val_len; i++) {
-    if (R_IsNA(v_val[i]) && !na_rm) {
-      return r_dbl(r_globals.na_dbl);
-    }
-
-    if (v_val[i] < min) {
-      min = v_val[i];
-    }
-  }
-  return r_dbl(min);
+  return altrep_sparse_double_extreme(x, na_rm, false);
 }
 
 static r_obj* altrep_sparse_double_Max_method(r_obj* x, Rboolean na_rm) {
-  double max = R_NegInf;
-
   if (sparse_extract_len(x) == 0) {
     Rf_warning("no non-missing arguments to max; returning -Inf");
-    return r_dbl(max);
+    return r_dbl(R_NegInf);
   }
+
+  return altrep_sparse_double_extreme(x, na_rm, true);
+}
+
+static r_obj* altrep_sparse_double_extreme(
+  r_obj* x,
+  Rboolean na_rm,
+  bool is_max
+) {
+  double out = is_max ? R_NegInf : R_PosInf;
 
   r_obj* val = sparse_extract_val(x);
   const double* v_val = r_dbl_cbegin(val);
@@ -347,8 +310,11 @@ static r_obj* altrep_sparse_double_Max_method(r_obj* x, Rboolean na_rm) {
   const double v_default_val = sparse_extract_default_double(x);
 
   // The default only appears if some positions are not explicitly stored
-  if (val_len < sparse_extract_len(x) && v_default_val > max) {
-    max = v_default_val;
+  if (
+    val_len < sparse_extract_len(x) &&
+    (is_max ? v_default_val > out : v_default_val < out)
+  ) {
+    out = v_default_val;
   }
 
   for (r_ssize i = 0; i < val_len; i++) {
@@ -356,11 +322,11 @@ static r_obj* altrep_sparse_double_Max_method(r_obj* x, Rboolean na_rm) {
       return r_dbl(r_globals.na_dbl);
     }
 
-    if (v_val[i] > max) {
-      max = v_val[i];
+    if (is_max ? v_val[i] > out : v_val[i] < out) {
+      out = v_val[i];
     }
   }
-  return r_dbl(max);
+  return r_dbl(out);
 }
 
 static int altrep_sparse_double_No_NA_method(r_obj* x) {
