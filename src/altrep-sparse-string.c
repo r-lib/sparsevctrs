@@ -92,17 +92,7 @@ static r_obj* altrep_sparse_string_Materialize(r_obj* x) {
 
   out = KEEP(r_alloc_character(len));
 
-  for (r_ssize i = 0; i < len; ++i) {
-    r_chr_poke(out, i, v_default_val);
-  }
-
-  const r_ssize n_positions = r_length(pos);
-
-  for (r_ssize i = 0; i < n_positions; ++i) {
-    const int loc = v_pos[i] - 1;
-
-    r_chr_poke(out, loc, r_chr_get(val, i));
-  }
+  sparse_chr_materialize(out, len, v_default_val, val, v_pos, r_length(pos));
 
   R_set_altrep_data2(x, out);
   // R_set_altrep_data1(x, R_NilValue);
@@ -146,28 +136,7 @@ static r_obj* altrep_sparse_string_Extract_subset(
   r_obj* out = KEEP(sparse_subset_list(x, size, out_val));
   int* v_out_pos = r_int_begin(r_list_get(out, 1));
 
-  r_ssize i_out = 0;
-
-  for (r_ssize i = 0; i < size; ++i) {
-    const int match = v_matches[i];
-
-    if (match == (int) n_pos) {
-      // Default value case
-      continue;
-    }
-
-    if (match == r_globals.na_int) {
-      r_chr_poke(out_val, i_out, r_globals.na_str);
-      v_out_pos[i_out] = (int) i + 1;
-      ++i_out;
-      continue;
-    }
-
-    // Otherwise we have a hit from `pos`
-    r_chr_poke(out_val, i_out, r_chr_get(val, match));
-    v_out_pos[i_out] = (int) i + 1;
-    ++i_out;
-  }
+  sparse_chr_subset(val, v_matches, size, n_pos, out_val, v_out_pos);
 
   r_obj* altrep = new_altrep_sparse_string(out);
 

@@ -29,3 +29,9 @@ static r_obj* altrep_sparse_double_Max_method(r_obj* x, Rboolean na_rm);
 static int altrep_sparse_double_No_NA_method(r_obj* x);
 
 static r_obj* altrep_sparse_double_Sum_method(r_obj* x, Rboolean na_rm);
+
+static r_obj* altrep_sparse_double_extreme(
+  r_obj* x,
+  Rboolean na_rm,
+  bool is_max
+);

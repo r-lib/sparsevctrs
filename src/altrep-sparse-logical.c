@@ -97,16 +97,14 @@ static r_obj* altrep_sparse_logical_Materialize(r_obj* x) {
   out = KEEP(r_alloc_logical(len));
   int* v_out = r_lgl_begin(out);
 
-  for (r_ssize i = 0; i < len; ++i) {
-    v_out[i] = v_default_val;
-  }
-
-  const r_ssize n_positions = r_length(pos);
-
-  for (r_ssize i = 0; i < n_positions; ++i) {
-    const int loc = v_pos[i] - 1;
-    v_out[loc] = v_val[i];
-  }
+  sparse_int_materialize(
+    v_out,
+    len,
+    v_default_val,
+    v_val,
+    v_pos,
+    r_length(pos)
+  );
 
   R_set_altrep_data2(x, out);
 
@@ -151,28 +149,15 @@ static r_obj* altrep_sparse_logical_Extract_subset(
   r_obj* out = KEEP(sparse_subset_list(x, size, out_val));
   int* v_out_pos = r_int_begin(r_list_get(out, 1));
 
-  r_ssize i_out = 0;
-
-  for (r_ssize i = 0; i < size; ++i) {
-    const int match = v_matches[i];
-
-    if (match == (int) n_pos) {
-      // Default value case
-      continue;
-    }
-
-    if (match == r_globals.na_int) {
-      v_out_val[i_out] = r_globals.na_lgl;
-      v_out_pos[i_out] = (int) i + 1;
-      ++i_out;
-      continue;
-    }
-
-    // Otherwise we have a hit from `pos`
-    v_out_val[i_out] = v_val[match];
-    v_out_pos[i_out] = (int) i + 1;
-    ++i_out;
-  }
+  sparse_int_subset(
+    v_val,
+    v_matches,
+    size,
+    n_pos,
+    r_globals.na_lgl,
+    v_out_val,
+    v_out_pos
+  );
 
   r_obj* altrep = new_altrep_sparse_logical(out);
 
