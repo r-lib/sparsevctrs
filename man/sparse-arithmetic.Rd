@@ -2,6 +2,7 @@
 % Please edit documentation in R/arithmetic.R
 \name{sparse-arithmetic}
 \alias{sparse-arithmetic}
+\alias{sparse-arithmatic}
 \alias{sparse_multiplication}
 \title{Vector arithmetic with sparse vectors}
 \usage{
@@ -16,7 +17,7 @@ sparse_multiplication(x, y)
 A sparse vector of same type.
 }
 \description{
-Do arithmetic operations on sparse vectors while trying to void destroying
+Do arithmetic operations on sparse vectors while trying to avoid destroying
 the sparsity.
 }
 \details{

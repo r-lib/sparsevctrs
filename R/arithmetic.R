@@ -27,6 +27,7 @@
 #' sparse_addition_scalar(x_sparse, 2)
 #' sparse_subtraction_scalar(x_sparse, 2)
 #' @name sparse-arithmetic-scalar
+#' @aliases sparse-arithmatic-scalar
 NULL
 
 #' @rdname sparse-arithmetic-scalar
@@ -214,6 +215,7 @@ sparse_subtraction_scalar <- function(x, val) {
 #'
 #' sparse_multiplication(x_sparse, x_sparse)
 #' @name sparse-arithmetic
+#' @aliases sparse-arithmatic
 NULL
 
 #' @rdname sparse-arithmetic

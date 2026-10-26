@@ -12,7 +12,8 @@ sparse_lag(x, n = 1L, default = NULL)
 \item{n}{Positive integer of length 1, giving the number of positions to lag
 by.}
 
-\item{default}{The value used to pad \verb{x`` back to its original size after the lag has been applied. The default, }NULL``, pads with a missing value.}
+\item{default}{The value used to pad \code{x} back to its original size after
+the lag has been applied. The default, \code{NULL}, pads with a missing value.}
 }
 \value{
 sparse vector.

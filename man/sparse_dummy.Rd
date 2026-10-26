@@ -26,7 +26,7 @@ If only a single level is present after \code{one_hot} takes effect. Then the
 vector produced won't be sparse.
 
 A missing value at the \code{i}th element will produce missing values for all
-dummy variables at thr \code{i}th position.
+dummy variables at the \code{i}th position.
 }
 \examples{
 x <- factor(c("a", "a", "b", "c", "d", "b"))

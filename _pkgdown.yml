@@ -12,6 +12,10 @@ template:
       <script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script>
       <script defer data-domain="sparsevctrs.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 
+redirects:
+  - ["reference/sparse-arithmatic.html", "reference/sparse-arithmetic.html"]
+  - ["reference/sparse-arithmatic-scalar.html", "reference/sparse-arithmetic-scalar.html"]
+
 reference:
 - title: Create Sparse Vectors
   contents:
@@ -20,7 +24,7 @@ reference:
   - sparse_character
   - sparse_logical
 
-- title: Convertion functions
+- title: Conversion functions
   contents:
   - coerce_to_sparse_data_frame
   - coerce_to_sparse_matrix
