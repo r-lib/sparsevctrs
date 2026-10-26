@@ -2,12 +2,12 @@
 % Please edit documentation in R/coerce.R
 \name{coerce_to_sparse_data_frame}
 \alias{coerce_to_sparse_data_frame}
-\title{Coerce sparse matrix to data frame with sparse columns}
+\title{Coerce sparse matrix or data frame to data frame with sparse columns}
 \usage{
 coerce_to_sparse_data_frame(x, call = rlang::caller_env(0))
 }
 \arguments{
-\item{x}{sparse matrix.}
+\item{x}{sparse matrix, or a data frame or tibble.}
 
 \item{call}{The execution environment of a currently
 running function, e.g. \code{caller_env()}. The function will be
@@ -18,10 +18,18 @@ mentioned in error messages as the source of the error. See the
 data.frame with sparse columns
 }
 \description{
-Turning a sparse matrix into a data frame
+Turning a sparse matrix or a data frame into a data frame with sparse
+columns.
 }
 \details{
-The only requirement from the sparse matrix is that it contains column names.
+The only requirement from a sparse matrix is that it contains column names.
+
+When \code{x} is a data frame, each column is turned into a sparse vector of the
+same type using \code{\link[=as_sparse_integer]{as_sparse_integer()}}, \code{\link[=as_sparse_double]{as_sparse_double()}},
+\code{\link[=as_sparse_logical]{as_sparse_logical()}} or \code{\link[=as_sparse_character]{as_sparse_character()}}, with the default value of
+each function. Columns that are already sparse are left as is. All columns
+must be integer, double, logical or character vectors. Column names and row
+names are kept, and the result is a plain data frame even if \code{x} is a tibble.
 }
 \examples{
 \dontshow{if (rlang::is_installed("Matrix")) withAutoprint(\{ # examplesIf}
@@ -35,6 +43,10 @@ res <- coerce_to_sparse_data_frame(sparse_mat)
 res
 
 # All columns are sparse
+vapply(res, is_sparse_vector, logical(1))
+
+# Data frames can be used as well
+res <- coerce_to_sparse_data_frame(as.data.frame(mat))
 vapply(res, is_sparse_vector, logical(1))
 \dontshow{\}) # examplesIf}
 }
