@@ -14,7 +14,7 @@
 
 * `sparse_multiplication()` no longer fails when one of two sparse inputs has no stored values. (#137)
 
-* `sparse_multiplication()` no longer returns duplicated positions when a sparse double vector with a stored `NA` is multiplied by a dense double vector with a fractional value at the same position.
+* `sparse_multiplication()` no longer returns duplicated positions when a sparse double vector with a stored `NA` is multiplied by a dense double vector with a fractional value at the same position. (#139)
 
 * `sparse_replace_na()` now works with sparse logical vectors. (#136)
 
