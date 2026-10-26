@@ -42,6 +42,18 @@
   no longer fails when one of two sparse inputs has no stored values.
   ([\#137](https://github.com/r-lib/sparsevctrs/issues/137))
 
+- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
+  no longer returns duplicated positions when a sparse double vector
+  with a stored `NA` is multiplied by a dense double vector with a
+  fractional value at the same position.
+  ([\#139](https://github.com/r-lib/sparsevctrs/issues/139))
+
+- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
+  is much faster when the result has many stored values, since sorting
+  them no longer takes quadratic time. With one million stored values on
+  each side it now takes milliseconds instead of minutes.
+  ([\#140](https://github.com/r-lib/sparsevctrs/issues/140))
+
 - [`sparse_replace_na()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_replace_na.md)
   now works with sparse logical vectors.
   ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
