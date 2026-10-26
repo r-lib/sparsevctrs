@@ -1,6 +1,6 @@
 # Vector arithmetic with sparse vectors
 
-Do arithmetic operations on sparse vectors while trying to void
+Do arithmetic operations on sparse vectors while trying to avoid
 destroying the sparsity.
 
 ## Usage

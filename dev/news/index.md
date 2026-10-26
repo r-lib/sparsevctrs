@@ -38,6 +38,13 @@
   instead of failing with an object not found error.
   ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
 
+- [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  and
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  now also scale the default value of the sparse vector, so they give
+  the right result when the default is not zero.
+  ([\#141](https://github.com/r-lib/sparsevctrs/issues/141))
+
 - [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
   no longer fails when one of two sparse inputs has no stored values.
   ([\#137](https://github.com/r-lib/sparsevctrs/issues/137))

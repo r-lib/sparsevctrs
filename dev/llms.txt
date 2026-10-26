@@ -145,7 +145,7 @@ and data frames.
 - [`sparse_logical()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_logical.md)
   : Create sparse logical vector
 
-## Convertion functions
+## Conversion functions
 
 - [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
   : Coerce sparse matrix to data frame with sparse columns

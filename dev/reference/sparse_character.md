@@ -13,11 +13,11 @@ sparse_character(values, positions, length, default = "")
 
 - values:
 
-  integer vector, values of non-zero entries.
+  character vector, values of non-default entries.
 
 - positions:
 
-  integer vector, indices of non-zero entries.
+  integer vector, indices of non-default entries.
 
 - length:
 
@@ -25,8 +25,8 @@ sparse_character(values, positions, length, default = "")
 
 - default:
 
-  integer value, value at indices not specified by `positions`. Defaults
-  to `""`. Cannot be `NA`.
+  character value, value at indices not specified by `positions`.
+  Defaults to `""`. Cannot be `NA`.
 
 ## Value
 

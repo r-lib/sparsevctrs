@@ -33,7 +33,7 @@ If only a single level is present after `one_hot` takes effect. Then the
 vector produced won't be sparse.
 
 A missing value at the `i`th element will produce missing values for all
-dummy variables at thr `i`th position.
+dummy variables at the `i`th position.
 
 ## Examples
 
