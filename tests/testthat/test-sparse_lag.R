@@ -301,3 +301,10 @@ test_that("sparse_lag() works with logical - non-zero default", {
     rep(TRUE, 10)
   )
 })
+
+test_that("sparse_lag() errors for n below 1", {
+  vec <- sparse_double(c(pi, 4), c(1, 5), 10)
+
+  expect_snapshot(error = TRUE, sparse_lag(vec, 0))
+  expect_snapshot(error = TRUE, sparse_lag(vec, -1))
+})

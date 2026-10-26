@@ -76,3 +76,18 @@ test_that("sparse_mean() works with wts argument", {
 
   expect_equal(weighted.mean(x, wts), sparse_mean(x, wts = wts))
 })
+
+test_that("sparse_mean() works with wts and NA values at specific positions", {
+  x <- sparse_double(c(1, NA, 3), c(2, 5, 9), 10)
+  wts <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+  expect_equal(weighted.mean(x, wts), sparse_mean(x, wts = wts))
+  expect_equal(
+    weighted.mean(x, wts, na.rm = TRUE),
+    sparse_mean(x, wts = wts, na_rm = TRUE)
+  )
+
+  wts[c(2, 7)] <- NA
+
+  expect_equal(weighted.mean(x, wts), sparse_mean(x, wts = wts))
+})
