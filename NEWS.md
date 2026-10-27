@@ -10,6 +10,8 @@
 
 * `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` are now much faster. (#66)
 
+* `coerce_to_sparse_data_frame()` now also takes data frames and tibbles, turning each integer, double, logical, or character column into a sparse vector of the same type. (#126)
+
 * `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now give an error when `x` is not a sparse integer or double vector, instead of failing with an object not found error. (#136)
 
 * `sparse_division_scalar()` and `sparse_multiplication_scalar()` now also scale the default value of the sparse vector, so they give the right result when the default is not zero. (#141)
