@@ -23,9 +23,14 @@ r_obj* ffi_sparse_dummy(
   // length equal to the number of occurances of that level.
   r_obj* out = KEEP(r_alloc_list(n_lvls));
 
+  r_obj* ptrs = KEEP(r_alloc_raw(n_lvls * sizeof(int*)));
+  int** v_ptrs = (int**) r_raw_begin(ptrs);
+
   for (r_ssize i = 0; i < n_lvls; ++i) {
     const r_ssize n_val = v_counts[i];
-    r_list_poke(out, i, r_alloc_integer(n_val));
+    r_obj* elt = r_alloc_integer(n_val);
+    r_list_poke(out, i, elt);
+    v_ptrs[i] = r_int_begin(elt);
   }
 
   // Vector of positions to keep track of how far into each position vector we
@@ -44,8 +49,7 @@ r_obj* ffi_sparse_dummy(
 
       const int index = v_pos_index[current_val];
 
-      r_obj* pos_vec = r_list_get(out, current_val);
-      int* v_pos_vec = r_int_begin(pos_vec);
+      int* v_pos_vec = v_ptrs[current_val];
 
       // we need the result to be 1-indexed
       v_pos_vec[index] = i + 1;
@@ -61,8 +65,7 @@ r_obj* ffi_sparse_dummy(
 
       const int index = v_pos_index[current_val];
 
-      r_obj* pos_vec = r_list_get(out, current_val);
-      int* v_pos_vec = r_int_begin(pos_vec);
+      int* v_pos_vec = v_ptrs[current_val];
 
       // we need the result to be 1-indexed
       v_pos_vec[index] = i + 1;
@@ -78,7 +81,7 @@ r_obj* ffi_sparse_dummy(
     r_list_poke(out, i, dummy);
   }
 
-  FREE(2);
+  FREE(3);
 
   return out;
 }
@@ -101,10 +104,20 @@ r_obj* ffi_sparse_dummy_na(
   r_obj* out_positions = KEEP(r_alloc_list(n_lvls));
   r_obj* out_values = KEEP(r_alloc_list(n_lvls));
 
+  r_obj* ptrs = KEEP(r_alloc_raw(2 * n_lvls * sizeof(int*)));
+  int** v_pos_ptrs = (int**) r_raw_begin(ptrs);
+  int** v_val_ptrs = v_pos_ptrs + n_lvls;
+
   for (r_ssize i = 0; i < n_lvls; ++i) {
     const r_ssize n_val = v_counts[i];
-    r_list_poke(out_values, i, r_alloc_integer(n_val));
-    r_list_poke(out_positions, i, r_alloc_integer(n_val));
+
+    r_obj* val_elt = r_alloc_integer(n_val);
+    r_list_poke(out_values, i, val_elt);
+    v_val_ptrs[i] = r_int_begin(val_elt);
+
+    r_obj* pos_elt = r_alloc_integer(n_val);
+    r_list_poke(out_positions, i, pos_elt);
+    v_pos_ptrs[i] = r_int_begin(pos_elt);
   }
 
   // Vector of positions to keep track of how far into each position vector we
@@ -126,10 +139,8 @@ r_obj* ffi_sparse_dummy_na(
         for (r_ssize j = 0; j < n_lvls; ++j) {
           const int index = v_pos_index[j];
 
-          r_obj* pos_vec = r_list_get(out_positions, j);
-          int* v_pos_vec = r_int_begin(pos_vec);
-          r_obj* val_vec = r_list_get(out_values, j);
-          int* v_val_vec = r_int_begin(val_vec);
+          int* v_pos_vec = v_pos_ptrs[j];
+          int* v_val_vec = v_val_ptrs[j];
 
           v_pos_vec[index] = i + 1;
           v_val_vec[index] = r_globals.na_int;
@@ -139,10 +150,8 @@ r_obj* ffi_sparse_dummy_na(
         --current_val;
         const int index = v_pos_index[current_val];
 
-        r_obj* pos_vec = r_list_get(out_positions, current_val);
-        int* v_pos_vec = r_int_begin(pos_vec);
-        r_obj* val_vec = r_list_get(out_values, current_val);
-        int* v_val_vec = r_int_begin(val_vec);
+        int* v_pos_vec = v_pos_ptrs[current_val];
+        int* v_val_vec = v_val_ptrs[current_val];
 
         // we need the result to be 1-indexed
         v_pos_vec[index] = i + 1;
@@ -158,10 +167,8 @@ r_obj* ffi_sparse_dummy_na(
         for (r_ssize j = 0; j < n_lvls; ++j) {
           const int index = v_pos_index[j];
 
-          r_obj* pos_vec = r_list_get(out_positions, j);
-          int* v_pos_vec = r_int_begin(pos_vec);
-          r_obj* val_vec = r_list_get(out_values, j);
-          int* v_val_vec = r_int_begin(val_vec);
+          int* v_pos_vec = v_pos_ptrs[j];
+          int* v_val_vec = v_val_ptrs[j];
 
           v_pos_vec[index] = i + 1;
           v_val_vec[index] = r_globals.na_int;
@@ -175,10 +182,8 @@ r_obj* ffi_sparse_dummy_na(
 
         const int index = v_pos_index[current_val];
 
-        r_obj* pos_vec = r_list_get(out_positions, current_val);
-        int* v_pos_vec = r_int_begin(pos_vec);
-        r_obj* val_vec = r_list_get(out_values, current_val);
-        int* v_val_vec = r_int_begin(val_vec);
+        int* v_pos_vec = v_pos_ptrs[current_val];
+        int* v_val_vec = v_val_ptrs[current_val];
 
         // we need the result to be 1-indexed
         v_pos_vec[index] = i + 1;
@@ -197,7 +202,7 @@ r_obj* ffi_sparse_dummy_na(
     r_list_poke(out_positions, i, dummy);
   }
 
-  FREE(3);
+  FREE(4);
 
   return out_positions;
 }
