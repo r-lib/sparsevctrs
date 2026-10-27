@@ -14,7 +14,7 @@
 ## Conversion functions
 
 - [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
-  : Coerce sparse matrix to data frame with sparse columns
+  : Coerce sparse matrix or data frame to data frame with sparse columns
 - [`coerce_to_sparse_matrix()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_matrix.md)
   : Coerce sparse data frame to sparse matrix
 - [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)

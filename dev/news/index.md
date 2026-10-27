@@ -30,6 +30,11 @@
   are now much faster.
   ([\#66](https://github.com/r-lib/sparsevctrs/issues/66))
 
+- [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
+  now also takes data frames and tibbles, turning each integer, double,
+  logical, or character column into a sparse vector of the same type.
+  ([\#126](https://github.com/r-lib/sparsevctrs/issues/126))
+
 - [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
   [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
   and

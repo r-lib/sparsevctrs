@@ -1,6 +1,7 @@
-# Coerce sparse matrix to data frame with sparse columns
+# Coerce sparse matrix or data frame to data frame with sparse columns
 
-Turning a sparse matrix into a data frame
+Turning a sparse matrix or a data frame into a data frame with sparse
+columns.
 
 ## Usage
 
@@ -12,7 +13,7 @@ coerce_to_sparse_data_frame(x, call = rlang::caller_env(0))
 
 - x:
 
-  sparse matrix.
+  sparse matrix, or a data frame or tibble.
 
 - call:
 
@@ -28,8 +29,20 @@ data.frame with sparse columns
 
 ## Details
 
-The only requirement from the sparse matrix is that it contains column
+The only requirement from a sparse matrix is that it contains column
 names.
+
+When `x` is a data frame, each column is turned into a sparse vector of
+the same type using
+[`as_sparse_integer()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce-vector.md),
+[`as_sparse_double()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce-vector.md),
+[`as_sparse_logical()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce-vector.md)
+or
+[`as_sparse_character()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce-vector.md),
+with the default value of each function. Columns that are already sparse
+are left as is. All columns must be integer, double, logical or
+character vectors. Column names and row names are kept, and the result
+is a plain data frame even if `x` is a tibble.
 
 ## See also
 
@@ -73,6 +86,12 @@ res
 #> 10 0 0 0 0 0 0 0 0 0 0
 
 # All columns are sparse
+vapply(res, is_sparse_vector, logical(1))
+#>    a    b    c    d    e    f    g    h    i    j 
+#> TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE 
+
+# Data frames can be used as well
+res <- coerce_to_sparse_data_frame(as.data.frame(mat))
 vapply(res, is_sparse_vector, logical(1))
 #>    a    b    c    d    e    f    g    h    i    j 
 #> TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE 
