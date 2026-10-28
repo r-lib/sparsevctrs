@@ -255,6 +255,21 @@ test_that("scalar subtraction works", {
   )
 })
 
+test_that("scalar multiplication by 0 keeps stored NA values", {
+  vec_int <- sparse_integer(c(4L, NA, 5L), c(1, 5, 10), 10)
+  vec_dbl <- sparse_double(c(4, NA, 5), c(1, 5, 10), 10)
+  vec_int_3 <- sparse_integer(c(NA, 5L), c(2, 5), 10, default = 3L)
+  vec_dbl_3 <- sparse_double(c(NA, 5), c(2, 5), 10, default = 3)
+
+  expect_identical(sparse_multiplication_scalar(vec_int, 0), vec_int[] * 0L)
+  expect_identical(sparse_multiplication_scalar(vec_dbl, 0), vec_dbl[] * 0)
+  expect_identical(sparse_multiplication_scalar(vec_int_3, 0), vec_int_3[] * 0L)
+  expect_identical(sparse_multiplication_scalar(vec_dbl_3, 0), vec_dbl_3[] * 0)
+
+  expect_true(is_sparse_integer(sparse_multiplication_scalar(vec_int, 0)))
+  expect_true(is_sparse_double(sparse_multiplication_scalar(vec_dbl, 0)))
+})
+
 test_that("scalar arithmetic works with non-zero defaults", {
   vec_int <- sparse_integer(c(4L, 78L), c(1, 10), 10, default = 3L)
   vec_dbl <- sparse_double(c(4, 78), c(1, 10), 10, default = 3)
