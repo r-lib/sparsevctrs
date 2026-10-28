@@ -6,76 +6,127 @@
 
 #include "decl/sparse-dummy-decl.h"
 
-r_obj* ffi_sparse_dummy(
-  r_obj* ffi_x,
-  r_obj* ffi_lvls,
-  r_obj* ffi_counts,
-  r_obj* ffi_one_hot
-) {
+r_obj* ffi_sparse_dummy(r_obj* ffi_x, r_obj* ffi_lvls, r_obj* ffi_one_hot) {
   const r_ssize n_lvls = r_length(ffi_lvls);
   const r_ssize len = sparse_ssize_as_int(r_length(ffi_x));
 
   const int* v_x = r_int_cbegin(ffi_x);
-  const int* v_counts = r_int_cbegin(ffi_counts);
-  const bool one_hot = r_lgl_get(ffi_one_hot, 0) == 1;
+  const unsigned int shift = r_lgl_get(ffi_one_hot, 0) == 1 ? 1 : 2;
 
+  r_obj* counts = KEEP(r_alloc_integer(n_lvls + 2));
+  int* v_counts = r_int_begin(counts);
+
+  sparse_dummy_count(v_x, len, shift, n_lvls, v_counts);
+
+  const r_ssize n_na = v_counts[n_lvls];
+
+  r_obj* out_len = KEEP(r_int((int) len));
+  r_obj* out_default = KEEP(r_int(0));
+
+  r_obj* out;
+  if (n_na == 0) {
+    out = sparse_dummy_no_na(
+      v_x,
+      len,
+      shift,
+      n_lvls,
+      v_counts,
+      out_len,
+      out_default
+    );
+  } else {
+    out = sparse_dummy_na(
+      v_x,
+      len,
+      shift,
+      n_lvls,
+      v_counts,
+      n_na,
+      out_len,
+      out_default
+    );
+  }
+
+  FREE(3);
+
+  return out;
+}
+
+static void sparse_dummy_count(
+  const int* v_x,
+  r_ssize len,
+  unsigned int shift,
+  r_ssize n_lvls,
+  int* v_counts
+) {
+  for (r_ssize k = 0; k < n_lvls + 2; ++k) {
+    v_counts[k] = 0;
+  }
+
+  const unsigned int n_lvls_uint = (unsigned int) n_lvls;
+
+  for (r_ssize i = 0; i < len; ++i) {
+    const int code = v_x[i];
+    const unsigned int k = (unsigned int) code - shift;
+    const unsigned int other = n_lvls_uint + (code != r_globals.na_int);
+
+    ++v_counts[k < n_lvls_uint ? k : other];
+  }
+}
+
+static r_obj* sparse_dummy_no_na(
+  const int* v_x,
+  r_ssize len,
+  unsigned int shift,
+  r_ssize n_lvls,
+  const int* v_counts,
+  r_obj* out_len,
+  r_obj* out_default
+) {
   // Generate list of integer vectors. One vector for each level, with its
   // length equal to the number of occurances of that level.
   r_obj* out = KEEP(r_alloc_list(n_lvls));
+  r_obj* ptrs = KEEP(r_alloc_raw((n_lvls + 1) * sizeof(int*)));
+  int** v_ptrs = (int**) r_raw_begin(ptrs);
 
-  for (r_ssize i = 0; i < n_lvls; ++i) {
-    const r_ssize n_val = v_counts[i];
-    r_list_poke(out, i, r_alloc_integer(n_val));
+  for (r_ssize k = 0; k < n_lvls; ++k) {
+    r_obj* pos = r_alloc_integer(v_counts[k]);
+    r_list_poke(out, k, pos);
+    v_ptrs[k] = r_int_begin(pos);
   }
 
-  // Vector of positions to keep track of how far into each position vector we
-  // are. Initialize to 0 to indicate first position.
-  r_obj* pos_index = KEEP(r_alloc_integer(n_lvls));
-  int* v_pos_index = r_int_begin(pos_index);
-  for (r_ssize i = 0; i < n_lvls; ++i) {
-    v_pos_index[i] = 0;
-  }
+  int scratch;
+  v_ptrs[n_lvls] = &scratch;
 
-  // Itterate over input, find its position index, and place the position value
-  // at the index. Increment specific index.
-  if (one_hot) {
-    for (r_ssize i = 0; i < len; ++i) {
-      const int current_val = v_x[i] - 1;
+  const unsigned int n_lvls_uint = (unsigned int) n_lvls;
 
-      const int index = v_pos_index[current_val];
+  for (r_ssize i = 0; i < len; ++i) {
+    const unsigned int k = (unsigned int) v_x[i] - shift;
+    const unsigned int slot = k < n_lvls_uint ? k : n_lvls_uint;
 
-      r_obj* pos_vec = r_list_get(out, current_val);
-      int* v_pos_vec = r_int_begin(pos_vec);
+    int* v_pos = v_ptrs[slot];
 
-      // we need the result to be 1-indexed
-      v_pos_vec[index] = i + 1;
-      v_pos_index[current_val]++;
-    }
-  } else {
-    for (r_ssize i = 0; i < len; ++i) {
-      const int current_val = v_x[i] - 1;
-
-      if (current_val == -1) {
-        continue;
-      }
-
-      const int index = v_pos_index[current_val];
-
-      r_obj* pos_vec = r_list_get(out, current_val);
-      int* v_pos_vec = r_int_begin(pos_vec);
-
-      // we need the result to be 1-indexed
-      v_pos_vec[index] = i + 1;
-      v_pos_index[current_val]++;
-    }
+    // we need the result to be 1-indexed
+    *v_pos = i + 1;
+    v_ptrs[slot] = v_pos + (slot < n_lvls_uint);
   }
 
   // Turn list of integer vectors with positions, into list of sparse integer
   // vectors.
-  for (r_ssize i = 0; i < n_lvls; ++i) {
-    r_obj* positions = r_list_get(out, i);
-    r_obj* dummy = create_dummy(positions, len);
-    r_list_poke(out, i, dummy);
+  for (r_ssize k = 0; k < n_lvls; ++k) {
+    r_obj* pos = r_list_get(out, k);
+
+    const r_ssize n_val = v_counts[k];
+    r_obj* val = KEEP(r_alloc_integer(n_val));
+    int* v_val = r_int_begin(val);
+    for (r_ssize j = 0; j < n_val; ++j) {
+      v_val[j] = 1;
+    }
+
+    r_obj* dummy = create_dummy(val, pos, out_len, out_default);
+    FREE(1);
+
+    r_list_poke(out, k, dummy);
   }
 
   FREE(2);
@@ -83,173 +134,131 @@ r_obj* ffi_sparse_dummy(
   return out;
 }
 
-r_obj* ffi_sparse_dummy_na(
-  r_obj* ffi_x,
-  r_obj* ffi_lvls,
-  r_obj* ffi_counts,
-  r_obj* ffi_one_hot
+static r_obj* sparse_dummy_na(
+  const int* v_x,
+  r_ssize len,
+  unsigned int shift,
+  r_ssize n_lvls,
+  const int* v_counts,
+  r_ssize n_na,
+  r_obj* out_len,
+  r_obj* out_default
 ) {
-  const r_ssize n_lvls = r_length(ffi_lvls);
-  const r_ssize len = sparse_ssize_as_int(r_length(ffi_x));
-
-  const int* v_x = r_int_cbegin(ffi_x);
-  const int* v_counts = r_int_cbegin(ffi_counts);
-  const bool one_hot = r_lgl_get(ffi_one_hot, 0) == 1;
-
-  // Generate lists of integer vectors. One vector for each level, with its
-  // length equal to the number of occurances of that level.
-  r_obj* out_positions = KEEP(r_alloc_list(n_lvls));
-  r_obj* out_values = KEEP(r_alloc_list(n_lvls));
-
-  for (r_ssize i = 0; i < n_lvls; ++i) {
-    const r_ssize n_val = v_counts[i];
-    r_list_poke(out_values, i, r_alloc_integer(n_val));
-    r_list_poke(out_positions, i, r_alloc_integer(n_val));
+  r_ssize n_own = 0;
+  for (r_ssize k = 0; k < n_lvls; ++k) {
+    n_own += v_counts[k];
   }
 
-  // Vector of positions to keep track of how far into each position vector we
-  // are. Initialize to 0 to indicate first position.
-  r_obj* pos_index = KEEP(r_alloc_integer(n_lvls));
-  int* v_pos_index = r_int_begin(pos_index);
-  for (r_ssize i = 0; i < n_lvls; ++i) {
-    v_pos_index[i] = 0;
+  r_obj* na_pos = KEEP(r_alloc_integer(n_na + 1));
+  int* v_na_pos = r_int_begin(na_pos);
+
+  r_obj* own = KEEP(r_alloc_integer(2 * (n_own + 1)));
+  int* v_own = r_int_begin(own);
+
+  r_obj* cursors = KEEP(r_alloc_integer(n_lvls + 1));
+  int* v_cursors = r_int_begin(cursors);
+
+  int offset = 0;
+  for (r_ssize k = 0; k < n_lvls; ++k) {
+    v_cursors[k] = offset;
+    offset += v_counts[k];
+  }
+  v_cursors[n_lvls] = offset;
+
+  const unsigned int n_lvls_uint = (unsigned int) n_lvls;
+  int n_seen = 0;
+
+  for (r_ssize i = 0; i < len; ++i) {
+    const int code = v_x[i];
+    const unsigned int k = (unsigned int) code - shift;
+    const unsigned int slot = k < n_lvls_uint ? k : n_lvls_uint;
+
+    int* v_e = v_own + 2 * (r_ssize) v_cursors[slot];
+
+    // we need the result to be 1-indexed
+    v_e[0] = i + 1;
+    v_e[1] = n_seen;
+    v_cursors[slot] += (slot < n_lvls_uint);
+
+    v_na_pos[n_seen] = i + 1;
+    n_seen += (code == r_globals.na_int);
   }
 
-  // Itterate over input, find its position index, and place the position value
-  // at the index. Increment specific index.
+  r_obj* out = KEEP(r_alloc_list(n_lvls));
 
-  if (one_hot) {
-    for (r_ssize i = 0; i < len; ++i) {
-      int current_val = v_x[i];
+  r_ssize first = 0;
+  for (r_ssize k = 0; k < n_lvls; ++k) {
+    const r_ssize n_k = v_counts[k];
+    const r_ssize n_val = n_k + n_na;
 
-      if (current_val == r_globals.na_int) {
-        for (r_ssize j = 0; j < n_lvls; ++j) {
-          const int index = v_pos_index[j];
+    r_obj* val = KEEP(r_alloc_integer(n_val));
+    int* v_val = r_int_begin(val);
+    r_obj* pos = KEEP(r_alloc_integer(n_val));
+    int* v_pos = r_int_begin(pos);
 
-          r_obj* pos_vec = r_list_get(out_positions, j);
-          int* v_pos_vec = r_int_begin(pos_vec);
-          r_obj* val_vec = r_list_get(out_values, j);
-          int* v_val_vec = r_int_begin(val_vec);
+    r_ssize n_out = 0;
+    r_ssize n_used = 0;
 
-          v_pos_vec[index] = i + 1;
-          v_val_vec[index] = r_globals.na_int;
-          v_pos_index[j]++;
-        }
-      } else {
-        --current_val;
-        const int index = v_pos_index[current_val];
+    for (r_ssize j = first; j < first + n_k; ++j) {
+      const int* v_e = v_own + 2 * j;
+      const r_ssize n_before = v_e[1];
+      const r_ssize n_gap = n_before - n_used;
 
-        r_obj* pos_vec = r_list_get(out_positions, current_val);
-        int* v_pos_vec = r_int_begin(pos_vec);
-        r_obj* val_vec = r_list_get(out_values, current_val);
-        int* v_val_vec = r_int_begin(val_vec);
+      sparse_dummy_fill_na(
+        v_pos + n_out,
+        v_val + n_out,
+        v_na_pos + n_used,
+        n_gap
+      );
+      n_out += n_gap;
+      n_used = n_before;
 
-        // we need the result to be 1-indexed
-        v_pos_vec[index] = i + 1;
-        v_val_vec[index] = 1;
-        v_pos_index[current_val]++;
-      }
+      v_pos[n_out] = v_e[0];
+      v_val[n_out] = 1;
+      ++n_out;
     }
-  } else {
-    for (r_ssize i = 0; i < len; ++i) {
-      int current_val = v_x[i];
 
-      if (current_val == r_globals.na_int) {
-        for (r_ssize j = 0; j < n_lvls; ++j) {
-          const int index = v_pos_index[j];
+    sparse_dummy_fill_na(
+      v_pos + n_out,
+      v_val + n_out,
+      v_na_pos + n_used,
+      n_na - n_used
+    );
 
-          r_obj* pos_vec = r_list_get(out_positions, j);
-          int* v_pos_vec = r_int_begin(pos_vec);
-          r_obj* val_vec = r_list_get(out_values, j);
-          int* v_val_vec = r_int_begin(val_vec);
+    first += n_k;
 
-          v_pos_vec[index] = i + 1;
-          v_val_vec[index] = r_globals.na_int;
-          v_pos_index[j]++;
-        }
-      } else {
-        --current_val;
-        if (current_val == -1) {
-          continue;
-        }
+    r_obj* dummy = create_dummy(val, pos, out_len, out_default);
+    FREE(2);
 
-        const int index = v_pos_index[current_val];
-
-        r_obj* pos_vec = r_list_get(out_positions, current_val);
-        int* v_pos_vec = r_int_begin(pos_vec);
-        r_obj* val_vec = r_list_get(out_values, current_val);
-        int* v_val_vec = r_int_begin(val_vec);
-
-        // we need the result to be 1-indexed
-        v_pos_vec[index] = i + 1;
-        v_val_vec[index] = 1;
-        v_pos_index[current_val]++;
-      }
-    }
+    r_list_poke(out, k, dummy);
   }
 
-  // Turn list of integer vectors with positions, into list of sparse integer
-  // vectors.
-  for (r_ssize i = 0; i < n_lvls; ++i) {
-    r_obj* positions = r_list_get(out_positions, i);
-    r_obj* values = r_list_get(out_values, i);
-    r_obj* dummy = create_dummy_na(values, positions, len);
-    r_list_poke(out_positions, i, dummy);
-  }
+  FREE(4);
 
-  FREE(3);
-
-  return out_positions;
+  return out;
 }
 
-static r_obj* create_dummy(r_obj* pos, r_ssize length) {
-  r_obj* out = KEEP(r_alloc_list(4));
+static inline void sparse_dummy_fill_na(
+  int* v_pos,
+  int* v_val,
+  const int* v_na_pos,
+  r_ssize n
+) {
+  const int na = r_globals.na_int;
 
-  const r_ssize pos_len = r_length(pos);
-
-  // values
-  r_obj* out_val = r_alloc_integer(pos_len);
-  r_list_poke(out, 0, out_val);
-  int* v_out_val = r_int_begin(out_val);
-
-  for (r_ssize i = 0; i < pos_len; ++i) {
-    v_out_val[i] = 1;
+  for (r_ssize i = 0; i < n; ++i) {
+    v_pos[i] = v_na_pos[i];
+    v_val[i] = na;
   }
-
-  // positions
-  r_list_poke(out, 1, pos);
-
-  // length
-  r_obj* out_length = r_int((int) length);
-  r_list_poke(out, 2, out_length);
-
-  // default
-  r_obj* out_default = r_int(0);
-  r_list_poke(out, 3, out_default);
-
-  r_obj* altrep = new_altrep_sparse_integer(out);
-
-  FREE(1);
-
-  return altrep;
 }
 
-static r_obj* create_dummy_na(r_obj* values, r_obj* pos, r_ssize length) {
+static r_obj* create_dummy(r_obj* val, r_obj* pos, r_obj* len, r_obj* def) {
   r_obj* out = KEEP(r_alloc_list(4));
 
-  // values
-  r_list_poke(out, 0, values);
-
-  // positions
+  r_list_poke(out, 0, val);
   r_list_poke(out, 1, pos);
-
-  // length
-  r_obj* out_length = r_int((int) length);
-  r_list_poke(out, 2, out_length);
-
-  // default
-  r_obj* out_default = r_int(0);
-  r_list_poke(out, 3, out_default);
+  r_list_poke(out, 2, len);
+  r_list_poke(out, 3, def);
 
   r_obj* altrep = new_altrep_sparse_integer(out);
 

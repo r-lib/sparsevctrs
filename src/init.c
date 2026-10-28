@@ -34,8 +34,7 @@ extern r_obj* ffi_sparse_is_sparse_vector(r_obj*);
 extern r_obj* ffi_sparse_is_altrep_non_sparse_vector(r_obj*);
 
 // Defined in sparse-dummy.c
-extern r_obj* ffi_sparse_dummy(r_obj*, r_obj*, r_obj*, r_obj*);
-extern r_obj* ffi_sparse_dummy_na(r_obj*, r_obj*, r_obj*, r_obj*);
+extern r_obj* ffi_sparse_dummy(r_obj*, r_obj*, r_obj*);
 
 // Defined in sparse-arithmetic.c
 extern r_obj* ffi_sparse_multiplication(r_obj*, r_obj*);
@@ -86,8 +85,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"ffi_sparse_is_altrep_non_sparse_vector",
    (DL_FUNC) &ffi_sparse_is_altrep_non_sparse_vector,
    1},
-  {"ffi_sparse_dummy", (DL_FUNC) &ffi_sparse_dummy, 4},
-  {"ffi_sparse_dummy_na", (DL_FUNC) &ffi_sparse_dummy_na, 4},
+  {"ffi_sparse_dummy", (DL_FUNC) &ffi_sparse_dummy, 3},
   {"ffi_sparse_multiplication", (DL_FUNC) &ffi_sparse_multiplication, 2},
   {NULL, NULL, 0}
 };

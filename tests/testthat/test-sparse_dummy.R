@@ -113,6 +113,55 @@ test_that("sparse_dummy(one_hot = TRUE) works with NA and unseen levels", {
   )
 })
 
+test_that("sparse_dummy(one_hot = TRUE) works with NA between and after values", {
+  x <- factor(c(NA, "a", "b", NA, NA, "a", "c", "a", NA, "b"))
+  exp <- list(
+    a = sparse_integer(
+      c(NA, 1, NA, NA, 1, 1, NA),
+      c(1, 2, 4, 5, 6, 8, 9),
+      10
+    ),
+    b = sparse_integer(
+      c(NA, 1, NA, NA, NA, 1),
+      c(1, 3, 4, 5, 9, 10),
+      10
+    ),
+    c = sparse_integer(
+      c(NA, NA, NA, 1, NA),
+      c(1, 4, 5, 7, 9),
+      10
+    )
+  )
+
+  res <- sparse_dummy(x, one_hot = TRUE)
+  expect_identical(
+    res,
+    exp
+  )
+
+  expect_true(
+    all(vapply(res, is_sparse_integer, logical(1)))
+  )
+})
+
+test_that("sparse_dummy(one_hot = TRUE) works with only NA", {
+  x <- factor(c(NA, NA, NA), levels = c("a", "b"))
+  exp <- list(
+    a = sparse_integer(c(NA, NA, NA), c(1, 2, 3), 3),
+    b = sparse_integer(c(NA, NA, NA), c(1, 2, 3), 3)
+  )
+
+  res <- sparse_dummy(x, one_hot = TRUE)
+  expect_identical(
+    res,
+    exp
+  )
+
+  expect_true(
+    all(vapply(res, is_sparse_integer, logical(1)))
+  )
+})
+
 # one_hot = FALSE ---------------------------------------------------------------
 
 test_that("sparse_dummy(one_hot = FALSE) works with single level", {
@@ -236,7 +285,62 @@ test_that("sparse_dummy(one_hot = FALSE) works with NA and unseen levels", {
   )
 })
 
+test_that("sparse_dummy(one_hot = FALSE) works with NA between and after values", {
+  x <- factor(c(NA, "a", "b", NA, NA, "a", "c", "a", NA, "b"))
+  exp <- list(
+    b = sparse_integer(
+      c(NA, 1, NA, NA, NA, 1),
+      c(1, 3, 4, 5, 9, 10),
+      10
+    ),
+    c = sparse_integer(
+      c(NA, NA, NA, 1, NA),
+      c(1, 4, 5, 7, 9),
+      10
+    )
+  )
+
+  res <- sparse_dummy(x, one_hot = FALSE)
+  expect_identical(
+    res,
+    exp
+  )
+
+  expect_true(
+    all(vapply(res, is_sparse_integer, logical(1)))
+  )
+})
+
 # Other ------------------------------------------------------------------------
+
+test_that("sparse_dummy() matches dense dummy variables with many levels", {
+  set.seed(1)
+  x <- factor(sample(c(letters, NA), 300, replace = TRUE))
+  exp <- lapply(levels(x), function(lvl) as.integer(x == lvl))
+  names(exp) <- levels(x)
+
+  expect_identical(
+    lapply(sparse_dummy(x, one_hot = TRUE), as.integer),
+    exp
+  )
+  expect_identical(
+    lapply(sparse_dummy(x, one_hot = FALSE), as.integer),
+    exp[-1]
+  )
+
+  x <- x[!is.na(x)]
+  exp <- lapply(levels(x), function(lvl) as.integer(x == lvl))
+  names(exp) <- levels(x)
+
+  expect_identical(
+    lapply(sparse_dummy(x, one_hot = TRUE), as.integer),
+    exp
+  )
+  expect_identical(
+    lapply(sparse_dummy(x, one_hot = FALSE), as.integer),
+    exp[-1]
+  )
+})
 
 test_that("sparse_dummy() errors with wrong input", {
   expect_snapshot(
