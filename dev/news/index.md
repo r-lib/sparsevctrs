@@ -50,6 +50,10 @@
   the right result when the default is not zero.
   ([\#141](https://github.com/r-lib/sparsevctrs/issues/141))
 
+- [`sparse_dummy()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_dummy.md)
+  is now faster, especially for factors with missing values and many
+  levels. ([\#81](https://github.com/r-lib/sparsevctrs/issues/81))
+
 - [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
   no longer fails when one of two sparse inputs has no stored values.
   ([\#137](https://github.com/r-lib/sparsevctrs/issues/137))
