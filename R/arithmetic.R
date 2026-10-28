@@ -76,9 +76,10 @@ sparse_multiplication_scalar <- function(x, val) {
 
   if (is_sparse_integer(x)) {
     if (val == 0) {
+      is_na <- is.na(sparse_values(x))
       res <- sparse_integer(
-        values = integer(),
-        positions = integer(),
+        values = sparse_values(x)[is_na],
+        positions = sparse_positions(x)[is_na],
         length = length(x),
         default = sparse_default(x) * val
       )
@@ -92,9 +93,10 @@ sparse_multiplication_scalar <- function(x, val) {
     }
   } else if (is_sparse_double(x)) {
     if (val == 0) {
+      is_na <- is.na(sparse_values(x))
       res <- sparse_double(
-        values = double(),
-        positions = integer(),
+        values = sparse_values(x)[is_na],
+        positions = sparse_positions(x)[is_na],
         length = length(x),
         default = sparse_default(x) * val
       )

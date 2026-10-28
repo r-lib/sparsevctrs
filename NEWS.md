@@ -24,6 +24,8 @@
 
 * `sparse_multiplication()` is much faster when the result has many stored values, since sorting them no longer takes quadratic time. With one million stored values on each side it now takes milliseconds instead of minutes. (#140)
 
+* `sparse_multiplication_scalar()` now keeps stored `NA` values when multiplying by 0, since `NA * 0` is `NA`. Previously they were dropped. (#145)
+
 * `sparse_replace_na()` now works with sparse logical vectors. (#136)
 
 # sparsevctrs 0.3.6
