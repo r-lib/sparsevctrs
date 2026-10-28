@@ -70,6 +70,11 @@
   each side it now takes milliseconds instead of minutes.
   ([\#140](https://github.com/r-lib/sparsevctrs/issues/140))
 
+- [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  now keeps stored `NA` values when multiplying by 0, since `NA * 0` is
+  `NA`. Previously they were dropped.
+  ([\#145](https://github.com/r-lib/sparsevctrs/issues/145))
+
 - [`sparse_replace_na()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_replace_na.md)
   now works with sparse logical vectors.
   ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
