@@ -30,7 +30,7 @@ Do Arithmetic on sparse vectors without destroying the sparsity. Note that
 only multiplication and division preserves the default value.
 }
 \details{
-No checking of the inputs are being done.
+Only minimal checking of the inputs is done, for performance reasons.
 
 \code{sparse_division_scalar()} and \code{sparse_multiplication_scalar()} are the most
 used ones, as they preserve the default, which is often what you want to do.
@@ -41,6 +41,14 @@ as the input is returned unchanged, or \code{val = NA} as the input returned wil
 be \code{NA} or the appropiate type. When \code{val = 0} the result contains \code{Inf},
 \code{-Inf} and \code{NaN}, which sparse vectors can't store, so a regular (dense)
 double vector is returned.
+
+The other functions return a sparse vector of the same type as \code{x}. This
+means that when \code{x} is a sparse integer vector, \code{val} must give whole number
+results. Integer overflow in the stored values produces \code{NA} with a warning,
+as it does for dense integer vectors.
+
+Results that sparse double vectors can't store, such as stored values that
+are \code{Inf} or \code{NaN}, or a default value that is \code{NaN}, give an error.
 }
 \examples{
 x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)

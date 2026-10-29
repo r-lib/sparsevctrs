@@ -313,10 +313,71 @@ test_that("scalar arithmetic errors for non-numeric sparse vectors", {
 
   expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_lgl, 2))
   expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_chr, 2))
+  expect_snapshot(error = TRUE, sparse_division_scalar(vec_lgl, 2))
+  expect_snapshot(error = TRUE, sparse_division_scalar(vec_chr, 2))
   expect_snapshot(error = TRUE, sparse_addition_scalar(vec_lgl, 2))
   expect_snapshot(error = TRUE, sparse_addition_scalar(vec_chr, 2))
   expect_snapshot(error = TRUE, sparse_subtraction_scalar(vec_lgl, 2))
   expect_snapshot(error = TRUE, sparse_subtraction_scalar(vec_chr, 2))
+})
+
+test_that("scalar arithmetic errors for non-numeric val", {
+  vec_dbl <- sparse_double(c(4, 78), c(1, 10), 10)
+
+  expect_snapshot(error = TRUE, sparse_addition_scalar(vec_dbl, "a"))
+})
+
+test_that("scalar arithmetic keeps stored NA values", {
+  vec_int <- sparse_integer(c(4L, NA), c(1, 5), 10)
+  vec_dbl <- sparse_double(c(4, NA), c(1, 5), 10)
+
+  expect_identical(sparse_multiplication_scalar(vec_int, 2), vec_int[] * 2L)
+  expect_identical(sparse_division_scalar(vec_int, 2), vec_int[] / 2)
+  expect_identical(sparse_addition_scalar(vec_int, 2), vec_int[] + 2L)
+  expect_identical(sparse_subtraction_scalar(vec_int, 2), vec_int[] - 2L)
+
+  expect_identical(sparse_multiplication_scalar(vec_dbl, 2), vec_dbl[] * 2)
+  expect_identical(sparse_division_scalar(vec_dbl, 2), vec_dbl[] / 2)
+  expect_identical(sparse_addition_scalar(vec_dbl, 2), vec_dbl[] + 2)
+  expect_identical(sparse_subtraction_scalar(vec_dbl, 2), vec_dbl[] - 2)
+})
+
+test_that("scalar arithmetic on sparse integers needs whole number results", {
+  vec_int <- sparse_integer(c(4L, 78L), c(1, 10), 10)
+
+  res <- sparse_multiplication_scalar(vec_int, 0.5)
+  expect_identical(res, as.integer(vec_int[] * 0.5))
+  expect_true(is_sparse_integer(res))
+
+  expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_int, 0.3))
+  expect_snapshot(error = TRUE, sparse_addition_scalar(vec_int, 0.5))
+})
+
+test_that("scalar arithmetic on sparse integers handles overflow", {
+  vec_int <- sparse_integer(c(.Machine$integer.max, 2L), c(1, 3), 5)
+
+  expect_warning(
+    res <- sparse_addition_scalar(vec_int, 1L),
+    "integer overflow"
+  )
+  expect_identical(res, c(NA, 1L, 3L, 1L, 1L))
+  expect_true(is_sparse_integer(res))
+
+  expect_warning(
+    res <- sparse_multiplication_scalar(vec_int, 2L),
+    "integer overflow"
+  )
+  expect_identical(res, c(NA, 0L, 4L, 0L, 0L))
+
+  vec_default <- sparse_integer(1L, 1, 5, default = .Machine$integer.max)
+  expect_snapshot(error = TRUE, sparse_addition_scalar(vec_default, 1L))
+})
+
+test_that("scalar arithmetic errors for results that can't be stored", {
+  vec_dbl <- sparse_double(c(4, 78), c(1, 10), 10)
+
+  expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_dbl, Inf))
+  expect_snapshot(error = TRUE, sparse_addition_scalar(vec_dbl, Inf))
 })
 
 test_that("vector multiplication works - integers", {

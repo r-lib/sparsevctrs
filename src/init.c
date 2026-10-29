@@ -39,6 +39,12 @@ extern r_obj* ffi_sparse_dummy(r_obj*, r_obj*, r_obj*);
 // Defined in sparse-arithmetic.c
 extern r_obj* ffi_sparse_multiplication(r_obj*, r_obj*);
 
+// Defined in sparse-arithmetic-scalar.c
+extern r_obj* ffi_sparse_addition_scalar(r_obj*, r_obj*);
+extern r_obj* ffi_sparse_subtraction_scalar(r_obj*, r_obj*);
+extern r_obj* ffi_sparse_multiplication_scalar(r_obj*, r_obj*);
+extern r_obj* ffi_sparse_division_scalar(r_obj*, r_obj*);
+
 // Defined below
 extern r_obj* ffi_init_library(r_obj*);
 
@@ -87,6 +93,14 @@ static const R_CallMethodDef CallEntries[] = {
    1},
   {"ffi_sparse_dummy", (DL_FUNC) &ffi_sparse_dummy, 3},
   {"ffi_sparse_multiplication", (DL_FUNC) &ffi_sparse_multiplication, 2},
+  {"ffi_sparse_addition_scalar", (DL_FUNC) &ffi_sparse_addition_scalar, 2},
+  {"ffi_sparse_subtraction_scalar",
+   (DL_FUNC) &ffi_sparse_subtraction_scalar,
+   2},
+  {"ffi_sparse_multiplication_scalar",
+   (DL_FUNC) &ffi_sparse_multiplication_scalar,
+   2},
+  {"ffi_sparse_division_scalar", (DL_FUNC) &ffi_sparse_division_scalar, 2},
   {NULL, NULL, 0}
 };
 
