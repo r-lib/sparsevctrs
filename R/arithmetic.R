@@ -15,7 +15,9 @@
 #' `sparse_division_scalar()` always produces double vectors, regardless of
 #' whether they could be represented as integers or not. Expect when `val = 1`
 #' as the input is returned unchanged, or `val = NA` as the input returned will
-#' be `NA` or the appropiate type.
+#' be `NA` or the appropiate type. When `val = 0` the result contains `Inf`,
+#' `-Inf` and `NaN`, which sparse vectors can't store, so a regular (dense)
+#' double vector is returned.
 #'
 #' @return A sparse vector of same type.
 #'
@@ -42,7 +44,9 @@ sparse_division_scalar <- function(x, val) {
   }
 
   if (val == 0) {
-    return(rep(Inf, length(x)))
+    res <- rep(sparse_default(x) / val, length(x))
+    res[sparse_positions(x)] <- sparse_values(x) / val
+    return(res)
   }
 
   if (val == 1) {

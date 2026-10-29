@@ -72,11 +72,11 @@ test_that("scalar division works", {
 
   expect_identical(
     sparse_division_scalar(vec_int, 0),
-    rep(Inf, 10)
+    exp_double / 0
   )
   expect_identical(
     sparse_division_scalar(vec_double, 0),
-    rep(Inf, 10)
+    exp_double / 0
   )
   expect_identical(
     sparse_division_scalar(vec_int, 1),
@@ -121,6 +121,24 @@ test_that("scalar division works", {
     sparse_division_scalar(vec_double, NA),
     rep(NA_real_, length(vec_double))
   )
+})
+
+test_that("scalar division by 0 matches dense division", {
+  vec_int <- sparse_integer(c(-4L, NA, 5L), c(1, 5, 10), 10)
+  vec_dbl <- sparse_double(c(-4, NA, 5), c(1, 5, 10), 10)
+  vec_int_neg <- sparse_integer(c(-4L, 5L), c(1, 10), 10, default = -3L)
+  vec_dbl_pos <- sparse_double(c(-4, 5), c(1, 10), 10, default = 3)
+  empty_dbl <- sparse_double(numeric(), integer(), 5, default = 3)
+  len_0 <- sparse_double(numeric(), integer(), 0)
+
+  expect_identical(sparse_division_scalar(vec_int, 0), vec_int[] / 0)
+  expect_identical(sparse_division_scalar(vec_dbl, 0), vec_dbl[] / 0)
+  expect_identical(sparse_division_scalar(vec_int_neg, 0), vec_int_neg[] / 0)
+  expect_identical(sparse_division_scalar(vec_dbl_pos, 0), vec_dbl_pos[] / 0)
+  expect_identical(sparse_division_scalar(empty_dbl, 0), empty_dbl[] / 0)
+  expect_identical(sparse_division_scalar(len_0, 0), len_0[] / 0)
+
+  expect_false(is_sparse_vector(sparse_division_scalar(vec_dbl, 0)))
 })
 
 test_that("scalar addition works", {

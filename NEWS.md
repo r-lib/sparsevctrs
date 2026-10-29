@@ -16,6 +16,8 @@
 
 * `sparse_division_scalar()` and `sparse_multiplication_scalar()` now also scale the default value of the sparse vector, so they give the right result when the default is not zero. (#141)
 
+* `sparse_division_scalar()` now gives the same result as dense division when `val` is 0, with `-Inf` for negative values, `NaN` for zeros and `NA` for missing values, instead of `Inf` everywhere. (#146)
+
 * `sparse_dummy()` is now faster, especially for factors with missing values and many levels. (#81)
 
 * `sparse_multiplication()` no longer fails when one of two sparse inputs has no stored values. (#137)
