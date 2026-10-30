@@ -12,14 +12,17 @@ r_obj* ffi_sparse_multiplication(r_obj* ffi_x, r_obj* ffi_y) {
 }
 
 static r_obj* multiplication(r_obj* x, r_obj* y) {
-  if (sparse_is_altrep(x)) {
-    if (sparse_is_altrep(y)) {
+  const bool x_sparse = sparse_is_sparse_vector(x);
+  const bool y_sparse = sparse_is_sparse_vector(y);
+
+  if (x_sparse) {
+    if (y_sparse) {
       return multiplication_sparse_sparse(x, y);
     } else {
       return multiplication_sparse_dense(x, y);
     }
   } else {
-    if (sparse_is_altrep(y)) {
+    if (y_sparse) {
       return multiplication_sparse_dense(y, x);
     } else {
       return multiplication_dense_dense(x, y);
