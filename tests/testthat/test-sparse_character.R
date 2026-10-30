@@ -351,3 +351,27 @@ test_that("printing works #48", {
     sparse_character("A", 1, 10)[]
   )
 })
+
+test_that("methods work after in-place modification of sparse_character", {
+  x <- sparse_character(c("a", "b"), c(1, 2), 4)
+  x[3] <- "z"
+  expect_identical(x[1:4], c("a", "b", "z", ""))
+  expect_true(is.unsorted(x))
+})
+
+test_that("in-place modification works with resets and NA", {
+  x <- sparse_character("a", 1, 3)
+  x[2] <- NA
+  expect_identical(x[1:3], c("a", NA, ""))
+  expect_identical(sparse_values(x), c("a", NA))
+  expect_identical(sparse_positions(x), 1:2)
+
+  x[1] <- ""
+  expect_identical(x[1:3], c("", NA, ""))
+
+  y <- sparse_character("a", 1, 3)
+  z <- y
+  y[3] <- "b"
+  expect_identical(sparse_values(z), "a")
+  expect_identical(sparse_values(y), c("a", "b"))
+})

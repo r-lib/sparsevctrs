@@ -64,3 +64,26 @@ test_that("sparse_values works with numeric vectors", {
     NA
   )
 })
+
+test_that("extractors reflect in-place modification", {
+  x <- sparse_double(c(1, 2), c(1, 2), 5)
+  x[3] <- 100
+  expect_identical(sparse_positions(x), 1:3)
+  expect_identical(sparse_values(x), c(1, 2, 100))
+  expect_identical(sparse_default(x), 0)
+
+  x <- sparse_integer(c(1L, 2L), c(1, 2), 5)
+  x[1] <- 0L
+  expect_identical(sparse_positions(x), 1:2)
+  expect_identical(sparse_values(x), c(0L, 2L))
+
+  x <- sparse_logical(TRUE, 1, 4)
+  x[3] <- NA
+  expect_identical(sparse_positions(x), c(1L, 3L))
+  expect_identical(sparse_values(x), c(TRUE, NA))
+
+  x <- sparse_character("a", 1, 4)
+  x[3] <- "z"
+  expect_identical(sparse_positions(x), c(1L, 3L))
+  expect_identical(sparse_values(x), c("a", "z"))
+})

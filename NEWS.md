@@ -1,5 +1,7 @@
 # sparsevctrs (development version)
 
+* Fixed bug where `sum()`, `min()`, `max()`, `anyNA()`, `is.unsorted()`, `[`, `sparse_values()`, `sparse_positions()`, and sparse multiplication on sparse vectors returned stale results after the vector was modified in place with `x[i] <- value`. (#147)
+
 * Fixed bug where `is.unsorted()` on sparse character vectors compared string pointers instead of string contents, and ignored default values after the last non-default value.
 
 * Fixed bug where `is.unsorted()` on sparse integer, sparse double, and sparse logical vectors ignored default values after the last non-default value, and returned `FALSE` for vectors with a single non-default value without comparing it against the default. (#133)

@@ -364,3 +364,38 @@ test_that("verbose testing", {
     }
   )
 })
+
+test_that("methods work after in-place modification of sparse_logical", {
+  x <- sparse_logical(c(TRUE, TRUE), c(1, 2), 5)
+  x[3] <- NA
+  expect_true(anyNA(x))
+  expect_identical(x[1:5], c(TRUE, TRUE, NA, FALSE, FALSE))
+
+  x <- sparse_logical(TRUE, 1, 5)
+  x[2] <- TRUE
+  expect_identical(sum(x), 2L)
+})
+
+test_that("in-place modification works with resets and sorting", {
+  x <- sparse_logical(TRUE, 1, 4)
+  x[1] <- FALSE
+  expect_identical(sum(x), 0L)
+  expect_false(is.unsorted(x))
+  expect_false(anyNA(x))
+
+  x[4] <- TRUE
+  expect_identical(sum(x), 1L)
+  expect_false(is.unsorted(x))
+
+  x <- sparse_logical(TRUE, 1, 4)
+  x[2] <- TRUE
+  expect_true(is.unsorted(x))
+  expect_identical(sparse_positions(x), 1:2)
+  expect_identical(sparse_values(x), c(TRUE, TRUE))
+
+  y <- sparse_logical(TRUE, 1, 4)
+  z <- y
+  y[2] <- NA
+  expect_false(anyNA(z))
+  expect_true(anyNA(y))
+})
