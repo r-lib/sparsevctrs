@@ -454,6 +454,60 @@ test_that("sum method works with sparse_double", {
   )
 })
 
+test_that("methods work after in-place modification of sparse_double", {
+  x <- sparse_double(c(1, NA), c(1, 2), 5)
+  x[is.na(x)] <- 0
+  expect_identical(sum(x), 1)
+  expect_true(!anyNA(x))
+
+  x <- sparse_double(c(1, 2), c(1, 2), 5)
+  x[3] <- 100
+  expect_identical(max(x), 100)
+  expect_identical(min(x), 0)
+  expect_identical(x[1:5], c(1, 2, 100, 0, 0))
+  expect_true(is.unsorted(x))
+
+  x <- sparse_double(c(1, 2), c(1, 2), 5)
+  x[3] <- NA
+  expect_true(anyNA(x))
+  expect_identical(sum(x), NA_real_)
+})
+
+test_that("sparse_multiplication() works after in-place modification", {
+  x <- sparse_double(c(1, 2), c(1, 2), 4)
+  y <- sparse_double(c(3, 4), c(2, 3), 4)
+  x[3] <- 5
+  y[4] <- 6
+
+  expect_identical(
+    sparse_multiplication(x, y) |> as.numeric(),
+    c(1, 2, 5, 0) * c(0, 3, 4, 6)
+  )
+  expect_identical(
+    sparse_multiplication(x, c(1, 1, 1, 1)) |> as.numeric(),
+    c(1, 2, 5, 0)
+  )
+})
+
+test_that("sparse_multiplication() treats non-sparse ALTREP as dense", {
+  x <- sort(c(2, 1, 3:10))
+  expect_true(is_altrep_non_sparse_vector(x))
+  y <- sparse_double(c(1, 2), c(1, 2), 10)
+  expect_identical(
+    sparse_multiplication(y, x) |> as.numeric(),
+    c(1, 4, rep(0, 8))
+  )
+})
+
+test_that("repeated reads after one modification stay correct", {
+  x <- sparse_double(1, 1, 5)
+  x[2] <- 3
+  expect_identical(sum(x), 4)
+  expect_identical(sum(x), 4)
+  x[3] <- 2
+  expect_identical(sum(x), 6)
+})
+
 test_that("default argument is working", {
   expect_snapshot(
     error = TRUE,
@@ -524,4 +578,67 @@ test_that("printing works #48", {
   expect_snapshot(
     sparse_double(1, 1, 10) + 1
   )
+})
+
+test_that("in-place modification works with non-zero defaults and resets", {
+  x <- sparse_double(c(1, 2), c(1, 2), 5, default = 3)
+  x[4] <- 7
+  expect_identical(sum(x), 1 + 2 + 3 + 7 + 3)
+  expect_identical(max(x), 7)
+  expect_identical(min(x), 1)
+  expect_identical(sparse_default(x), 3)
+
+  x <- sparse_double(c(1, 2), c(1, 2), 5, default = 3)
+  x[1:2] <- 3
+  expect_identical(sum(x), 15)
+  expect_identical(max(x), 3)
+  expect_identical(min(x), 3)
+  expect_identical(x[1:5], rep(3, 5))
+
+  x <- sparse_double(c(1, 2), c(1, 2), 5)
+  x[1] <- 0
+  expect_identical(sum(x), 2)
+  expect_identical(x[1:5], c(0, 2, 0, 0, 0))
+})
+
+test_that("in-place modification works with NA and NaN", {
+  x <- sparse_double(c(1, 2), c(1, 2), 5)
+  x[3] <- NaN
+  expect_identical(x[1:5], c(1, 2, NaN, 0, 0))
+  expect_identical(sparse_values(x), c(1, 2, NaN))
+  expect_identical(sum(x), NaN)
+
+  x <- sparse_double(c(1, 2), c(1, 2), 5)
+  x[3] <- NA
+  expect_identical(sparse_values(x), c(1, 2, NA))
+  expect_identical(sum(x, na.rm = TRUE), 3)
+})
+
+test_that("in-place modification works with length 0 vectors", {
+  x <- sparse_double(numeric(), integer(), 0)
+  x[integer()] <- numeric()
+  expect_identical(sum(x), 0)
+  expect_identical(sparse_values(x), numeric())
+  expect_identical(sparse_positions(x), integer())
+})
+
+test_that("in-place modification does not affect copies", {
+  x <- sparse_double(c(1, 2), c(1, 2), 5)
+  y <- x
+  x[3] <- 9
+
+  expect_identical(sum(y), 3)
+  expect_identical(sparse_values(y), c(1, 2))
+  expect_identical(sum(x), 12)
+})
+
+test_that("methods are unchanged by materialization without modification", {
+  x <- sparse_double(c(1, 2), c(1, 2), 5)
+  x[]
+
+  expect_identical(sparse_values(x), c(1, 2))
+  expect_identical(sparse_positions(x), 1:2)
+  expect_identical(sum(x), 3)
+  expect_identical(max(x), 2)
+  expect_identical(x[2:3], c(2, 0))
 })

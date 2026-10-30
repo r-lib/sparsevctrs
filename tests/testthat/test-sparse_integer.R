@@ -422,6 +422,19 @@ test_that("anyNA method works with sparse_integer", {
   )
 })
 
+test_that("methods work after in-place modification of sparse_integer", {
+  x <- sparse_integer(c(1L, 2L), c(1, 2), 5)
+  x[3] <- 100L
+  expect_identical(sum(x), 103L)
+  expect_identical(max(x), 100L)
+  expect_identical(x[1:5], c(1L, 2L, 100L, 0L, 0L))
+  expect_true(is.unsorted(x))
+
+  x <- sparse_integer(c(1L, 2L), c(1, 2), 5)
+  x[3] <- NA
+  expect_true(anyNA(x))
+})
+
 test_that("sum method works with sparse_integer", {
   expect_identical(
     sum(sparse_integer(integer(), integer(), 0)),
@@ -529,4 +542,31 @@ test_that("printing works #48", {
   expect_snapshot(
     sparse_integer(1, 1, 10) + 1
   )
+})
+
+test_that("in-place modification works with non-zero defaults and resets", {
+  x <- sparse_integer(1L, 1, 4, default = 2L)
+  x[3] <- NA
+  expect_true(anyNA(x))
+  expect_identical(min(x, na.rm = TRUE), 1L)
+  expect_identical(max(x, na.rm = TRUE), 2L)
+  expect_identical(sum(x, na.rm = TRUE), 5L)
+  expect_identical(sum(x), NA_integer_)
+
+  x <- sparse_integer(c(1L, 5L), c(1, 2), 5)
+  x[1:2] <- 0L
+  expect_identical(sum(x), 0L)
+  expect_identical(min(x), 0L)
+  expect_identical(max(x), 0L)
+  expect_false(anyNA(x))
+  expect_false(is.unsorted(x))
+})
+
+test_that("in-place modification does not affect copies of sparse_integer", {
+  x <- sparse_integer(c(1L, 2L), c(1, 2), 5)
+  y <- x
+  x[3] <- 9L
+
+  expect_identical(sum(y), 3L)
+  expect_identical(sparse_values(y), c(1L, 2L))
 })

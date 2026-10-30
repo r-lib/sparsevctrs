@@ -19,6 +19,8 @@ int sparse_extract_default_logical(r_obj* x);
 
 bool sparse_is_altrep(r_obj* x);
 
+bool sparse_is_sparse_vector(r_obj* x);
+
 r_ssize sparse_binary_search(int needle, const int* v_haystack, r_ssize size);
 
 bool sparse_is_index_handleable(r_obj* x);
