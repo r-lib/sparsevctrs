@@ -2,6 +2,17 @@
 
 ## sparsevctrs (development version)
 
+- Fixed bug where [`sum()`](https://rdrr.io/r/base/sum.html),
+  [`min()`](https://rdrr.io/r/base/Extremes.html),
+  [`max()`](https://rdrr.io/r/base/Extremes.html),
+  [`anyNA()`](https://rdrr.io/r/base/NA.html),
+  [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html), `[`,
+  [`sparse_values()`](https://r-lib.github.io/sparsevctrs/dev/reference/extractors.md),
+  [`sparse_positions()`](https://r-lib.github.io/sparsevctrs/dev/reference/extractors.md),
+  and sparse multiplication on sparse vectors returned stale results
+  after the vector was modified in place with `x[i] <- value`.
+  ([\#147](https://github.com/r-lib/sparsevctrs/issues/147))
+
 - Fixed bug where
   [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html) on sparse
   character vectors compared string pointers instead of string contents,
