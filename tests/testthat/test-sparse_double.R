@@ -497,6 +497,81 @@ test_that("sparse_multiplication() treats non-sparse ALTREP as dense", {
     sparse_multiplication(y, x) |> as.numeric(),
     c(1, 4, rep(0, 8))
   )
+  expect_identical(
+    sparse_multiplication(x, y) |> as.numeric(),
+    c(1, 4, rep(0, 8))
+  )
+  expect_identical(
+    sparse_multiplication(sparse_double(2, 2, 3), sort(c(3, 1, 2))) |>
+      as.numeric(),
+    c(0, 4, 0)
+  )
+  expect_identical(
+    sparse_multiplication(
+      sparse_double(2, 1, 3),
+      sort(c(3, 1, 2), decreasing = TRUE)
+    ) |>
+      as.numeric(),
+    c(6, 0, 0)
+  )
+})
+
+test_that("sparse_multiplication() treats non-sparse integer ALTREP as dense", {
+  x <- sort(c(3L, 1L, 2L))
+  y <- sparse_integer(2L, 2, 3)
+  expect_identical(sparse_multiplication(y, x) |> as.integer(), c(0L, 4L, 0L))
+  expect_identical(
+    sparse_multiplication(sort(c(3L, 1L, 2L)), x) |> as.integer(),
+    c(1L, 4L, 9L)
+  )
+})
+
+test_that("sparse_multiplication() handles more non-sparse ALTREP inputs", {
+  expect_identical(
+    sparse_multiplication(sort(c(3, 1, 2)), sort(c(3, 1, 2))) |> as.numeric(),
+    c(1, 4, 9)
+  )
+
+  expect_identical(
+    sparse_multiplication(sparse_double(2, 2, 3), sort(c(3L, 1L, 2L))) |>
+      as.numeric(),
+    c(0, 4, 0)
+  )
+  expect_identical(
+    sparse_multiplication(sort(c(3L, 1L, 2L)), sparse_double(2, 2, 3)) |>
+      as.numeric(),
+    c(0, 4, 0)
+  )
+
+  df <- data.frame(w = sort(c(3, 1, 2)))
+  expect_identical(
+    sparse_multiplication(sparse_double(2, 2, 3), df$w) |> as.numeric(),
+    c(0, 4, 0)
+  )
+
+  expect_identical(
+    sparse_multiplication(
+      sparse_double(2, 2, 3, default = 1),
+      sort(c(3, 1, 2))
+    ) |>
+      as.numeric(),
+    c(1, 4, 3)
+  )
+
+  expect_identical(
+    sparse_multiplication(sparse_double(2, 2, 3), sparse_double(5, 2, 3)) |>
+      as.numeric(),
+    c(0, 10, 0)
+  )
+})
+
+test_that("sparse_mean() works with non-sparse ALTREP weights", {
+  x <- sparse_double(c(1, 2), 1:2, 6)
+  w <- c(3, 1, 2, 6, 5, 4)
+  expect_equal(
+    sparse_mean(x, wts = sort(w)),
+    weighted.mean(c(1, 2, 0, 0, 0, 0), sort(w))
+  )
 })
 
 test_that("repeated reads after one modification stay correct", {
