@@ -32,6 +32,8 @@
 
 * `sparse_multiplication()` no longer returns duplicated positions when a sparse double vector with a stored `NA` is multiplied by a dense double vector with a fractional value at the same position. (#139)
 
+* `sparse_multiplication()` now returns `NA` with a warning, as dense integer vectors do, when the product of two integers overflows, instead of silently wrapping around. This also affects `sparse_mean()` with integer weights. (#150)
+
 * `sparse_multiplication()` is much faster when the result has many stored values, since sorting them no longer takes quadratic time. With one million stored values on each side it now takes milliseconds instead of minutes. (#140)
 
 * `sparse_multiplication_scalar()` now keeps stored `NA` values when multiplying by 0, since `NA * 0` is `NA`. Previously they were dropped. (#145)

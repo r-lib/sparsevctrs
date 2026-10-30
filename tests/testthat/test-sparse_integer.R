@@ -570,3 +570,131 @@ test_that("in-place modification does not affect copies of sparse_integer", {
   expect_identical(sum(y), 3L)
   expect_identical(sparse_values(y), c(1L, 2L))
 })
+
+test_that("sparse_multiplication() gives NA with a warning on integer overflow", {
+  x <- sparse_integer(100000L, 1, 3)
+  expect_warning(
+    res <- sparse_multiplication(x, x),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(as.integer(res), c(NA_integer_, 0L, 0L))
+  expect_identical(sparse_values(res), NA_integer_)
+
+  big <- sparse_integer(.Machine$integer.max, 1, 3)
+  expect_warning(
+    res <- sparse_multiplication(big, big),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(as.integer(res), c(NA_integer_, 0L, 0L))
+
+  wrap <- sparse_integer(65536L, 1, 3)
+  expect_warning(
+    res <- sparse_multiplication(wrap, wrap),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(as.integer(res), c(NA_integer_, 0L, 0L))
+
+  expect_warning(
+    res <- sparse_multiplication(sparse_integer(-65536L, 1, 3), wrap),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(as.integer(res), c(NA_integer_, 0L, 0L))
+})
+
+test_that("sparse_multiplication() overflow works for sparse-dense and dense-dense", {
+  x <- sparse_integer(100000L, 1, 3)
+  y <- c(100000L, 1L, 1L)
+
+  expect_warning(
+    res <- sparse_multiplication(x, y),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(as.integer(res), c(NA_integer_, 0L, 0L))
+
+  expect_warning(
+    res <- sparse_multiplication(y, x),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(as.integer(res), c(NA_integer_, 0L, 0L))
+
+  expect_warning(
+    res <- sparse_multiplication(y + 0L, c(100000L, 2L, 3L)),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(res, c(NA_integer_, 2L, 3L))
+})
+
+test_that("sparse_multiplication() does not warn without integer overflow", {
+  x <- sparse_integer(c(46340L, 2L), 1:2, 3)
+  expect_no_warning(res <- sparse_multiplication(x, x))
+  expect_identical(as.integer(res), c(2147395600L, 4L, 0L))
+
+  neg <- sparse_integer(c(-46340L, 46340L), 1:2, 3)
+  expect_no_warning(res <- sparse_multiplication(neg, neg))
+  expect_identical(as.integer(res), c(2147395600L, 2147395600L, 0L))
+
+  expect_no_warning(
+    res <- sparse_multiplication(sparse_integer(NA_integer_, 1, 3), x)
+  )
+  expect_identical(as.integer(res), c(NA_integer_, 0L, 0L))
+})
+
+test_that("sparse_mean() with integer weights warns on overflow", {
+  x <- sparse_integer(c(100000L, 5L), 1:2, 10L)
+  expect_warning(
+    res <- sparse_mean(x, wts = rep(100000L, 10)),
+    "NAs produced by integer overflow"
+  )
+  expect_true(is.na(res))
+})
+
+test_that("sparse_multiplication() treats a product of INT_MIN as overflow", {
+  x <- sparse_integer(-65536L, 1, 3)
+  y <- sparse_integer(32768L, 1, 3)
+
+  expect_warning(
+    res <- sparse_multiplication(x, y),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(as.integer(res), c(NA_integer_, 0L, 0L))
+})
+
+test_that("sparse_multiplication() handles mixed overflow, NA and finite values", {
+  x <- sparse_integer(c(100000L, 3L, NA, 100000L, 7L), c(1, 2, 3, 4, 6), 7)
+  y <- sparse_integer(c(100000L, 4L, 2L, 100000L, NA), c(1, 2, 3, 4, 7), 7)
+
+  expect_warning(
+    res <- sparse_multiplication(x, y),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(
+    as.integer(res),
+    c(NA, 12L, NA, NA, 0L, 0L, NA)
+  )
+
+  d <- c(100000L, 4L, 2L, 100000L, 0L, 0L, NA)
+  expect_warning(
+    res <- sparse_multiplication(x, d),
+    "NAs produced by integer overflow"
+  )
+  expect_identical(as.integer(res), c(NA, 12L, NA, NA, 0L, 0L, NA))
+})
+
+test_that("sparse_multiplication() warns once for several overflows", {
+  x <- sparse_integer(rep(100000L, 3), 1:3, 4)
+  warnings <- character()
+  withCallingHandlers(
+    sparse_multiplication(x, x),
+    warning = function(w) {
+      warnings <<- c(warnings, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+  expect_identical(warnings, "NAs produced by integer overflow")
+})
+
+test_that("sparse_multiplication() on doubles does not warn on large products", {
+  x <- sparse_double(c(1e200, 2), 1:2, 3)
+  expect_no_warning(res <- sparse_multiplication(x, x))
+  expect_identical(as.numeric(res), c(Inf, 4, 0))
+})
