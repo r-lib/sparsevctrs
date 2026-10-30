@@ -128,7 +128,11 @@ static r_obj* altrep_sparse_double_Materialize(r_obj* x) {
 // ALTVEC
 
 static void* altrep_sparse_double_Dataptr(r_obj* x, Rboolean writeable) {
-  return DATAPTR_RW(altrep_sparse_double_Materialize(x));
+  r_obj* out = altrep_sparse_double_Materialize(x);
+  if (writeable) {
+    sparse_mark_dirty(x);
+  }
+  return DATAPTR_RW(out);
 }
 
 static const void* altrep_sparse_double_Dataptr_or_null(r_obj* x) {

@@ -15,6 +15,10 @@ r_obj* sparse_new(
 
 const void* sparse_dataptr_or_null(r_obj* x);
 
+void sparse_sync(r_obj* x);
+
+void sparse_mark_dirty(r_obj* x);
+
 Rboolean sparse_inspect(r_obj* x, const char* class_name);
 
 r_obj* sparse_duplicate(

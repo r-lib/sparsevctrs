@@ -1,6 +1,7 @@
 #include "sparsevctrs-core.h"
 
 #include "sparse-utils.h"
+#include "altrep-sparse-common.h"
 
 #include "decl/sparse-utils-decl.h"
 
@@ -13,11 +14,7 @@ r_obj* ffi_sparse_extract_altrep_class(r_obj* ffi_x) {
 }
 
 r_obj* ffi_sparse_is_sparse_vector(r_obj* ffi_x) {
-  if (!sparse_is_altrep(ffi_x)) {
-    return (r_lgl(false));
-  }
-
-  return r_lgl(altrep_package(ffi_x) == r_sym("sparsevctrs"));
+  return r_lgl(sparse_is_sparse_vector(ffi_x));
 }
 
 r_obj* ffi_sparse_is_altrep_non_sparse_vector(r_obj* ffi_x) {
@@ -32,17 +29,23 @@ bool sparse_is_altrep(r_obj* x) {
   return (bool) ALTREP(x);
 }
 
+bool sparse_is_sparse_vector(r_obj* x) {
+  return sparse_is_altrep(x) && altrep_package(x) == r_sym("sparsevctrs");
+}
+
 static inline r_obj* altrep_package(r_obj* x) {
   return R_altrep_class_package(x);
 }
 
 r_obj* sparse_extract_val(r_obj* x) {
+  sparse_sync(x);
   r_obj* data1 = R_altrep_data1(x);
   r_obj* out = r_list_get(data1, 0);
   return out;
 }
 
 r_obj* sparse_extract_pos(r_obj* x) {
+  sparse_sync(x);
   r_obj* data1 = R_altrep_data1(x);
   r_obj* out = r_list_get(data1, 1);
   return out;
