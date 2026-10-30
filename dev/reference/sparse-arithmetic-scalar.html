@@ -73,13 +73,21 @@ only multiplication and division preserves the default value.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>No checking of the inputs are being done.</p>
+    <p>Only minimal checking of the inputs is done, for performance reasons.</p>
 <p><code>sparse_division_scalar()</code> and <code>sparse_multiplication_scalar()</code> are the most
 used ones, as they preserve the default, which is often what you want to do.</p>
 <p><code>sparse_division_scalar()</code> always produces double vectors, regardless of
 whether they could be represented as integers or not. Expect when <code>val = 1</code>
 as the input is returned unchanged, or <code>val = NA</code> as the input returned will
-be <code>NA</code> or the appropiate type.</p>
+be <code>NA</code> or the appropiate type. When <code>val = 0</code> the result contains <code>Inf</code>,
+<code>-Inf</code> and <code>NaN</code>, which sparse vectors can't store, so a regular (dense)
+double vector is returned.</p>
+<p>The other functions return a sparse vector of the same type as <code>x</code>. This
+means that when <code>x</code> is a sparse integer vector, <code>val</code> must give whole number
+results. Integer overflow in the stored values produces <code>NA</code> with a warning,
+as it does for dense integer vectors.</p>
+<p>Results that sparse double vectors can't store, such as stored values that
+are <code>Inf</code> or <code>NaN</code>, or a default value that is <code>NaN</code>, give an error.</p>
     </div>
 
     <div class="section level2">

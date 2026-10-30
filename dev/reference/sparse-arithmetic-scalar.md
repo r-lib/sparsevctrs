@@ -31,7 +31,7 @@ A sparse vector of same type.
 
 ## Details
 
-No checking of the inputs are being done.
+Only minimal checking of the inputs is done, for performance reasons.
 
 `sparse_division_scalar()` and `sparse_multiplication_scalar()` are the
 most used ones, as they preserve the default, which is often what you
@@ -40,7 +40,18 @@ want to do.
 `sparse_division_scalar()` always produces double vectors, regardless of
 whether they could be represented as integers or not. Expect when
 `val = 1` as the input is returned unchanged, or `val = NA` as the input
-returned will be `NA` or the appropiate type.
+returned will be `NA` or the appropiate type. When `val = 0` the result
+contains `Inf`, `-Inf` and `NaN`, which sparse vectors can't store, so a
+regular (dense) double vector is returned.
+
+The other functions return a sparse vector of the same type as `x`. This
+means that when `x` is a sparse integer vector, `val` must give whole
+number results. Integer overflow in the stored values produces `NA` with
+a warning, as it does for dense integer vectors.
+
+Results that sparse double vectors can't store, such as stored values
+that are `Inf` or `NaN`, or a default value that is `NaN`, give an
+error.
 
 ## Examples
 

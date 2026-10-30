@@ -43,12 +43,40 @@
   instead of failing with an object not found error.
   ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
 
+- [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  and
+  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  are now faster.
+  ([\#88](https://github.com/r-lib/sparsevctrs/issues/88))
+
+- [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  and
+  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  now return `NA` with a warning, as dense integer vectors do, when a
+  stored value of a sparse integer vector overflows, instead of failing
+  with an error.
+  ([\#88](https://github.com/r-lib/sparsevctrs/issues/88))
+
 - [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
   and
   [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
   now also scale the default value of the sparse vector, so they give
   the right result when the default is not zero.
   ([\#141](https://github.com/r-lib/sparsevctrs/issues/141))
+
+- [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  now gives an error when `x` is not a sparse integer or double vector,
+  instead of silently accepting sparse logical vectors.
+  ([\#88](https://github.com/r-lib/sparsevctrs/issues/88))
+
+- [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  now gives the same result as dense division when `val` is 0, with
+  `-Inf` for negative values, `NaN` for zeros and `NA` for missing
+  values, instead of `Inf` everywhere.
+  ([\#146](https://github.com/r-lib/sparsevctrs/issues/146))
 
 - [`sparse_dummy()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_dummy.md)
   is now faster, especially for factors with missing values and many
