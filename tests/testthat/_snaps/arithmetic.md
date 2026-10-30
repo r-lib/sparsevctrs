@@ -17,6 +17,22 @@
 ---
 
     Code
+      sparse_division_scalar(vec_lgl, 2)
+    Condition
+      Error in `sparse_division_scalar()`:
+      ! `x` must be a sparse integer or double vector.
+
+---
+
+    Code
+      sparse_division_scalar(vec_chr, 2)
+    Condition
+      Error in `sparse_division_scalar()`:
+      ! `x` must be a sparse integer or double vector.
+
+---
+
+    Code
       sparse_addition_scalar(vec_lgl, 2)
     Condition
       Error in `sparse_addition_scalar()`:
@@ -45,6 +61,54 @@
     Condition
       Error in `sparse_subtraction_scalar()`:
       ! `x` must be a sparse integer or double vector.
+
+# scalar arithmetic errors for non-numeric val
+
+    Code
+      sparse_addition_scalar(vec_dbl, "a")
+    Condition
+      Error in `sparse_addition_scalar()`:
+      ! `val` must be a single number.
+
+# scalar arithmetic on sparse integers needs whole number results
+
+    Code
+      sparse_multiplication_scalar(vec_int, 0.3)
+    Condition
+      Error in `sparse_multiplication_scalar()`:
+      ! `val` must give whole number results when `x` is a sparse integer vector.
+
+---
+
+    Code
+      sparse_addition_scalar(vec_int, 0.5)
+    Condition
+      Error in `sparse_addition_scalar()`:
+      ! `val` must give whole number results when `x` is a sparse integer vector.
+
+# scalar arithmetic on sparse integers handles overflow
+
+    Code
+      sparse_addition_scalar(vec_default, 1L)
+    Condition
+      Error in `sparse_addition_scalar()`:
+      ! Integer overflow in the default value of `x`.
+
+# scalar arithmetic errors for results that can't be stored
+
+    Code
+      sparse_multiplication_scalar(vec_dbl, Inf)
+    Condition
+      Error in `sparse_multiplication_scalar()`:
+      ! The result has a `NaN` default value, which sparse double vectors can't store.
+
+---
+
+    Code
+      sparse_addition_scalar(vec_dbl, Inf)
+    Condition
+      Error in `sparse_addition_scalar()`:
+      ! The result has `Inf` or `NaN` values, which sparse double vectors can't store.
 
 # vector multiplication errors for non-numeric input
 

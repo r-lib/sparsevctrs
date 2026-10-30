@@ -14,7 +14,13 @@
 
 * `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now give an error when `x` is not a sparse integer or double vector, instead of failing with an object not found error. (#136)
 
+* `sparse_addition_scalar()`, `sparse_division_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` are now faster. (#88)
+
+* `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now return `NA` with a warning, as dense integer vectors do, when a stored value of a sparse integer vector overflows, instead of failing with an error. (#88)
+
 * `sparse_division_scalar()` and `sparse_multiplication_scalar()` now also scale the default value of the sparse vector, so they give the right result when the default is not zero. (#141)
+
+* `sparse_division_scalar()` now gives an error when `x` is not a sparse integer or double vector, instead of silently accepting sparse logical vectors. (#88)
 
 * `sparse_division_scalar()` now gives the same result as dense division when `val` is 0, with `-Inf` for negative values, `NaN` for zeros and `NA` for missing values, instead of `Inf` everywhere. (#146)
 

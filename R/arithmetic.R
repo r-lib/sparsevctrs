@@ -7,7 +7,7 @@
 #' @param val A single numeric value.
 #'
 #' @details
-#' No checking of the inputs are being done.
+#' Only minimal checking of the inputs is done, for performance reasons.
 #'
 #' `sparse_division_scalar()` and `sparse_multiplication_scalar()` are the most
 #' used ones, as they preserve the default, which is often what you want to do.
@@ -18,6 +18,14 @@
 #' be `NA` or the appropiate type. When `val = 0` the result contains `Inf`,
 #' `-Inf` and `NaN`, which sparse vectors can't store, so a regular (dense)
 #' double vector is returned.
+#'
+#' The other functions return a sparse vector of the same type as `x`. This
+#' means that when `x` is a sparse integer vector, `val` must give whole number
+#' results. Integer overflow in the stored values produces `NA` with a warning,
+#' as it does for dense integer vectors.
+#'
+#' Results that sparse double vectors can't store, such as stored values that
+#' are `Inf` or `NaN`, or a default value that is `NaN`, give an error.
 #'
 #' @return A sparse vector of same type.
 #'
@@ -36,11 +44,7 @@ NULL
 #' @export
 sparse_division_scalar <- function(x, val) {
   if (is.na(val)) {
-    if (is.integer(x)) {
-      return(rep(NA_integer_, length(x)))
-    } else {
-      return(rep(NA_real_, length(x)))
-    }
+    return(scalar_na(x))
   }
 
   if (val == 0) {
@@ -53,142 +57,74 @@ sparse_division_scalar <- function(x, val) {
     return(x)
   }
 
-  res <- sparse_double(
-    values = sparse_values(x) / val,
-    positions = sparse_positions(x),
-    length = length(x),
-    default = sparse_default(x) / val
-  )
+  check_sparse_numeric(x)
 
-  res
+  .Call(ffi_sparse_division_scalar, x, val)
 }
 
 #' @rdname sparse-arithmetic-scalar
 #' @export
 sparse_multiplication_scalar <- function(x, val) {
   if (is.na(val)) {
-    if (is.integer(x)) {
-      return(rep(NA_integer_, length(x)))
-    } else {
-      return(rep(NA_real_, length(x)))
-    }
+    return(scalar_na(x))
   }
 
   if (val == 1) {
     return(x)
   }
 
-  if (is_sparse_integer(x)) {
-    if (val == 0) {
-      is_na <- is.na(sparse_values(x))
-      res <- sparse_integer(
-        values = sparse_values(x)[is_na],
-        positions = sparse_positions(x)[is_na],
-        length = length(x),
-        default = sparse_default(x) * val
-      )
-    } else {
-      res <- sparse_integer(
-        values = sparse_values(x) * val,
-        positions = sparse_positions(x),
-        length = length(x),
-        default = sparse_default(x) * val
-      )
-    }
-  } else if (is_sparse_double(x)) {
-    if (val == 0) {
-      is_na <- is.na(sparse_values(x))
-      res <- sparse_double(
-        values = sparse_values(x)[is_na],
-        positions = sparse_positions(x)[is_na],
-        length = length(x),
-        default = sparse_default(x) * val
-      )
-    } else {
-      res <- sparse_double(
-        values = sparse_values(x) * val,
-        positions = sparse_positions(x),
-        length = length(x),
-        default = sparse_default(x) * val
-      )
-    }
-  } else {
-    cli::cli_abort("{.arg x} must be a sparse integer or double vector.")
-  }
+  check_sparse_numeric(x)
 
-  res
+  .Call(ffi_sparse_multiplication_scalar, x, val)
 }
 
 #' @rdname sparse-arithmetic-scalar
 #' @export
 sparse_addition_scalar <- function(x, val) {
   if (is.na(val)) {
-    if (is.integer(x)) {
-      return(rep(NA_integer_, length(x)))
-    } else {
-      return(rep(NA_real_, length(x)))
-    }
+    return(scalar_na(x))
   }
 
   if (val == 0) {
     return(x)
   }
 
-  if (is_sparse_integer(x)) {
-    res <- sparse_integer(
-      values = sparse_values(x) + val,
-      positions = sparse_positions(x),
-      length = length(x),
-      default = sparse_default(x) + val
-    )
-  } else if (is_sparse_double(x)) {
-    res <- sparse_double(
-      values = sparse_values(x) + val,
-      positions = sparse_positions(x),
-      length = length(x),
-      default = sparse_default(x) + val
-    )
-  } else {
-    cli::cli_abort("{.arg x} must be a sparse integer or double vector.")
-  }
+  check_sparse_numeric(x)
 
-  res
+  .Call(ffi_sparse_addition_scalar, x, val)
 }
 
 #' @rdname sparse-arithmetic-scalar
 #' @export
 sparse_subtraction_scalar <- function(x, val) {
   if (is.na(val)) {
-    if (is.integer(x)) {
-      return(rep(NA_integer_, length(x)))
-    } else {
-      return(rep(NA_real_, length(x)))
-    }
+    return(scalar_na(x))
   }
 
   if (val == 0) {
     return(x)
   }
 
-  if (is_sparse_integer(x)) {
-    res <- sparse_integer(
-      values = sparse_values(x) - val,
-      positions = sparse_positions(x),
-      length = length(x),
-      default = sparse_default(x) - val
-    )
-  } else if (is_sparse_double(x)) {
-    res <- sparse_double(
-      values = sparse_values(x) - val,
-      positions = sparse_positions(x),
-      length = length(x),
-      default = sparse_default(x) - val
-    )
-  } else {
-    cli::cli_abort("{.arg x} must be a sparse integer or double vector.")
-  }
+  check_sparse_numeric(x)
 
-  res
+  .Call(ffi_sparse_subtraction_scalar, x, val)
+}
+
+scalar_na <- function(x) {
+  if (is.integer(x)) {
+    rep(NA_integer_, length(x))
+  } else {
+    rep(NA_real_, length(x))
+  }
+}
+
+check_sparse_numeric <- function(x, call = rlang::caller_env()) {
+  if (!is_sparse_numeric(x)) {
+    cli::cli_abort(
+      "{.arg x} must be a sparse integer or double vector.",
+      call = call
+    )
+  }
 }
 
 #' Vector arithmetic with sparse vectors
