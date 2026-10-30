@@ -72,6 +72,7 @@ static r_obj* multiplication_sparse_sparse(r_obj* x, r_obj* y) {
   r_obj* out_val = KEEP(alloc_vec(is_integer, out_len));
   void* v_out_val = r_vec_begin(out_val);
   r_ssize out_idx = 0;
+  bool overflow = false;
 
   if (overlap != r_null) {
     const int* v_x_pos_idx = r_int_cbegin(r_list_get(overlap, 0));
@@ -79,7 +80,7 @@ static r_obj* multiplication_sparse_sparse(r_obj* x, r_obj* y) {
 
     for (r_ssize i = 0; i < n_overlap; i++) {
       v_out_pos[out_idx] = v_x_pos[v_x_pos_idx[i]];
-      poke_product(
+      overflow |= poke_product(
         v_out_val,
         out_idx,
         v_x_val,
@@ -104,6 +105,10 @@ static r_obj* multiplication_sparse_sparse(r_obj* x, r_obj* y) {
     v_out_pos[out_idx] = v_y_pos[v_y_na_pos[i]];
     poke_na(v_out_val, out_idx, is_integer);
     out_idx++;
+  }
+
+  if (overflow) {
+    warn_integer_overflow();
   }
 
   sparse_sort_pos_and_val(out_pos, out_val);
@@ -192,13 +197,15 @@ static r_obj* multiplication_sparse_dense(r_obj* x, r_obj* y) {
   void* v_out_val = r_vec_begin(out_val);
 
   idx = 0;
+  bool overflow = false;
 
   for (r_ssize i = 0; i < n_values; i++) {
     const int cur_pos = v_x_pos[i];
 
     if (!is_zero_at(v_y, cur_pos - 1, is_integer)) {
       v_out_pos[idx] = cur_pos;
-      poke_product(v_out_val, idx, v_x_val, i, v_y, cur_pos - 1, is_integer);
+      overflow |=
+        poke_product(v_out_val, idx, v_x_val, i, v_y, cur_pos - 1, is_integer);
       idx++;
     }
   }
@@ -222,6 +229,10 @@ static r_obj* multiplication_sparse_dense(r_obj* x, r_obj* y) {
     idx++;
   }
 
+  if (overflow) {
+    warn_integer_overflow();
+  }
+
   sparse_sort_pos_and_val(out_pos, out_val);
 
   r_obj* out = new_sparse_product(out_val, out_pos, x_len);
@@ -242,8 +253,15 @@ static r_obj* multiplication_dense_dense(r_obj* x, r_obj* y) {
     const int* v_y = r_int_cbegin(y);
     int* v_out = r_int_begin(out);
 
+    bool overflow = false;
     for (r_ssize i = 0; i < len; i++) {
-      poke_product(v_out, i, v_x, i, v_y, i, true);
+      overflow |= poke_product(v_out, i, v_x, i, v_y, i, true);
+    }
+
+    if (overflow) {
+      KEEP(out);
+      warn_integer_overflow();
+      FREE(1);
     }
   } else {
     const double* v_x = r_dbl_cbegin(x);
@@ -280,7 +298,7 @@ static inline void poke_na(void* v_out, r_ssize i_out, bool is_integer) {
   }
 }
 
-static inline void poke_product(
+static inline bool poke_product(
   void* v_out,
   r_ssize i_out,
   const void* v_x,
@@ -295,13 +313,29 @@ static inline void poke_product(
 
     if (x_val == r_globals.na_int || y_val == r_globals.na_int) {
       ((int*) v_out)[i_out] = r_globals.na_int;
-    } else {
-      ((int*) v_out)[i_out] = x_val * y_val;
+      return false;
     }
-  } else {
-    ((double*) v_out)[i_out] =
-      ((const double*) v_x)[i_x] * ((const double*) v_y)[i_y];
+
+    int product;
+    if (
+      __builtin_mul_overflow(x_val, y_val, &product) ||
+      product == r_globals.na_int
+    ) {
+      ((int*) v_out)[i_out] = r_globals.na_int;
+      return true;
+    }
+
+    ((int*) v_out)[i_out] = product;
+    return false;
   }
+
+  ((double*) v_out)[i_out] =
+    ((const double*) v_x)[i_x] * ((const double*) v_y)[i_y];
+  return false;
+}
+
+static void warn_integer_overflow(void) {
+  Rf_warning("NAs produced by integer overflow");
 }
 
 static r_obj* alloc_vec(bool is_integer, r_ssize n) {

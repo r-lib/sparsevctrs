@@ -12,7 +12,7 @@ static inline bool is_zero_at(const void* v, r_ssize i, bool is_integer);
 
 static inline void poke_na(void* v_out, r_ssize i_out, bool is_integer);
 
-static inline void poke_product(
+static inline bool poke_product(
   void* v_out,
   r_ssize i_out,
   const void* v_x,
@@ -21,6 +21,8 @@ static inline void poke_product(
   r_ssize i_y,
   bool is_integer
 );
+
+static void warn_integer_overflow(void);
 
 static r_obj* alloc_vec(bool is_integer, r_ssize n);
 
