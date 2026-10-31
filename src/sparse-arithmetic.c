@@ -139,26 +139,26 @@ static r_obj* multiplication_sparse_dense(r_obj* x, r_obj* y) {
   }
 
   // Locate NA values for Y - dense
-  r_ssize n_y_nas = 0;
+  r_ssize n_y_non_finite = 0;
   const r_ssize y_len = r_length(y);
   for (r_ssize i = 0; i < y_len; i++) {
-    if (is_na_at(v_y, i, is_integer)) {
+    if (is_non_finite_at(v_y, i, is_integer)) {
       // i + 1 because of R-indexing
       if (!int_match((int) i + 1, x_pos)) {
-        n_y_nas++;
+        n_y_non_finite++;
       }
     }
   }
 
-  r_obj* y_na_pos = KEEP(r_alloc_integer(n_y_nas));
-  int* v_y_na_pos = r_int_begin(y_na_pos);
+  r_obj* y_non_finite_pos = KEEP(r_alloc_integer(n_y_non_finite));
+  int* v_y_non_finite_pos = r_int_begin(y_non_finite_pos);
   r_ssize idx = 0;
 
   for (r_ssize i = 0; i < y_len; i++) {
-    if (is_na_at(v_y, i, is_integer)) {
+    if (is_non_finite_at(v_y, i, is_integer)) {
       // i + 1 because of R-indexing
       if (!int_match((int) i + 1, x_pos)) {
-        v_y_na_pos[idx] = i;
+        v_y_non_finite_pos[idx] = i;
         idx++;
       }
     }
@@ -190,7 +190,7 @@ static r_obj* multiplication_sparse_dense(r_obj* x, r_obj* y) {
     }
   }
 
-  const r_ssize out_len = n_values - n_zero + n_x_nas + n_y_nas;
+  const r_ssize out_len = n_values - n_zero + n_x_nas + n_y_non_finite;
   r_obj* out_pos = KEEP(r_alloc_integer(out_len));
   int* v_out_pos = r_int_begin(out_pos);
   r_obj* out_val = KEEP(alloc_vec(is_integer, out_len));
@@ -220,12 +220,12 @@ static r_obj* multiplication_sparse_dense(r_obj* x, r_obj* y) {
   }
 
   // set y na values
-  for (r_ssize i = 0; i < n_y_nas; i++) {
-    const int cur_pos = v_y_na_pos[i];
+  for (r_ssize i = 0; i < n_y_non_finite; i++) {
+    const int cur_pos = v_y_non_finite_pos[i];
 
     // cur_pos + 1 because it is R-indexed
     v_out_pos[idx] = cur_pos + 1;
-    poke_na(v_out_val, idx, is_integer);
+    poke_zero_product(v_out_val, idx, v_y, cur_pos, is_integer);
     idx++;
   }
 
@@ -290,11 +290,39 @@ static inline bool is_zero_at(const void* v, r_ssize i, bool is_integer) {
   return ((const double*) v)[i] == 0;
 }
 
+static inline bool is_non_finite_at(const void* v, r_ssize i, bool is_integer) {
+  if (is_integer) {
+    return ((const int*) v)[i] == r_globals.na_int;
+  }
+  return !R_FINITE(((const double*) v)[i]);
+}
+
 static inline void poke_na(void* v_out, r_ssize i_out, bool is_integer) {
   if (is_integer) {
     ((int*) v_out)[i_out] = r_globals.na_int;
   } else {
     ((double*) v_out)[i_out] = r_globals.na_dbl;
+  }
+}
+
+static inline void poke_zero_product(
+  void* v_out,
+  r_ssize i_out,
+  const void* v,
+  r_ssize i,
+  bool is_integer
+) {
+  if (is_integer) {
+    ((int*) v_out)[i_out] = r_globals.na_int;
+    return;
+  }
+
+  const double elt = ((const double*) v)[i];
+
+  if (R_IsNA(elt)) {
+    ((double*) v_out)[i_out] = r_globals.na_dbl;
+  } else {
+    ((double*) v_out)[i_out] = 0 * elt;
   }
 }
 
