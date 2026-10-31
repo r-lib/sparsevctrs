@@ -34,7 +34,7 @@
 
 * `sparse_multiplication()` now returns `NA` with a warning, as dense integer vectors do, when the product of two integers overflows, instead of silently wrapping around. This also affects `sparse_mean()` with integer weights. (#150)
 
-* `sparse_multiplication()` now returns `NaN` where a sparse vector has its default value of 0 and the dense vector has `Inf`, `-Inf` or `NaN`, since `0 * Inf` is `NaN`. Previously these positions were dropped and gave 0.
+* `sparse_multiplication()` now returns `NaN` where a sparse vector has its default value of 0 and the dense vector has `Inf`, `-Inf` or `NaN`, since `0 * Inf` is `NaN`. Previously these positions were dropped and gave 0. (#152)
 
 * `sparse_multiplication()` is much faster when the result has many stored values, since sorting them no longer takes quadratic time. With one million stored values on each side it now takes milliseconds instead of minutes. (#140)
 
