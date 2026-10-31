@@ -25,7 +25,9 @@
 #' as it does for dense integer vectors.
 #'
 #' Results that sparse double vectors can't store, such as stored values that
-#' are `Inf` or `NaN`, or a default value that is `NaN`, give an error.
+#' are `Inf` or `NaN`, or a default value that is `NaN`, give an error. The
+#' exception is `sparse_multiplication_scalar()` with `val = 0`, which keeps
+#' `NaN` for stored `Inf` and `NaN` values, since `Inf * 0` is `NaN`.
 #'
 #' @return A sparse vector of same type.
 #'

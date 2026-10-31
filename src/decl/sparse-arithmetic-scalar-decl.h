@@ -18,7 +18,7 @@ static r_obj* sparse_scalar_double(
   enum sparse_scalar_op op
 );
 
-static r_obj* sparse_scalar_na_pos(r_obj* x);
+static r_obj* sparse_scalar_non_finite_pos(r_obj* x);
 
 static inline int sparse_scalar_int_op(
   int x,

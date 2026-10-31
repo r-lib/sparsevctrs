@@ -48,7 +48,9 @@ results. Integer overflow in the stored values produces \code{NA} with a warning
 as it does for dense integer vectors.
 
 Results that sparse double vectors can't store, such as stored values that
-are \code{Inf} or \code{NaN}, or a default value that is \code{NaN}, give an error.
+are \code{Inf} or \code{NaN}, or a default value that is \code{NaN}, give an error. The
+exception is \code{sparse_multiplication_scalar()} with \code{val = 0}, which keeps
+\code{NaN} for stored \code{Inf} and \code{NaN} values, since \code{Inf * 0} is \code{NaN}.
 }
 \examples{
 x_sparse <- sparse_double(c(pi, 5, 0.1), c(2, 5, 10), 10)
