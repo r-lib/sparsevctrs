@@ -23,6 +23,12 @@ Calculate mean from sparse vectors
 This function, as with any of the other helper functions assumes that the
 input \code{x} is a sparse numeric vector. This is done for performance reasons,
 and it is thus the users responsibility to perform input checking.
+
+When \code{wts} is supplied, the weights are multiplied into \code{x} and the result is
+divided by the sum of the weights. With \code{na_rm = TRUE}, weights at positions
+where the weighted value is missing are dropped from the sum of the weights,
+so a missing weight removes that observation instead of returning \code{NA} as
+\code{\link[stats:weighted.mean]{stats::weighted.mean()}} does.
 }
 \examples{
 sparse_mean(

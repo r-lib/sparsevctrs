@@ -77,6 +77,24 @@ test_that("sparse_mean() works with wts argument", {
   expect_equal(weighted.mean(x, wts), sparse_mean(x, wts = wts))
 })
 
+test_that("sparse_mean() does not overflow with integer default", {
+  x <- sparse_integer(1L, 1, 1e9, default = 5L)
+
+  expect_no_warning(res <- sparse_mean(x))
+  expect_equal(res, (1 + 5 * (1e9 - 1)) / 1e9)
+})
+
+test_that("sparse_mean() divides by zero-sum weights", {
+  x <- sparse_double(c(1, 2), 1:2, 6L)
+  wts <- rep(0, 6)
+
+  expect_equal(sparse_mean(x, wts = wts), weighted.mean(x, wts))
+
+  x <- sparse_double(numeric(), integer(), 6L)
+
+  expect_equal(sparse_mean(x, wts = wts), weighted.mean(x, wts))
+})
+
 test_that("sparse_mean() works with wts and NA values at specific positions", {
   x <- sparse_double(c(1, NA, 3), c(2, 5, 9), 10)
   wts <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
