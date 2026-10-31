@@ -34,7 +34,7 @@ static r_obj* multiplication_sparse_sparse(r_obj* x, r_obj* y) {
   const bool is_integer = r_typeof(x) == R_TYPE_integer;
 
   r_obj* overlap = KEEP(find_overlap(x, y));
-  r_obj* nas = KEEP(find_nas_with_no_overlap(x, y));
+  r_obj* nas = KEEP(find_non_finite_with_no_overlap(x, y));
 
   r_obj* x_val = sparse_extract_val(x);
   r_obj* x_pos = sparse_extract_pos(x);
@@ -46,16 +46,16 @@ static r_obj* multiplication_sparse_sparse(r_obj* x, r_obj* y) {
   const void* v_y_val = r_vec_cbegin(y_val);
   const int* v_y_pos = r_int_cbegin(y_pos);
 
-  r_obj* x_na_pos = r_list_get(nas, 0);
-  r_obj* y_na_pos = r_list_get(nas, 1);
+  r_obj* x_non_finite_pos = r_list_get(nas, 0);
+  r_obj* y_non_finite_pos = r_list_get(nas, 1);
 
-  const int* v_x_na_pos = r_int_cbegin(x_na_pos);
-  const int* v_y_na_pos = r_int_cbegin(y_na_pos);
+  const int* v_x_non_finite_pos = r_int_cbegin(x_non_finite_pos);
+  const int* v_y_non_finite_pos = r_int_cbegin(y_non_finite_pos);
 
-  const r_ssize x_na_count = r_length(x_na_pos);
-  const r_ssize y_na_count = r_length(y_na_pos);
+  const r_ssize x_non_finite_count = r_length(x_non_finite_pos);
+  const r_ssize y_non_finite_count = r_length(y_non_finite_pos);
 
-  if (overlap == r_null && x_na_count == 0 && y_na_count == 0) {
+  if (overlap == r_null && x_non_finite_count == 0 && y_non_finite_count == 0) {
     FREE(2);
     return empty_sparse(sparse_extract_len(x), is_integer);
   }
@@ -65,7 +65,7 @@ static r_obj* multiplication_sparse_sparse(r_obj* x, r_obj* y) {
     n_overlap = r_length(r_list_get(overlap, 0));
   }
 
-  const r_ssize out_len = n_overlap + x_na_count + y_na_count;
+  const r_ssize out_len = n_overlap + x_non_finite_count + y_non_finite_count;
 
   r_obj* out_pos = KEEP(r_alloc_integer(out_len));
   int* v_out_pos = r_int_begin(out_pos);
@@ -94,16 +94,28 @@ static r_obj* multiplication_sparse_sparse(r_obj* x, r_obj* y) {
   }
 
   // set x NA values
-  for (r_ssize i = 0; i < x_na_count; i++) {
-    v_out_pos[out_idx] = v_x_pos[v_x_na_pos[i]];
-    poke_na(v_out_val, out_idx, is_integer);
+  for (r_ssize i = 0; i < x_non_finite_count; i++) {
+    v_out_pos[out_idx] = v_x_pos[v_x_non_finite_pos[i]];
+    poke_zero_product(
+      v_out_val,
+      out_idx,
+      v_x_val,
+      v_x_non_finite_pos[i],
+      is_integer
+    );
     out_idx++;
   }
 
   // set y NA values
-  for (r_ssize i = 0; i < y_na_count; i++) {
-    v_out_pos[out_idx] = v_y_pos[v_y_na_pos[i]];
-    poke_na(v_out_val, out_idx, is_integer);
+  for (r_ssize i = 0; i < y_non_finite_count; i++) {
+    v_out_pos[out_idx] = v_y_pos[v_y_non_finite_pos[i]];
+    poke_zero_product(
+      v_out_val,
+      out_idx,
+      v_y_val,
+      v_y_non_finite_pos[i],
+      is_integer
+    );
     out_idx++;
   }
 
@@ -165,32 +177,32 @@ static r_obj* multiplication_sparse_dense(r_obj* x, r_obj* y) {
   }
 
   // Locate NA values for X sparse
-  r_ssize n_x_nas = 0;
+  r_ssize n_x_non_finite = 0;
   for (r_ssize i = 0; i < n_values; i++) {
-    if (is_na_at(v_x_val, i, is_integer)) {
+    if (is_non_finite_at(v_x_val, i, is_integer)) {
       // v_x_pos[i] - 1 because of R-indexing
       if (is_zero_at(v_y, v_x_pos[i] - 1, is_integer)) {
-        n_x_nas++;
+        n_x_non_finite++;
       }
     }
   }
 
-  r_obj* x_na_pos = KEEP(r_alloc_integer(n_x_nas));
-  int* v_x_na_pos = r_int_begin(x_na_pos);
+  r_obj* x_non_finite_pos = KEEP(r_alloc_integer(n_x_non_finite));
+  int* v_x_non_finite_pos = r_int_begin(x_non_finite_pos);
   idx = 0;
 
   for (r_ssize i = 0; i < n_values; i++) {
-    if (is_na_at(v_x_val, i, is_integer)) {
+    if (is_non_finite_at(v_x_val, i, is_integer)) {
       const int cur_pos = v_x_pos[i];
       // cur_pos - 1 because of R-indexing
       if (is_zero_at(v_y, cur_pos - 1, is_integer)) {
-        v_x_na_pos[idx] = cur_pos;
+        v_x_non_finite_pos[idx] = i;
         idx++;
       }
     }
   }
 
-  const r_ssize out_len = n_values - n_zero + n_x_nas + n_y_non_finite;
+  const r_ssize out_len = n_values - n_zero + n_x_non_finite + n_y_non_finite;
   r_obj* out_pos = KEEP(r_alloc_integer(out_len));
   int* v_out_pos = r_int_begin(out_pos);
   r_obj* out_val = KEEP(alloc_vec(is_integer, out_len));
@@ -211,11 +223,15 @@ static r_obj* multiplication_sparse_dense(r_obj* x, r_obj* y) {
   }
 
   // set x na values
-  for (r_ssize i = 0; i < n_x_nas; i++) {
-    const int cur_pos = v_x_na_pos[i];
-
-    v_out_pos[idx] = cur_pos;
-    poke_na(v_out_val, idx, is_integer);
+  for (r_ssize i = 0; i < n_x_non_finite; i++) {
+    v_out_pos[idx] = v_x_pos[v_x_non_finite_pos[i]];
+    poke_zero_product(
+      v_out_val,
+      idx,
+      v_x_val,
+      v_x_non_finite_pos[i],
+      is_integer
+    );
     idx++;
   }
 
@@ -276,13 +292,6 @@ static r_obj* multiplication_dense_dense(r_obj* x, r_obj* y) {
   return out;
 }
 
-static inline bool is_na_at(const void* v, r_ssize i, bool is_integer) {
-  if (is_integer) {
-    return ((const int*) v)[i] == r_globals.na_int;
-  }
-  return R_IsNA(((const double*) v)[i]);
-}
-
 static inline bool is_zero_at(const void* v, r_ssize i, bool is_integer) {
   if (is_integer) {
     return ((const int*) v)[i] == 0;
@@ -295,14 +304,6 @@ static inline bool is_non_finite_at(const void* v, r_ssize i, bool is_integer) {
     return ((const int*) v)[i] == r_globals.na_int;
   }
   return !R_FINITE(((const double*) v)[i]);
-}
-
-static inline void poke_na(void* v_out, r_ssize i_out, bool is_integer) {
-  if (is_integer) {
-    ((int*) v_out)[i_out] = r_globals.na_int;
-  } else {
-    ((double*) v_out)[i_out] = r_globals.na_dbl;
-  }
 }
 
 static inline void poke_zero_product(
@@ -449,7 +450,7 @@ static r_obj* find_overlap(r_obj* x, r_obj* y) {
   return out;
 }
 
-static r_obj* find_nas_with_no_overlap(r_obj* x, r_obj* y) {
+static r_obj* find_non_finite_with_no_overlap(r_obj* x, r_obj* y) {
   r_obj* x_pos = sparse_extract_pos(x);
   r_obj* x_val = sparse_extract_val(x);
   r_obj* y_pos = sparse_extract_pos(y);
@@ -462,8 +463,8 @@ static r_obj* find_nas_with_no_overlap(r_obj* x, r_obj* y) {
   r_obj* y_matches = KEEP(r_alloc_integer(y_len));
   int* v_y_matches = r_int_begin(y_matches);
 
-  mark_nas(x_val, v_x_matches);
-  mark_nas(y_val, v_y_matches);
+  mark_non_finite(x_val, v_x_matches);
+  mark_non_finite(y_val, v_y_matches);
 
   const int* x_pos_v = r_int_cbegin(x_pos);
   const int* y_pos_v = r_int_cbegin(y_pos);
@@ -540,13 +541,13 @@ static bool int_match(int x, r_obj* table) {
   return out;
 }
 
-static void mark_nas(r_obj* val, int* v_matches) {
+static void mark_non_finite(r_obj* val, int* v_matches) {
   const r_ssize n = r_length(val);
   const void* v_val = r_vec_cbegin(val);
   const bool is_integer = r_typeof(val) == R_TYPE_integer;
 
   for (r_ssize i = 0; i < n; i++) {
-    v_matches[i] = is_na_at(v_val, i, is_integer) ? 1 : 0;
+    v_matches[i] = is_non_finite_at(v_val, i, is_integer) ? 1 : 0;
   }
 }
 

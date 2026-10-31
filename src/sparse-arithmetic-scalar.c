@@ -73,8 +73,9 @@ static r_obj* sparse_scalar_integer(
 
   const bool keeps_only_na = op == SPARSE_SCALAR_OP_mul && val == 0;
 
-  r_obj* out_pos =
-    KEEP(keeps_only_na ? sparse_scalar_na_pos(x) : sparse_extract_pos(x));
+  r_obj* out_pos = KEEP(
+    keeps_only_na ? sparse_scalar_non_finite_pos(x) : sparse_extract_pos(x)
+  );
   const r_ssize n_pos = r_length(out_pos);
 
   r_obj* out_val = KEEP(r_alloc_integer(n_pos));
@@ -132,8 +133,9 @@ static r_obj* sparse_scalar_double(
 
   const bool keeps_only_na = op == SPARSE_SCALAR_OP_mul && val == 0;
 
-  r_obj* out_pos =
-    KEEP(keeps_only_na ? sparse_scalar_na_pos(x) : sparse_extract_pos(x));
+  r_obj* out_pos = KEEP(
+    keeps_only_na ? sparse_scalar_non_finite_pos(x) : sparse_extract_pos(x)
+  );
   const r_ssize n_pos = r_length(out_pos);
 
   r_obj* out_val = KEEP(r_alloc_double(n_pos));
@@ -144,8 +146,17 @@ static r_obj* sparse_scalar_double(
   bool has_non_finite = false;
 
   if (keeps_only_na) {
-    for (r_ssize i = 0; i < n_pos; ++i) {
-      v_out_val[i] = r_globals.na_dbl;
+    const double* v_val = r_dbl_cbegin(x_val);
+    const r_ssize n_val = r_length(x_val);
+
+    r_ssize idx = 0;
+    for (r_ssize i = 0; i < n_val; ++i) {
+      const double elt = v_val[i];
+
+      if (!R_FINITE(elt)) {
+        v_out_val[idx] = R_IsNA(elt) ? r_globals.na_dbl : 0 * elt;
+        ++idx;
+      }
     }
   } else if (is_integer) {
     const int* v_val = r_int_cbegin(x_val);
@@ -187,7 +198,7 @@ static r_obj* sparse_scalar_double(
   return out;
 }
 
-static r_obj* sparse_scalar_na_pos(r_obj* x) {
+static r_obj* sparse_scalar_non_finite_pos(r_obj* x) {
   r_obj* x_val = sparse_extract_val(x);
   const int* v_x_pos = r_int_cbegin(sparse_extract_pos(x));
   const r_ssize n_val = r_length(x_val);
@@ -209,7 +220,7 @@ static r_obj* sparse_scalar_na_pos(r_obj* x) {
 
     for (r_ssize i = 0; i < n_val; ++i) {
       v_out_pos[n_na] = v_x_pos[i];
-      n_na += ISNAN(v_x_val[i]);
+      n_na += !R_FINITE(v_x_val[i]);
     }
   }
 

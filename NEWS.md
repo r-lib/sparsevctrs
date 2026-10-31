@@ -36,6 +36,8 @@
 
 * `sparse_multiplication()` now returns `NaN` where a sparse vector has its default value of 0 and the dense vector has `Inf`, `-Inf` or `NaN`, since `0 * Inf` is `NaN`. Previously these positions were dropped and gave 0. (#152)
 
+* `sparse_multiplication()` and `sparse_multiplication_scalar()` with `val = 0` now return `NaN` for stored `Inf` and `NaN` values of a sparse double vector multiplied by 0, as dense multiplication does. Previously `Inf` was dropped and gave 0, and `NaN` was returned as `NA`. (#153)
+
 * `sparse_multiplication()` is much faster when the result has many stored values, since sorting them no longer takes quadratic time. With one million stored values on each side it now takes milliseconds instead of minutes. (#140)
 
 * `sparse_multiplication_scalar()` now keeps stored `NA` values when multiplying by 0, since `NA * 0` is `NA`. Previously they were dropped. (#145)
