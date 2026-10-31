@@ -304,10 +304,10 @@ static r_obj* altrep_sparse_integer_Sum_method(r_obj* x, Rboolean na_rm) {
   const r_ssize val_len = r_length(val);
   const r_ssize len = sparse_extract_len(x);
 
-  int sum = 0;
+  int64_t sum = 0;
 
   if (len == 0) {
-    return r_int(sum);
+    return r_int(0);
   }
 
   for (r_ssize i = 0; i < val_len; i++) {
@@ -318,15 +318,19 @@ static r_obj* altrep_sparse_integer_Sum_method(r_obj* x, Rboolean na_rm) {
         return r_int(r_globals.na_int);
       }
     }
-    sum = sum + v_val[i];
+    sum += v_val[i];
   }
 
   // default can be non-zero
   const int v_default_val = sparse_extract_default_integer(x);
 
   if (v_default_val != 0) {
-    sum = sum + (len - val_len) * v_default_val;
+    sum += (int64_t) (len - val_len) * v_default_val;
   }
 
-  return r_int(sum);
+  if (sum > INT_MAX || sum <= INT_MIN) {
+    return r_dbl((double) sum);
+  }
+
+  return r_int((int) sum);
 }
