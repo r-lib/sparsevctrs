@@ -70,13 +70,13 @@
       Error in `sparse_addition_scalar()`:
       ! `val` must be a single number.
 
-# scalar arithmetic on sparse integers needs whole number results
+# scalar arithmetic on sparse integers needs whole number val
 
     Code
       sparse_multiplication_scalar(vec_int, 0.3)
     Condition
       Error in `sparse_multiplication_scalar()`:
-      ! `val` must give whole number results when `x` is a sparse integer vector.
+      ! `val` must be a whole number when `x` is a sparse integer vector.
 
 ---
 
@@ -84,7 +84,31 @@
       sparse_addition_scalar(vec_int, 0.5)
     Condition
       Error in `sparse_addition_scalar()`:
-      ! `val` must give whole number results when `x` is a sparse integer vector.
+      ! `val` must be a whole number when `x` is a sparse integer vector.
+
+---
+
+    Code
+      sparse_multiplication_scalar(vec_int, 0.5)
+    Condition
+      Error in `sparse_multiplication_scalar()`:
+      ! `val` must be a whole number when `x` is a sparse integer vector.
+
+---
+
+    Code
+      sparse_multiplication_scalar(vec_odd, 0.5)
+    Condition
+      Error in `sparse_multiplication_scalar()`:
+      ! `val` must be a whole number when `x` is a sparse integer vector.
+
+---
+
+    Code
+      sparse_subtraction_scalar(vec_int, Inf)
+    Condition
+      Error in `sparse_subtraction_scalar()`:
+      ! `val` must be a whole number when `x` is a sparse integer vector.
 
 # scalar arithmetic on sparse integers handles overflow
 
