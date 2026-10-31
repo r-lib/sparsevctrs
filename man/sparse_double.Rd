@@ -14,7 +14,7 @@ sparse_double(values, positions, length, default = 0)
 \item{length}{integer value, Length of vector.}
 
 \item{default}{double value, value at indices not specified by \code{positions}.
-Defaults to \code{0}. Cannot be \code{NA}.}
+Defaults to \code{0}. Cannot be \code{NA}, \code{NaN}, or infinite.}
 }
 \value{
 sparse double vector

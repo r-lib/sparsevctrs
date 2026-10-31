@@ -7,7 +7,7 @@
 #' @param positions integer vector, indices of non-zero entries.
 #' @param length integer value, Length of vector.
 #' @param default double value, value at indices not specified by `positions`.
-#'   Defaults to `0`. Cannot be `NA`.
+#'   Defaults to `0`. Cannot be `NA`, `NaN`, or infinite.
 #'
 #' @details
 #'
@@ -43,7 +43,7 @@
 #' )
 #' @export
 sparse_double <- function(values, positions, length, default = 0) {
-  check_number_decimal(default)
+  check_number_decimal(default, allow_infinite = FALSE)
   validate_length(length)
 
   if (!is.integer(length)) {
