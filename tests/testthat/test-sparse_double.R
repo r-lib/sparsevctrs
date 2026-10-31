@@ -565,6 +565,57 @@ test_that("sparse_multiplication() handles more non-sparse ALTREP inputs", {
   )
 })
 
+test_that("sparse_multiplication() keeps 0 * non-finite from dense operand", {
+  x <- sparse_double(c(2, 3), c(1, 2), 4)
+  y <- c(1, 1, Inf, NaN)
+  expected <- c(2, 3, 0, 0) * y
+
+  res <- sparse_multiplication(x, y)
+  expect_true(is_sparse_double(res))
+  expect_identical(as.numeric(res), expected)
+  expect_identical(sparse_multiplication(y, x) |> as.numeric(), expected)
+
+  y <- c(1, 1, -Inf, NA)
+  expect_identical(
+    sparse_multiplication(x, y) |> as.numeric(),
+    c(2, 3, 0, 0) * y
+  )
+})
+
+test_that("sparse_multiplication() keeps 0 * non-finite with empty sparse", {
+  x <- sparse_double(numeric(), integer(), 4L)
+  y <- c(1, 1, Inf, NaN)
+
+  expect_identical(
+    sparse_multiplication(x, y) |> as.numeric(),
+    c(0, 0, 0, 0) * y
+  )
+  expect_identical(
+    sparse_multiplication(y, x) |> as.numeric(),
+    c(0, 0, 0, 0) * y
+  )
+})
+
+test_that("sparse_multiplication() handles non-finite at stored positions", {
+  x <- sparse_double(c(2, 3), c(1, 2), 4)
+  y <- c(Inf, NaN, 1, Inf)
+
+  expect_identical(
+    sparse_multiplication(x, y) |> as.numeric(),
+    c(2, 3, 0, 0) * y
+  )
+})
+
+test_that("sparse_multiplication() mixes stored NA with non-finite", {
+  x <- sparse_double(c(NA, 3), c(1, 2), 4)
+  y <- c(0, 1, Inf, 0)
+
+  expect_identical(
+    sparse_multiplication(x, y) |> as.numeric(),
+    c(NA, 3, 0, 0) * y
+  )
+})
+
 test_that("sparse_mean() works with non-sparse ALTREP weights", {
   x <- sparse_double(c(1, 2), 1:2, 6)
   w <- c(3, 1, 2, 6, 5, 4)
