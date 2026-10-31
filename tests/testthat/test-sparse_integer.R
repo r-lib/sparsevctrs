@@ -475,25 +475,24 @@ test_that("sum method works with sparse_integer", {
 test_that("sum method does not overflow with sparse_integer", {
   x <- sparse_integer(integer(), integer(), 2000000000, default = 2)
   expect_identical(sum(x), 4e9)
-  expect_identical(sum(x), sum(x[]))
 
   x <- sparse_integer(5L, 1, 2000000000, default = 2)
-  expect_identical(sum(x), sum(x[]))
+  expect_identical(sum(x), 4000000003)
 
   x <- sparse_integer(c(2147483647L, 1L), 1:2, 2)
-  expect_identical(sum(x), sum(x[]))
+  expect_identical(sum(x), 2147483648)
 
   x <- sparse_integer(c(-2147483647L, -2147483647L), 1:2, 2)
-  expect_identical(sum(x), sum(x[]))
+  expect_identical(sum(x), -4294967294)
 
   x <- sparse_integer(c(2147483647L, 1L), 1:2, 2, default = 3)
-  expect_identical(sum(x), sum(x[]))
+  expect_identical(sum(x), 2147483648)
 
   x <- sparse_integer(c(-2147483647L, -1L), 1:2, 2)
-  expect_identical(sum(x), sum(x[]))
+  expect_identical(sum(x), -2147483648)
 
   x <- sparse_integer(c(2147483647L, NA), 1:2, 3)
-  expect_identical(sum(x, na.rm = TRUE), sum(x[], na.rm = TRUE))
+  expect_identical(sum(x, na.rm = TRUE), 2147483647L)
 })
 
 test_that("default argument is working", {
