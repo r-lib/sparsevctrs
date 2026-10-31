@@ -6,6 +6,8 @@ static r_obj* sparse_scalar_arithmetic(
 
 static double sparse_scalar_val(r_obj* ffi_val);
 
+static bool sparse_scalar_is_whole(double val);
+
 static r_obj* sparse_scalar_integer(
   r_obj* x,
   double val,
