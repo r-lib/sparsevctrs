@@ -44,6 +44,8 @@
 
 * `sparse_division_scalar()` now gives the same result as dense division when `val` is 0, with `-Inf` for negative values, `NaN` for zeros and `NA` for missing values, instead of `Inf` everywhere. (#146)
 
+* `sparse_double()` now gives an error when `default` is `NaN`, `Inf` or `-Inf`, since they made `sum()` return `NaN`.
+
 * `sparse_dummy()` is now faster, especially for factors with missing values and many levels. (#81)
 
 * `sparse_dummy()` now returns missing values for missing elements of a factor with a single level and `one_hot = TRUE`, instead of 1.
