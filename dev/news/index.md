@@ -13,6 +13,12 @@
   after the vector was modified in place with `x[i] <- value`.
   ([\#147](https://github.com/r-lib/sparsevctrs/issues/147))
 
+- Fixed bug where [`sum()`](https://rdrr.io/r/base/sum.html) on sparse
+  integer vectors overflowed silently. It now returns a double when the
+  sum is outside the integer range, as
+  [`sum()`](https://rdrr.io/r/base/sum.html) does for dense integer
+  vectors in current R versions.
+
 - Fixed bug where
   [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html) on sparse
   character vectors compared string pointers instead of string contents,
