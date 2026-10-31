@@ -22,6 +22,7 @@ Turning a sparse matrix into a tibble.
 }
 \details{
 The only requirement from the sparse matrix is that it contains column names.
+Logical sparse matrices give sparse double columns.
 }
 \examples{
 \dontshow{if (rlang::is_installed("tibble")) withAutoprint(\{ # examplesIf}
