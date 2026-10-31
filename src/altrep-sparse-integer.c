@@ -268,12 +268,12 @@ static r_obj* altrep_sparse_integer_extreme(
 
   const int v_default_val = sparse_extract_default_integer(x);
 
+  bool seen = false;
+
   // The default only appears if some positions are not explicitly stored
-  if (
-    val_len < sparse_extract_len(x) &&
-    (is_max ? v_default_val > out : v_default_val < out)
-  ) {
+  if (val_len < sparse_extract_len(x)) {
     out = v_default_val;
+    seen = true;
   }
 
   for (r_ssize i = 0; i < val_len; i++) {
@@ -285,10 +285,22 @@ static r_obj* altrep_sparse_integer_extreme(
       }
     }
 
-    if (is_max ? v_val[i] > out : v_val[i] < out) {
+    if (!seen || (is_max ? v_val[i] > out : v_val[i] < out)) {
       out = v_val[i];
+      seen = true;
     }
   }
+
+  if (!seen) {
+    if (is_max) {
+      Rf_warning("no non-missing arguments to max; returning -Inf");
+      return r_dbl(R_NegInf);
+    } else {
+      Rf_warning("no non-missing arguments to min; returning Inf");
+      return r_dbl(R_PosInf);
+    }
+  }
+
   return r_int(out);
 }
 
