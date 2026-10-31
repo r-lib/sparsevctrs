@@ -44,6 +44,14 @@
 - [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
   and
   [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)
+  now give an error when a sparse matrix contains `NaN` or infinite
+  values, as they already do for data frames, instead of creating sparse
+  vectors that break [`min()`](https://rdrr.io/r/base/Extremes.html) and
+  [`max()`](https://rdrr.io/r/base/Extremes.html).
+
+- [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
+  and
+  [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)
   are now much faster.
   ([\#66](https://github.com/r-lib/sparsevctrs/issues/66))
 
