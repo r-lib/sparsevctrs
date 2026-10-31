@@ -101,6 +101,7 @@ coerce_to_sparse_matrix <- function(x, call = rlang::caller_env(0)) {
 #'
 #' @details
 #' The only requirement from the sparse matrix is that it contains column names.
+#' Logical sparse matrices give sparse double columns.
 #'
 #' @return tibble with sparse columns
 #'
@@ -155,6 +156,7 @@ coerce_to_sparse_tibble <- function(x, call = rlang::caller_env(0)) {
 #'
 #' @details
 #' The only requirement from a sparse matrix is that it contains column names.
+#' Logical sparse matrices give sparse double columns.
 #'
 #' When `x` is a data frame, each column is turned into a sparse vector of the
 #' same type using [as_sparse_integer()], [as_sparse_double()],
@@ -262,6 +264,9 @@ coerce_to_sparse_data_frame <- function(x, call = rlang::caller_env(0)) {
       x <- Matrix::drop0(x)
     }
     values <- x@x
+    if (is.logical(values)) {
+      values <- as.double(values)
+    }
     if (is.double(values)) {
       validate_values_double(values, call = call)
     }

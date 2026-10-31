@@ -410,6 +410,33 @@ test_that("coerce_to_sparse_data_frame() works with non-dgCMatrix input", {
   expect_identical(res, exp)
 })
 
+test_that("coerce_to_sparse_data_frame() works with logical matrices", {
+  skip_if_not_installed("Matrix")
+
+  sparse_mat <- Matrix::sparseMatrix(
+    i = c(1, 3, 3),
+    j = c(1, 1, 2),
+    x = c(TRUE, NA, TRUE),
+    dims = c(3, 2),
+    dimnames = list(NULL, c("a", "b"))
+  )
+
+  res <- coerce_to_sparse_data_frame(sparse_mat)
+
+  exp <- data.frame(
+    a = sparse_double(c(1, NA), c(1, 3), 3),
+    b = sparse_double(1, 3, 3)
+  )
+
+  expect_identical(res, exp)
+
+  empty <- coerce_to_sparse_matrix(data.frame(x = integer(), y = integer()))
+  res <- coerce_to_sparse_data_frame(empty)
+
+  expect_identical(dim(res), c(0L, 2L))
+  expect_true(all(vapply(res, is_sparse_double, logical(1))))
+})
+
 test_that("coerce_to_sparse_data_frame() errors with no column names", {
   skip_if_not_installed("Matrix")
 
@@ -546,6 +573,28 @@ test_that("coerce_to_sparse_tibble() works with non-dgCMatrix input", {
   exp <- lapply(1:10, function(x) sparse_double(x, x, length = 10))
   names(exp) <- letters[1:10]
   exp <- tibble::as_tibble(exp)
+
+  expect_identical(res, exp)
+})
+
+test_that("coerce_to_sparse_tibble() works with logical matrices", {
+  skip_if_not_installed("Matrix")
+  skip_if_not_installed("tibble")
+
+  sparse_mat <- Matrix::sparseMatrix(
+    i = c(1, 3, 3),
+    j = c(1, 1, 2),
+    x = c(TRUE, NA, TRUE),
+    dims = c(3, 2),
+    dimnames = list(NULL, c("a", "b"))
+  )
+
+  res <- coerce_to_sparse_tibble(sparse_mat)
+
+  exp <- tibble::tibble(
+    a = sparse_double(c(1, NA), c(1, 3), 3),
+    b = sparse_double(1, 3, 3)
+  )
 
   expect_identical(res, exp)
 })

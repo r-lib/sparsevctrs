@@ -23,6 +23,7 @@ columns.
 }
 \details{
 The only requirement from a sparse matrix is that it contains column names.
+Logical sparse matrices give sparse double columns.
 
 When \code{x} is a data frame, each column is turned into a sparse vector of the
 same type using \code{\link[=as_sparse_integer]{as_sparse_integer()}}, \code{\link[=as_sparse_double]{as_sparse_double()}},
