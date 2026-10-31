@@ -350,6 +350,11 @@ test_that("min method works with sparse_integer()", {
     min(sparse_integer(c(5L, 6L), 1:2, 2)),
     5L
   )
+
+  expect_snapshot(
+    res <- min(sparse_integer(NA, 1, 1), na.rm = TRUE)
+  )
+  expect_identical(res, Inf)
 })
 
 test_that("max method works with sparse_integer()", {
@@ -402,6 +407,11 @@ test_that("max method works with sparse_integer()", {
     max(sparse_integer(c(-5L, -6L), 1:2, 2)),
     -5L
   )
+
+  expect_snapshot(
+    res <- max(sparse_integer(NA, 1, 1), na.rm = TRUE)
+  )
+  expect_identical(res, -Inf)
 })
 
 test_that("anyNA method works with sparse_integer", {

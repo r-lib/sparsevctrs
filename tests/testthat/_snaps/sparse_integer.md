@@ -268,10 +268,26 @@
       Warning:
       no non-missing arguments to min; returning Inf
 
+---
+
+    Code
+      res <- min(sparse_integer(NA, 1, 1), na.rm = TRUE)
+    Condition
+      Warning:
+      no non-missing arguments to min; returning Inf
+
 # max method works with sparse_integer()
 
     Code
       res <- max(sparse_integer(integer(), integer(), 0))
+    Condition
+      Warning:
+      no non-missing arguments to max; returning -Inf
+
+---
+
+    Code
+      res <- max(sparse_integer(NA, 1, 1), na.rm = TRUE)
     Condition
       Warning:
       no non-missing arguments to max; returning -Inf

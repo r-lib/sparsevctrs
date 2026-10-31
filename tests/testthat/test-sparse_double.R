@@ -346,6 +346,11 @@ test_that("min method works with sparse_double()", {
     min(sparse_double(c(5, 6), 1:2, 2)),
     5
   )
+
+  expect_snapshot(
+    res <- min(sparse_double(NA, 1, 1), na.rm = TRUE)
+  )
+  expect_identical(res, Inf)
 })
 
 test_that("max method works with sparse_double()", {
@@ -397,6 +402,11 @@ test_that("max method works with sparse_double()", {
     max(sparse_double(c(-5, -6), 1:2, 2)),
     -5
   )
+
+  expect_snapshot(
+    res <- max(sparse_double(NA, 1, 1), na.rm = TRUE)
+  )
+  expect_identical(res, -Inf)
 })
 
 test_that("anyNA method works with sparse_double", {

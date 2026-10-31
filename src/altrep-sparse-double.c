@@ -313,23 +313,39 @@ static r_obj* altrep_sparse_double_extreme(
 
   const double v_default_val = sparse_extract_default_double(x);
 
+  bool seen = false;
+
   // The default only appears if some positions are not explicitly stored
   if (
     val_len < sparse_extract_len(x) &&
     (is_max ? v_default_val > out : v_default_val < out)
   ) {
     out = v_default_val;
+    seen = true;
   }
 
   for (r_ssize i = 0; i < val_len; i++) {
-    if (R_IsNA(v_val[i]) && !na_rm) {
+    if (R_IsNA(v_val[i])) {
+      if (na_rm) {
+        continue;
+      }
       return r_dbl(r_globals.na_dbl);
     }
 
     if (is_max ? v_val[i] > out : v_val[i] < out) {
       out = v_val[i];
+      seen = true;
     }
   }
+
+  if (!seen) {
+    if (is_max) {
+      Rf_warning("no non-missing arguments to max; returning -Inf");
+    } else {
+      Rf_warning("no non-missing arguments to min; returning Inf");
+    }
+  }
+
   return r_dbl(out);
 }
 
