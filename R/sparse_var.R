@@ -5,8 +5,12 @@
 #'
 #' @details
 #' This function, as with any of the other helper functions assumes that the
-#' input `x` is a sparse numeric vector. This is done for performance reasons,
-#' and it is thus the users responsibility to perform input checking.
+#' input `x` is a numeric vector. This is done for performance reasons, and it
+#' is thus the users responsibility to perform input checking. Non-sparse
+#' numeric vectors are supported but get no performance benefit.
+#'
+#' Like [var()], it returns `NA` when fewer than 2 non-missing observations
+#' remain.
 #'
 #' Much like [var()] it uses the denominator `n-1`.
 #'
@@ -36,21 +40,15 @@
 #'
 #' @export
 sparse_var <- function(x, na_rm = FALSE) {
-  values <- sparse_values(x)
-  len_values <- length(values)
-
-  if (len_values == 0) {
-    return(0)
-  }
-
-  default <- sparse_default(x)
   x_len <- length(x)
 
-  mean <- sparse_mean(x, na_rm = na_rm)
+  if (x_len < 2) {
+    return(NA_real_)
+  }
 
-  res <- sum((values - mean)^2, na.rm = na_rm)
-
-  res <- res + (default - mean)^2 * (x_len - len_values)
+  values <- sparse_values(x)
+  len_values <- length(values)
+  default <- sparse_default(x)
 
   denominator <- x_len - 1
 
@@ -58,6 +56,21 @@ sparse_var <- function(x, na_rm = FALSE) {
     denominator <- denominator - sum(is.na(values))
   }
 
-  res <- res / denominator
-  res
+  if (denominator < 1) {
+    return(NA_real_)
+  }
+
+  if (len_values == 0) {
+    return(0)
+  }
+
+  mean <- sparse_mean(x, na_rm = na_rm)
+
+  res <- sum((values - mean)^2, na.rm = na_rm)
+
+  if (!is.na(default)) {
+    res <- res + (default - mean)^2 * as.numeric(x_len - len_values)
+  }
+
+  res / denominator
 }

@@ -34,6 +34,10 @@
 #'
 #' @export
 sparse_median <- function(x, na_rm = FALSE) {
+  if (length(x) == 0) {
+    return(NA_real_)
+  }
+
   default <- sparse_default(x)
   values <- sparse_values(x)
   values_len <- length(values)

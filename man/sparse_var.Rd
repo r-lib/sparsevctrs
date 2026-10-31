@@ -19,8 +19,12 @@ Calculate variance from sparse vectors
 }
 \details{
 This function, as with any of the other helper functions assumes that the
-input \code{x} is a sparse numeric vector. This is done for performance reasons,
-and it is thus the users responsibility to perform input checking.
+input \code{x} is a numeric vector. This is done for performance reasons, and it
+is thus the users responsibility to perform input checking. Non-sparse
+numeric vectors are supported but get no performance benefit.
+
+Like \code{\link[=var]{var()}}, it returns \code{NA} when fewer than 2 non-missing observations
+remain.
 
 Much like \code{\link[=var]{var()}} it uses the denominator \code{n-1}.
 }
