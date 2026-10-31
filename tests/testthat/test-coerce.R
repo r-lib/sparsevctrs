@@ -622,6 +622,30 @@ test_that(".sparse_matrix_to_list() handles explicit zeros", {
   )
 })
 
+test_that("matrix coercion rejects non-finite values", {
+  skip_if_not_installed("Matrix")
+
+  nan <- Matrix::sparseMatrix(
+    i = 1:2,
+    j = c(1, 1),
+    x = c(NaN, 2),
+    dims = c(3, 1),
+    dimnames = list(NULL, "a")
+  )
+  inf <- Matrix::sparseMatrix(
+    i = 1:2,
+    j = c(1, 1),
+    x = c(Inf, 2),
+    dims = c(3, 1),
+    dimnames = list(NULL, "a")
+  )
+
+  expect_snapshot(error = TRUE, coerce_to_sparse_data_frame(nan))
+  expect_snapshot(error = TRUE, coerce_to_sparse_data_frame(inf))
+  expect_snapshot(error = TRUE, coerce_to_sparse_tibble(nan))
+  expect_snapshot(error = TRUE, coerce_to_sparse_tibble(inf))
+})
+
 test_that("coerce_to_sparse_data_frame() repairs column names", {
   skip_if_not_installed("Matrix")
 

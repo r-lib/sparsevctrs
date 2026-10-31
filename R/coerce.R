@@ -254,7 +254,7 @@ coerce_to_sparse_data_frame <- function(x, call = rlang::caller_env(0)) {
   )
 }
 
-.sparse_matrix_to_list <- function(x) {
+.sparse_matrix_to_list <- function(x, call = rlang::caller_env()) {
   if (methods::is(x, "ngCMatrix")) {
     values <- NULL
   } else {
@@ -262,6 +262,9 @@ coerce_to_sparse_data_frame <- function(x, call = rlang::caller_env(0)) {
       x <- Matrix::drop0(x)
     }
     values <- x@x
+    if (is.double(values)) {
+      validate_values_double(values, call = call)
+    }
   }
 
   # Matrix guarantees sorted, unique, in-range positions, so we skip the

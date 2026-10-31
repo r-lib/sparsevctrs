@@ -121,3 +121,39 @@
       Error in `coerce_to_sparse_tibble()`:
       ! `x` must be a <sparseMatrix>, not an integer vector.
 
+# matrix coercion rejects non-finite values
+
+    Code
+      coerce_to_sparse_data_frame(nan)
+    Condition
+      Error in `coerce_to_sparse_data_frame()`:
+      x `values` must not contain NaN values.
+      i NaN values at index: 1.
+
+---
+
+    Code
+      coerce_to_sparse_data_frame(inf)
+    Condition
+      Error in `coerce_to_sparse_data_frame()`:
+      x `values` must not contain infinite values.
+      i Infinite values at index: 1.
+
+---
+
+    Code
+      coerce_to_sparse_tibble(nan)
+    Condition
+      Error in `coerce_to_sparse_tibble()`:
+      x `values` must not contain NaN values.
+      i NaN values at index: 1.
+
+---
+
+    Code
+      coerce_to_sparse_tibble(inf)
+    Condition
+      Error in `coerce_to_sparse_tibble()`:
+      x `values` must not contain infinite values.
+      i Infinite values at index: 1.
+
