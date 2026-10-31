@@ -28,6 +28,8 @@
 
 * `sparse_dummy()` is now faster, especially for factors with missing values and many levels. (#81)
 
+* `sparse_dummy()` now returns missing values for missing elements of a factor with a single level and `one_hot = TRUE`, instead of 1.
+
 * `sparse_multiplication()` no longer fails when one of two sparse inputs has no stored values. (#137)
 
 * `sparse_multiplication()` no longer returns duplicated positions when a sparse double vector with a stored `NA` is multiplied by a dense double vector with a fractional value at the same position. (#139)
