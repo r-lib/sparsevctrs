@@ -33,6 +33,14 @@ the input `x` is a sparse numeric vector. This is done for performance
 reasons, and it is thus the users responsibility to perform input
 checking.
 
+When `wts` is supplied, the weights are multiplied into `x` and the
+result is divided by the sum of the weights. With `na_rm = TRUE`,
+weights at positions where the weighted value is missing are dropped
+from the sum of the weights, so a missing weight removes that
+observation instead of returning `NA` as
+[`stats::weighted.mean()`](https://rdrr.io/r/stats/weighted.mean.html)
+does.
+
 ## Examples
 
 ``` r

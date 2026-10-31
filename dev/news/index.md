@@ -13,6 +13,37 @@
   after the vector was modified in place with `x[i] <- value`.
   ([\#147](https://github.com/r-lib/sparsevctrs/issues/147))
 
+- Fixed bug where
+  [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md),
+  [`sparse_var()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_var.md)
+  and
+  [`sparse_sd()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_sd.md)
+  returned `NA` with an overflow warning for sparse integer vectors with
+  a large default and length.
+  [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md)
+  with `wts` summing to zero now returns `NaN`, as
+  [`weighted.mean()`](https://rdrr.io/r/stats/weighted.mean.html) does.
+
+- Fixed bug where [`min()`](https://rdrr.io/r/base/Extremes.html) and
+  [`max()`](https://rdrr.io/r/base/Extremes.html) with `na.rm = TRUE` on
+  sparse integer vectors with no non-missing values returned the wrong
+  value. They now return `Inf` and `-Inf` with a warning, as dense
+  vectors do. Sparse double vectors now give the same warning.
+
+- Fixed bug where
+  [`sparse_var()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_var.md)
+  and
+  [`sparse_sd()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_sd.md)
+  returned `NA` for non-sparse input. They now also return `NA` when
+  fewer than 2 non-missing observations remain, as
+  [`var()`](https://rdrr.io/r/stats/cor.html) does.
+
+- Fixed bug where
+  [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md)
+  of a length-0 vector returned the default instead of `NaN`, and
+  [`sparse_median()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_median.md)
+  of a length-0 vector returned the default instead of `NA`.
+
 - Fixed bug where [`sum()`](https://rdrr.io/r/base/sum.html) on sparse
   integer vectors overflowed silently. It now returns a double when the
   sum is outside the integer range, as

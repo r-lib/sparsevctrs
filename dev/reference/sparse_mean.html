@@ -71,6 +71,11 @@
     <p>This function, as with any of the other helper functions assumes that the
 input <code>x</code> is a sparse numeric vector. This is done for performance reasons,
 and it is thus the users responsibility to perform input checking.</p>
+<p>When <code>wts</code> is supplied, the weights are multiplied into <code>x</code> and the result is
+divided by the sum of the weights. With <code>na_rm = TRUE</code>, weights at positions
+where the weighted value is missing are dropped from the sum of the weights,
+so a missing weight removes that observation instead of returning <code>NA</code> as
+<code><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">stats::weighted.mean()</a></code> does.</p>
     </div>
 
     <div class="section level2">

@@ -65,8 +65,11 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function, as with any of the other helper functions assumes that the
-input <code>x</code> is a sparse numeric vector. This is done for performance reasons,
-and it is thus the users responsibility to perform input checking.</p>
+input <code>x</code> is a numeric vector. This is done for performance reasons, and it
+is thus the users responsibility to perform input checking. Non-sparse
+numeric vectors are supported but get no performance benefit.</p>
+<p>Like <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code>, it returns <code>NA</code> when fewer than 2 non-missing observations
+remain.</p>
 <p>Much like <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code> it uses the denominator <code>n-1</code>.</p>
     </div>
 
