@@ -12,6 +12,8 @@
 
 * Fixed bug where `sum()` on sparse logical vectors used the wrong default value.
 
+* `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` now give an error when a sparse matrix contains `NaN` or infinite values, as they already do for data frames, instead of creating sparse vectors that break `min()` and `max()`.
+
 * `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` are now much faster. (#66)
 
 * `coerce_to_sparse_data_frame()` now also takes data frames and tibbles, turning each integer, double, logical, or character column into a sparse vector of the same type. (#126)
