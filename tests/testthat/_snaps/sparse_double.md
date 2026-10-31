@@ -292,6 +292,30 @@
       x `values` value must not be equal to the default 1.
       i 1 values at index: 1 and 2.
 
+---
+
+    Code
+      sparse_double(1, 1, 10, default = Inf)
+    Condition
+      Error in `sparse_double()`:
+      ! `default` must be a number, not `Inf`.
+
+---
+
+    Code
+      sparse_double(1, 1, 10, default = -Inf)
+    Condition
+      Error in `sparse_double()`:
+      ! `default` must be a number, not `-Inf`.
+
+---
+
+    Code
+      sparse_double(1, 1, 10, default = NaN)
+    Condition
+      Error in `sparse_double()`:
+      ! `default` must be a number, not `NaN`.
+
 # verbose testing
 
     Code

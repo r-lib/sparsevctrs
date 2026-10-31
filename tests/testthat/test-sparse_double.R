@@ -713,6 +713,21 @@ test_that("default argument is working", {
     sparse_double(c(1, 1, 4), c(1, 4, 6), 10, default = 1)
   )
 
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(1, 1, 10, default = Inf)
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(1, 1, 10, default = -Inf)
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    sparse_double(1, 1, 10, default = NaN)
+  )
+
   x_sparse <- sparse_double(
     value = c(10, NA, 20),
     position = c(1, 5, 8),
