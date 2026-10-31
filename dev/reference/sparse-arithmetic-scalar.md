@@ -45,9 +45,12 @@ contains `Inf`, `-Inf` and `NaN`, which sparse vectors can't store, so a
 regular (dense) double vector is returned.
 
 The other functions return a sparse vector of the same type as `x`. This
-means that when `x` is a sparse integer vector, `val` must give whole
-number results. Integer overflow in the stored values produces `NA` with
-a warning, as it does for dense integer vectors.
+means that when `x` is a sparse integer vector, `val` must be a whole
+number. Integer overflow in the stored values produces `NA` with a
+warning, as it does for dense integer vectors.
+
+When `val` is `NA` or `NaN` a regular (dense) vector of `NA` or `NaN`
+values is returned.
 
 Results that sparse double vectors can't store, such as stored values
 that are `Inf` or `NaN`, or a default value that is `NaN`, give an

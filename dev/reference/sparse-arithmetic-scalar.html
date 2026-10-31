@@ -83,9 +83,11 @@ be <code>NA</code> or the appropiate type. When <code>val = 0</code> the result 
 <code>-Inf</code> and <code>NaN</code>, which sparse vectors can't store, so a regular (dense)
 double vector is returned.</p>
 <p>The other functions return a sparse vector of the same type as <code>x</code>. This
-means that when <code>x</code> is a sparse integer vector, <code>val</code> must give whole number
-results. Integer overflow in the stored values produces <code>NA</code> with a warning,
-as it does for dense integer vectors.</p>
+means that when <code>x</code> is a sparse integer vector, <code>val</code> must be a whole number.
+Integer overflow in the stored values produces <code>NA</code> with a warning, as it
+does for dense integer vectors.</p>
+<p>When <code>val</code> is <code>NA</code> or <code>NaN</code> a regular (dense) vector of <code>NA</code> or <code>NaN</code> values
+is returned.</p>
 <p>Results that sparse double vectors can't store, such as stored values that
 are <code>Inf</code> or <code>NaN</code>, or a default value that is <code>NaN</code>, give an error. The
 exception is <code>sparse_multiplication_scalar()</code> with <code>val = 0</code>, which keeps

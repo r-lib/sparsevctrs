@@ -108,6 +108,23 @@
   ([\#88](https://github.com/r-lib/sparsevctrs/issues/88))
 
 - [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  and
+  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  now return `NaN` instead of `NA` when `val` is `NaN`, and no longer
+  store values that are equal to the new default value after underflow
+  or rounding.
+
+- [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  and
+  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  now always give an error when `x` is a sparse integer vector and `val`
+  is not a whole number, instead of only when a result is not a whole
+  number.
+
+- [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
   [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
   and
   [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
