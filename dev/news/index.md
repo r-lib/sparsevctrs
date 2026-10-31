@@ -83,6 +83,12 @@
 - [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
   and
   [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)
+  now work with logical sparse matrices, giving sparse double columns,
+  instead of failing with an error about `REAL()`.
+
+- [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
+  and
+  [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)
   are now much faster.
   ([\#66](https://github.com/r-lib/sparsevctrs/issues/66))
 

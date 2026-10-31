@@ -30,7 +30,7 @@ data.frame with sparse columns
 ## Details
 
 The only requirement from a sparse matrix is that it contains column
-names.
+names. Logical sparse matrices give sparse double columns.
 
 When `x` is a data frame, each column is turned into a sparse vector of
 the same type using
