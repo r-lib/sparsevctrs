@@ -157,6 +157,10 @@
   values, instead of `Inf` everywhere.
   ([\#146](https://github.com/r-lib/sparsevctrs/issues/146))
 
+- [`sparse_double()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_double.md)
+  now gives an error when `default` is `NaN`, `Inf` or `-Inf`, since
+  they made [`sum()`](https://rdrr.io/r/base/sum.html) return `NaN`.
+
 - [`sparse_dummy()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_dummy.md)
   is now faster, especially for factors with missing values and many
   levels. ([\#81](https://github.com/r-lib/sparsevctrs/issues/81))
