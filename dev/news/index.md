@@ -93,6 +93,10 @@
   is now faster, especially for factors with missing values and many
   levels. ([\#81](https://github.com/r-lib/sparsevctrs/issues/81))
 
+- [`sparse_dummy()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_dummy.md)
+  now returns missing values for missing elements of a factor with a
+  single level and `one_hot = TRUE`, instead of 1.
+
 - [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
   no longer fails when one of two sparse inputs has no stored values.
   ([\#137](https://github.com/r-lib/sparsevctrs/issues/137))
@@ -102,6 +106,28 @@
   with a stored `NA` is multiplied by a dense double vector with a
   fractional value at the same position.
   ([\#139](https://github.com/r-lib/sparsevctrs/issues/139))
+
+- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
+  now returns `NA` with a warning, as dense integer vectors do, when the
+  product of two integers overflows, instead of silently wrapping
+  around. This also affects
+  [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md)
+  with integer weights.
+  ([\#150](https://github.com/r-lib/sparsevctrs/issues/150))
+
+- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
+  now returns `NaN` where a sparse vector has its default value of 0 and
+  the dense vector has `Inf`, `-Inf` or `NaN`, since `0 * Inf` is `NaN`.
+  Previously these positions were dropped and gave 0.
+  ([\#152](https://github.com/r-lib/sparsevctrs/issues/152))
+
+- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
+  and
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  with `val = 0` now return `NaN` for stored `Inf` and `NaN` values of a
+  sparse double vector multiplied by 0, as dense multiplication does.
+  Previously `Inf` was dropped and gave 0, and `NaN` was returned as
+  `NA`. ([\#153](https://github.com/r-lib/sparsevctrs/issues/153))
 
 - [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
   is much faster when the result has many stored values, since sorting

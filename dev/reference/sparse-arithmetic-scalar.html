@@ -87,7 +87,9 @@ means that when <code>x</code> is a sparse integer vector, <code>val</code> must
 results. Integer overflow in the stored values produces <code>NA</code> with a warning,
 as it does for dense integer vectors.</p>
 <p>Results that sparse double vectors can't store, such as stored values that
-are <code>Inf</code> or <code>NaN</code>, or a default value that is <code>NaN</code>, give an error.</p>
+are <code>Inf</code> or <code>NaN</code>, or a default value that is <code>NaN</code>, give an error. The
+exception is <code>sparse_multiplication_scalar()</code> with <code>val = 0</code>, which keeps
+<code>NaN</code> for stored <code>Inf</code> and <code>NaN</code> values, since <code>Inf * 0</code> is <code>NaN</code>.</p>
     </div>
 
     <div class="section level2">
