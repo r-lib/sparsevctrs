@@ -46,6 +46,10 @@ sparse_mean <- function(x, wts = NULL, na_rm = FALSE) {
     x <- sparse_multiplication(x, wts)
   }
 
+  if (length(x) == 0) {
+    return(NaN)
+  }
+
   default <- sparse_default(x)
   values <- sparse_values(x)
   len_values <- length(values)

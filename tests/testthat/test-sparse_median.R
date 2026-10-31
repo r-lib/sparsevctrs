@@ -51,3 +51,9 @@ test_that("sparse_median() edge cases", {
   expect_equal(median(x), sparse_median(x))
   expect_equal(median(x, na.rm = TRUE), sparse_median(x, na_rm = TRUE))
 })
+
+test_that("sparse_median() returns NA for length 0", {
+  x <- sparse_double(numeric(), integer(), 0L)
+
+  expect_identical(sparse_median(x), NA_real_)
+})

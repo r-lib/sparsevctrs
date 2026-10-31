@@ -6,6 +6,10 @@
 
 * Fixed bug where `min()` and `max()` with `na.rm = TRUE` on sparse integer vectors with no non-missing values returned the wrong value. They now return `Inf` and `-Inf` with a warning, as dense vectors do. Sparse double vectors now give the same warning.
 
+* Fixed bug where `sparse_var()` and `sparse_sd()` returned `NA` for non-sparse input. They now also return `NA` when fewer than 2 non-missing observations remain, as `var()` does.
+
+* Fixed bug where `sparse_mean()` of a length-0 vector returned the default instead of `NaN`, and `sparse_median()` of a length-0 vector returned the default instead of `NA`.
+
 * Fixed bug where `sum()` on sparse integer vectors overflowed silently. It now returns a double when the sum is outside the integer range, as `sum()` does for dense integer vectors in current R versions.
 
 * Fixed bug where `is.unsorted()` on sparse character vectors compared string pointers instead of string contents, and ignored default values after the last non-default value.

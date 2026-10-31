@@ -109,3 +109,9 @@ test_that("sparse_mean() works with wts and NA values at specific positions", {
 
   expect_equal(weighted.mean(x, wts), sparse_mean(x, wts = wts))
 })
+
+test_that("sparse_mean() returns NaN for length 0", {
+  x <- sparse_double(numeric(), integer(), 0L, default = 5)
+
+  expect_identical(sparse_mean(x), NaN)
+})
