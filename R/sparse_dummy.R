@@ -44,7 +44,7 @@ sparse_dummy <- function(x, one_hot = TRUE) {
     lvls <- lvls[-1]
   }
 
-  if (length(lvls) == 1 && one_hot) {
+  if (length(lvls) == 1 && one_hot && !anyNA(x)) {
     res <- list(rep(1L, length(x)))
     names(res) <- lvls
     return(res)

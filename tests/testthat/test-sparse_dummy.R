@@ -16,6 +16,31 @@ test_that("sparse_dummy(one_hot = TRUE) works with single level", {
   expect_false(is_sparse_vector(res$a))
 })
 
+test_that("sparse_dummy(one_hot = TRUE) works with single level and NA", {
+  x <- factor(c("a", NA, "a"))
+
+  res <- sparse_dummy(x, one_hot = TRUE)
+  expect_named(res, "a")
+  expect_true(is_sparse_vector(res$a))
+  expect_identical(as.integer(res$a), c(1L, NA, 1L))
+})
+
+test_that("sparse_dummy(one_hot = TRUE) works with single level and only NA", {
+  x <- factor(c(NA, NA), levels = "a")
+
+  res <- sparse_dummy(x, one_hot = TRUE)
+  expect_named(res, "a")
+  expect_true(is_sparse_vector(res$a))
+  expect_identical(as.integer(res$a), c(NA_integer_, NA_integer_))
+})
+
+test_that("sparse_dummy(one_hot = TRUE) works with single level and zero length", {
+  x <- factor(character(), levels = "a")
+
+  res <- sparse_dummy(x, one_hot = TRUE)
+  expect_identical(res, list(a = integer()))
+})
+
 test_that("sparse_dummy(one_hot = FALSE) works zero length input", {
   x <- factor(character())
   exp <- structure(list(), names = character(0))
