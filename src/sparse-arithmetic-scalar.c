@@ -31,6 +31,12 @@ static r_obj* sparse_scalar_arithmetic(
   const double val = sparse_scalar_val(ffi_val);
 
   if (r_typeof(x) == R_TYPE_integer && op != SPARSE_SCALAR_OP_div) {
+    if (!sparse_scalar_is_whole(val)) {
+      Rf_error(
+        "`val` must be a whole number when `x` is a sparse integer vector."
+      );
+    }
+
     return sparse_scalar_integer(x, val, op);
   }
 
@@ -58,6 +64,10 @@ static double sparse_scalar_val(r_obj* ffi_val) {
     Rf_error("`val` must be a single number.");
   }
   }
+}
+
+static bool sparse_scalar_is_whole(double val) {
+  return R_FINITE(val) && val == floor(val);
 }
 
 static r_obj* sparse_scalar_integer(
@@ -188,12 +198,43 @@ static r_obj* sparse_scalar_double(
     );
   }
 
+  int n_extra = 0;
+
+  if (!keeps_only_na) {
+    r_ssize n_drop = 0;
+    for (r_ssize i = 0; i < n_pos; ++i) {
+      n_drop += v_out_val[i] == out_default_val;
+    }
+
+    if (n_drop > 0) {
+      const int* v_out_pos = r_int_cbegin(out_pos);
+
+      r_obj* new_pos = KEEP(r_alloc_integer(n_pos - n_drop));
+      r_obj* new_val = KEEP(r_alloc_double(n_pos - n_drop));
+      int* v_new_pos = r_int_begin(new_pos);
+      double* v_new_val = r_dbl_begin(new_val);
+
+      r_ssize idx = 0;
+      for (r_ssize i = 0; i < n_pos; ++i) {
+        if (v_out_val[i] != out_default_val) {
+          v_new_pos[idx] = v_out_pos[i];
+          v_new_val[idx] = v_out_val[i];
+          ++idx;
+        }
+      }
+
+      out_pos = new_pos;
+      out_val = new_val;
+      n_extra = 2;
+    }
+  }
+
   r_obj* out_len = KEEP(r_int((int) sparse_extract_len(x)));
   r_obj* out_default = KEEP(r_dbl(out_default_val));
 
   r_obj* out = new_sparse_double(out_val, out_pos, out_len, out_default);
 
-  FREE(4);
+  FREE(4 + n_extra);
 
   return out;
 }
@@ -241,13 +282,6 @@ static inline int sparse_scalar_int_op(
   }
 
   const double out = sparse_scalar_dbl_op((double) x, val, op);
-
-  if (out != floor(out)) {
-    Rf_error(
-      "`val` must give whole number results when `x` is a sparse integer "
-      "vector."
-    );
-  }
 
   if (out > INT_MAX || out < -INT_MAX) {
     return r_globals.na_int;

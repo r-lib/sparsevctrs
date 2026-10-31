@@ -342,15 +342,51 @@ test_that("scalar arithmetic keeps stored NA values", {
   expect_identical(sparse_subtraction_scalar(vec_dbl, 2), vec_dbl[] - 2)
 })
 
-test_that("scalar arithmetic on sparse integers needs whole number results", {
+test_that("scalar arithmetic on sparse integers needs whole number val", {
   vec_int <- sparse_integer(c(4L, 78L), c(1, 10), 10)
+  vec_odd <- sparse_integer(c(3L, 5L), c(1, 10), 10)
 
-  res <- sparse_multiplication_scalar(vec_int, 0.5)
-  expect_identical(res, as.integer(vec_int[] * 0.5))
+  res <- sparse_multiplication_scalar(vec_int, 2)
+  expect_identical(res, vec_int[] * 2L)
   expect_true(is_sparse_integer(res))
 
   expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_int, 0.3))
   expect_snapshot(error = TRUE, sparse_addition_scalar(vec_int, 0.5))
+  expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_int, 0.5))
+  expect_snapshot(error = TRUE, sparse_multiplication_scalar(vec_odd, 0.5))
+  expect_snapshot(error = TRUE, sparse_subtraction_scalar(vec_int, Inf))
+})
+
+test_that("scalar arithmetic with val = NaN gives NaN", {
+  vec_int <- sparse_integer(c(4L, 78L), c(1, 10), 10)
+  vec_dbl <- sparse_double(c(4, 78), c(1, 10), 10)
+
+  for (x in list(vec_int, vec_dbl)) {
+    expect_identical(sparse_multiplication_scalar(x, NaN), x[] * NaN)
+    expect_identical(sparse_division_scalar(x, NaN), x[] / NaN)
+    expect_identical(sparse_addition_scalar(x, NaN), x[] + NaN)
+    expect_identical(sparse_subtraction_scalar(x, NaN), x[] - NaN)
+  }
+
+  expect_identical(sparse_addition_scalar(vec_dbl, NA), rep(NA_real_, 10))
+})
+
+test_that("scalar arithmetic drops stored values that equal the new default", {
+  vec_dbl <- sparse_double(c(1e-200, 5), c(1, 2), 4)
+
+  res <- sparse_multiplication_scalar(vec_dbl, 1e-200)
+  expect_identical(res, vec_dbl[] * 1e-200)
+  expect_identical(sparse_positions(res), 2L)
+  expect_identical(sparse_values(res), 5e-200)
+
+  vec_dbl <- sparse_double(c(1e-20, 5), c(1, 2), 4)
+
+  res <- sparse_addition_scalar(vec_dbl, 1)
+  expect_identical(res, vec_dbl[] + 1)
+  expect_identical(sparse_positions(res), 2L)
+
+  res <- sparse_division_scalar(sparse_double(c(1e-320, 5), c(1, 2), 4), 1e10)
+  expect_identical(sparse_positions(res), 2L)
 })
 
 test_that("scalar arithmetic on sparse integers handles overflow", {

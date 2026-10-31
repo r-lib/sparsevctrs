@@ -43,9 +43,12 @@ be \code{NA} or the appropiate type. When \code{val = 0} the result contains \co
 double vector is returned.
 
 The other functions return a sparse vector of the same type as \code{x}. This
-means that when \code{x} is a sparse integer vector, \code{val} must give whole number
-results. Integer overflow in the stored values produces \code{NA} with a warning,
-as it does for dense integer vectors.
+means that when \code{x} is a sparse integer vector, \code{val} must be a whole number.
+Integer overflow in the stored values produces \code{NA} with a warning, as it
+does for dense integer vectors.
+
+When \code{val} is \code{NA} or \code{NaN} a regular (dense) vector of \code{NA} or \code{NaN} values
+is returned.
 
 Results that sparse double vectors can't store, such as stored values that
 are \code{Inf} or \code{NaN}, or a default value that is \code{NaN}, give an error. The
