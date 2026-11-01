@@ -1,40 +1,38 @@
-# sparsevctrs (development version)
+# sparsevctrs 0.4.0
 
-* Fixed bug where `sum()`, `min()`, `max()`, `anyNA()`, `is.unsorted()`, `[`, `sparse_values()`, `sparse_positions()`, and sparse multiplication on sparse vectors returned stale results after the vector was modified in place with `x[i] <- value`. (#147)
-
-* Fixed bug where `sparse_mean()`, `sparse_var()` and `sparse_sd()` returned `NA` with an overflow warning for sparse integer vectors with a large default and length. `sparse_mean()` with `wts` summing to zero now returns `NaN`, as `weighted.mean()` does.
-
-* Fixed bug where `min()` and `max()` with `na.rm = TRUE` on sparse integer vectors with no non-missing values returned the wrong value. They now return `Inf` and `-Inf` with a warning, as dense vectors do. Sparse double vectors now give the same warning.
-
-* Fixed bug where `sparse_var()` and `sparse_sd()` returned `NA` for non-sparse input. They now also return `NA` when fewer than 2 non-missing observations remain, as `var()` does.
-
-* Fixed bug where `sparse_mean()` of a length-0 vector returned the default instead of `NaN`, and `sparse_median()` of a length-0 vector returned the default instead of `NA`.
-
-* Fixed bug where `sum()` on sparse integer vectors overflowed silently. It now returns a double when the sum is outside the integer range, as `sum()` does for dense integer vectors in current R versions.
-
-* Fixed bug where `is.unsorted()` on sparse character vectors compared string pointers instead of string contents, and ignored default values after the last non-default value.
-
-* Fixed bug where `is.unsorted()` on sparse integer, sparse double, and sparse logical vectors ignored default values after the last non-default value, and returned `FALSE` for vectors with a single non-default value without comparing it against the default. (#133)
-
-* Fixed bug where `min()` and `max()` on sparse integer and sparse double vectors included the default value even when every position was a non-default value. (#132)
-
-* Fixed bug where `sum()` on sparse logical vectors used the wrong default value.
-
-* `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` now give an error when a sparse matrix contains `NaN` or infinite values, as they already do for data frames, instead of creating sparse vectors that break `min()` and `max()`.
-
-* `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` now work with logical sparse matrices, giving sparse double columns, instead of failing with an error about `REAL()`.
-
-* `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` are now much faster. (#66)
+## Improvements
 
 * `coerce_to_sparse_data_frame()` now also takes data frames and tibbles, turning each integer, double, logical, or character column into a sparse vector of the same type. (#126)
 
+* `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` are now much faster. (#66)
+
+* `sparse_addition_scalar()`, `sparse_division_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` are now faster. (#88, #147)
+
+* `sparse_dummy()` is now faster, especially for factors with missing values and many levels. (#81)
+
+* `sparse_multiplication()` is now much faster when the result has many stored values, since sorting them no longer takes quadratic time. With one million stored values on each side it now takes milliseconds instead of minutes. (#140)
+
+* `sparse_replace_na()` now works with sparse logical vectors. (#136)
+
+## Bug Fixes
+
+* `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` now give an error when a sparse matrix contains `NaN` or infinite values, as they already do for data frames, instead of creating sparse vectors that break `min()` and `max()`. (#156)
+
+* `coerce_to_sparse_data_frame()` and `coerce_to_sparse_tibble()` now work with logical sparse matrices, giving sparse double columns, instead of failing with an error about `REAL()`. (#162)
+
+* `is.unsorted()` now compares the contents of strings, not string pointers, for sparse character vectors. It also takes default values after the last non-default value into account. (#131)
+
+* `is.unsorted()` now takes default values after the last non-default value into account for sparse integer, double, and logical vectors, and compares a single non-default value against the default. (#133)
+
+* `min()` and `max()` now ignore the default value of sparse integer and double vectors when every position is a non-default value. (#132)
+
+* `min()` and `max()` with `na.rm = TRUE` now return `Inf` and `-Inf` with a warning for sparse integer and double vectors with no non-missing values, as dense vectors do. (#159)
+
 * `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now give an error when `x` is not a sparse integer or double vector, instead of failing with an object not found error. (#136)
 
-* `sparse_addition_scalar()`, `sparse_division_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` are now faster. (#88)
+* `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now always give an error when `x` is a sparse integer vector and `val` is not a whole number, instead of only when a result is not a whole number. (#161)
 
-* `sparse_addition_scalar()`, `sparse_division_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now return `NaN` instead of `NA` when `val` is `NaN`, and no longer store values that are equal to the new default value after underflow or rounding.
-
-* `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now always give an error when `x` is a sparse integer vector and `val` is not a whole number, instead of only when a result is not a whole number.
+* `sparse_addition_scalar()`, `sparse_division_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now return `NaN` instead of `NA` when `val` is `NaN`, and no longer store values that are equal to the new default value after underflow or rounding. (#161)
 
 * `sparse_addition_scalar()`, `sparse_multiplication_scalar()` and `sparse_subtraction_scalar()` now return `NA` with a warning, as dense integer vectors do, when a stored value of a sparse integer vector overflows, instead of failing with an error. (#88)
 
@@ -44,13 +42,17 @@
 
 * `sparse_division_scalar()` now gives the same result as dense division when `val` is 0, with `-Inf` for negative values, `NaN` for zeros and `NA` for missing values, instead of `Inf` everywhere. (#146)
 
-* `sparse_double()` now gives an error when `default` is `NaN`, `Inf` or `-Inf`, since they made `sum()` return `NaN`.
+* `sparse_double()` now gives an error when `default` is `NaN`, `Inf` or `-Inf`, since they made `sum()` return `NaN`. (#160)
 
-* `sparse_dummy()` is now faster, especially for factors with missing values and many levels. (#81)
+* `sparse_dummy()` now returns missing values for missing elements of a factor with a single level and `one_hot = TRUE`, instead of 1. (#155)
 
-* `sparse_dummy()` now returns missing values for missing elements of a factor with a single level and `one_hot = TRUE`, instead of 1.
+* `sparse_mean()` and `sparse_median()` now return `NaN` and `NA` respectively for length-0 vectors, instead of the default. (#158)
 
-* `sparse_multiplication()` no longer fails when one of two sparse inputs has no stored values. (#137)
+* `sparse_mean()`, `sparse_var()` and `sparse_sd()` now work for sparse integer vectors with a large default and length, instead of returning `NA` with an overflow warning. (#157)
+
+* `sparse_mean()` with `wts` summing to zero now returns `NaN`, as `weighted.mean()` does. (#157)
+
+* `sparse_multiplication()` now works when one of two sparse inputs has no stored values. (#137)
 
 * `sparse_multiplication()` no longer returns duplicated positions when a sparse double vector with a stored `NA` is multiplied by a dense double vector with a fractional value at the same position. (#139)
 
@@ -60,11 +62,15 @@
 
 * `sparse_multiplication()` and `sparse_multiplication_scalar()` with `val = 0` now return `NaN` for stored `Inf` and `NaN` values of a sparse double vector multiplied by 0, as dense multiplication does. Previously `Inf` was dropped and gave 0, and `NaN` was returned as `NA`. (#153)
 
-* `sparse_multiplication()` is much faster when the result has many stored values, since sorting them no longer takes quadratic time. With one million stored values on each side it now takes milliseconds instead of minutes. (#140)
-
 * `sparse_multiplication_scalar()` now keeps stored `NA` values when multiplying by 0, since `NA * 0` is `NA`. Previously they were dropped. (#145)
 
-* `sparse_replace_na()` now works with sparse logical vectors. (#136)
+* `sparse_var()` and `sparse_sd()` now work for non-sparse input, and return `NA` when fewer than 2 non-missing observations remain, as `var()` does. (#158)
+
+* `sum()` now uses the right default value for sparse logical vectors. (#131)
+
+* `sum()` now returns a double when the sum of a sparse integer vector is outside the integer range, as `sum()` does for dense integer vectors in current R versions, instead of overflowing silently. (#151)
+
+* `sum()`, `min()`, `max()`, `anyNA()`, `is.unsorted()`, `[`, `sparse_values()`, `sparse_positions()`, and sparse multiplication now give up-to-date results for sparse vectors that were modified in place with `x[i] <- value`. (#148)
 
 # sparsevctrs 0.3.6
 
