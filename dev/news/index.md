@@ -2,75 +2,47 @@
 
 ## sparsevctrs (development version)
 
-- Fixed bug where [`sum()`](https://rdrr.io/r/base/sum.html),
-  [`min()`](https://rdrr.io/r/base/Extremes.html),
-  [`max()`](https://rdrr.io/r/base/Extremes.html),
-  [`anyNA()`](https://rdrr.io/r/base/NA.html),
-  [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html), `[`,
-  [`sparse_values()`](https://r-lib.github.io/sparsevctrs/dev/reference/extractors.md),
-  [`sparse_positions()`](https://r-lib.github.io/sparsevctrs/dev/reference/extractors.md),
-  and sparse multiplication on sparse vectors returned stale results
-  after the vector was modified in place with `x[i] <- value`.
-  ([\#147](https://github.com/r-lib/sparsevctrs/issues/147))
+## sparsevctrs 0.4.0
 
-- Fixed bug where
-  [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md),
-  [`sparse_var()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_var.md)
+CRAN release: 2026-11-01
+
+### Improvements
+
+- [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
+  now also takes data frames and tibbles, turning each integer, double,
+  logical, or character column into a sparse vector of the same type.
+  ([\#126](https://github.com/r-lib/sparsevctrs/issues/126))
+
+- [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
   and
-  [`sparse_sd()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_sd.md)
-  returned `NA` with an overflow warning for sparse integer vectors with
-  a large default and length.
-  [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md)
-  with `wts` summing to zero now returns `NaN`, as
-  [`weighted.mean()`](https://rdrr.io/r/stats/weighted.mean.html) does.
+  [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)
+  are now much faster.
+  ([\#66](https://github.com/r-lib/sparsevctrs/issues/66))
 
-- Fixed bug where [`min()`](https://rdrr.io/r/base/Extremes.html) and
-  [`max()`](https://rdrr.io/r/base/Extremes.html) with `na.rm = TRUE` on
-  sparse integer vectors with no non-missing values returned the wrong
-  value. They now return `Inf` and `-Inf` with a warning, as dense
-  vectors do. Sparse double vectors now give the same warning.
-
-- Fixed bug where
-  [`sparse_var()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_var.md)
+- [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
   and
-  [`sparse_sd()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_sd.md)
-  returned `NA` for non-sparse input. They now also return `NA` when
-  fewer than 2 non-missing observations remain, as
-  [`var()`](https://rdrr.io/r/stats/cor.html) does.
+  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
+  are now faster.
+  ([\#88](https://github.com/r-lib/sparsevctrs/issues/88),
+  [\#147](https://github.com/r-lib/sparsevctrs/issues/147))
 
-- Fixed bug where
-  [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md)
-  of a length-0 vector returned the default instead of `NaN`, and
-  [`sparse_median()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_median.md)
-  of a length-0 vector returned the default instead of `NA`.
+- [`sparse_dummy()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_dummy.md)
+  is now faster, especially for factors with missing values and many
+  levels. ([\#81](https://github.com/r-lib/sparsevctrs/issues/81))
 
-- Fixed bug where [`sum()`](https://rdrr.io/r/base/sum.html) on sparse
-  integer vectors overflowed silently. It now returns a double when the
-  sum is outside the integer range, as
-  [`sum()`](https://rdrr.io/r/base/sum.html) does for dense integer
-  vectors in current R versions.
+- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
+  is now much faster when the result has many stored values, since
+  sorting them no longer takes quadratic time. With one million stored
+  values on each side it now takes milliseconds instead of minutes.
+  ([\#140](https://github.com/r-lib/sparsevctrs/issues/140))
 
-- Fixed bug where
-  [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html) on sparse
-  character vectors compared string pointers instead of string contents,
-  and ignored default values after the last non-default value.
+- [`sparse_replace_na()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_replace_na.md)
+  now works with sparse logical vectors.
+  ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
 
-- Fixed bug where
-  [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html) on sparse
-  integer, sparse double, and sparse logical vectors ignored default
-  values after the last non-default value, and returned `FALSE` for
-  vectors with a single non-default value without comparing it against
-  the default.
-  ([\#133](https://github.com/r-lib/sparsevctrs/issues/133))
-
-- Fixed bug where [`min()`](https://rdrr.io/r/base/Extremes.html) and
-  [`max()`](https://rdrr.io/r/base/Extremes.html) on sparse integer and
-  sparse double vectors included the default value even when every
-  position was a non-default value.
-  ([\#132](https://github.com/r-lib/sparsevctrs/issues/132))
-
-- Fixed bug where [`sum()`](https://rdrr.io/r/base/sum.html) on sparse
-  logical vectors used the wrong default value.
+### Bug Fixes
 
 - [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
   and
@@ -79,23 +51,38 @@
   values, as they already do for data frames, instead of creating sparse
   vectors that break [`min()`](https://rdrr.io/r/base/Extremes.html) and
   [`max()`](https://rdrr.io/r/base/Extremes.html).
+  ([\#156](https://github.com/r-lib/sparsevctrs/issues/156))
 
 - [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
   and
   [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)
   now work with logical sparse matrices, giving sparse double columns,
   instead of failing with an error about `REAL()`.
+  ([\#162](https://github.com/r-lib/sparsevctrs/issues/162))
 
-- [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
-  and
-  [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_tibble.md)
-  are now much faster.
-  ([\#66](https://github.com/r-lib/sparsevctrs/issues/66))
+- [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html) now
+  compares the contents of strings, not string pointers, for sparse
+  character vectors. It also takes default values after the last
+  non-default value into account.
+  ([\#131](https://github.com/r-lib/sparsevctrs/issues/131))
 
-- [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/dev/reference/coerce_to_sparse_data_frame.md)
-  now also takes data frames and tibbles, turning each integer, double,
-  logical, or character column into a sparse vector of the same type.
-  ([\#126](https://github.com/r-lib/sparsevctrs/issues/126))
+- [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html) now takes
+  default values after the last non-default value into account for
+  sparse integer, double, and logical vectors, and compares a single
+  non-default value against the default.
+  ([\#133](https://github.com/r-lib/sparsevctrs/issues/133))
+
+- [`min()`](https://rdrr.io/r/base/Extremes.html) and
+  [`max()`](https://rdrr.io/r/base/Extremes.html) now ignore the default
+  value of sparse integer and double vectors when every position is a
+  non-default value.
+  ([\#132](https://github.com/r-lib/sparsevctrs/issues/132))
+
+- [`min()`](https://rdrr.io/r/base/Extremes.html) and
+  [`max()`](https://rdrr.io/r/base/Extremes.html) with `na.rm = TRUE`
+  now return `Inf` and `-Inf` with a warning for sparse integer and
+  double vectors with no non-missing values, as dense vectors do.
+  ([\#159](https://github.com/r-lib/sparsevctrs/issues/159))
 
 - [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
   [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
@@ -106,12 +93,12 @@
   ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
 
 - [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
-  [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
   [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
   and
   [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
-  are now faster.
-  ([\#88](https://github.com/r-lib/sparsevctrs/issues/88))
+  now always give an error when `x` is a sparse integer vector and `val`
+  is not a whole number, instead of only when a result is not a whole
+  number. ([\#161](https://github.com/r-lib/sparsevctrs/issues/161))
 
 - [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
   [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
@@ -121,14 +108,7 @@
   now return `NaN` instead of `NA` when `val` is `NaN`, and no longer
   store values that are equal to the new default value after underflow
   or rounding.
-
-- [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
-  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
-  and
-  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
-  now always give an error when `x` is a sparse integer vector and `val`
-  is not a whole number, instead of only when a result is not a whole
-  number.
+  ([\#161](https://github.com/r-lib/sparsevctrs/issues/161))
 
 - [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md),
   [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
@@ -160,17 +140,35 @@
 - [`sparse_double()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_double.md)
   now gives an error when `default` is `NaN`, `Inf` or `-Inf`, since
   they made [`sum()`](https://rdrr.io/r/base/sum.html) return `NaN`.
-
-- [`sparse_dummy()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_dummy.md)
-  is now faster, especially for factors with missing values and many
-  levels. ([\#81](https://github.com/r-lib/sparsevctrs/issues/81))
+  ([\#160](https://github.com/r-lib/sparsevctrs/issues/160))
 
 - [`sparse_dummy()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_dummy.md)
   now returns missing values for missing elements of a factor with a
   single level and `one_hot = TRUE`, instead of 1.
+  ([\#155](https://github.com/r-lib/sparsevctrs/issues/155))
+
+- [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md)
+  and
+  [`sparse_median()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_median.md)
+  now return `NaN` and `NA` respectively for length-0 vectors, instead
+  of the default.
+  ([\#158](https://github.com/r-lib/sparsevctrs/issues/158))
+
+- [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md),
+  [`sparse_var()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_var.md)
+  and
+  [`sparse_sd()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_sd.md)
+  now work for sparse integer vectors with a large default and length,
+  instead of returning `NA` with an overflow warning.
+  ([\#157](https://github.com/r-lib/sparsevctrs/issues/157))
+
+- [`sparse_mean()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_mean.md)
+  with `wts` summing to zero now returns `NaN`, as
+  [`weighted.mean()`](https://rdrr.io/r/stats/weighted.mean.html) does.
+  ([\#157](https://github.com/r-lib/sparsevctrs/issues/157))
 
 - [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
-  no longer fails when one of two sparse inputs has no stored values.
+  now works when one of two sparse inputs has no stored values.
   ([\#137](https://github.com/r-lib/sparsevctrs/issues/137))
 
 - [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
@@ -201,20 +199,39 @@
   Previously `Inf` was dropped and gave 0, and `NaN` was returned as
   `NA`. ([\#153](https://github.com/r-lib/sparsevctrs/issues/153))
 
-- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic.md)
-  is much faster when the result has many stored values, since sorting
-  them no longer takes quadratic time. With one million stored values on
-  each side it now takes milliseconds instead of minutes.
-  ([\#140](https://github.com/r-lib/sparsevctrs/issues/140))
-
 - [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse-arithmetic-scalar.md)
   now keeps stored `NA` values when multiplying by 0, since `NA * 0` is
   `NA`. Previously they were dropped.
   ([\#145](https://github.com/r-lib/sparsevctrs/issues/145))
 
-- [`sparse_replace_na()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_replace_na.md)
-  now works with sparse logical vectors.
-  ([\#136](https://github.com/r-lib/sparsevctrs/issues/136))
+- [`sparse_var()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_var.md)
+  and
+  [`sparse_sd()`](https://r-lib.github.io/sparsevctrs/dev/reference/sparse_sd.md)
+  now work for non-sparse input, and return `NA` when fewer than 2
+  non-missing observations remain, as
+  [`var()`](https://rdrr.io/r/stats/cor.html) does.
+  ([\#158](https://github.com/r-lib/sparsevctrs/issues/158))
+
+- [`sum()`](https://rdrr.io/r/base/sum.html) now uses the right default
+  value for sparse logical vectors.
+  ([\#131](https://github.com/r-lib/sparsevctrs/issues/131))
+
+- [`sum()`](https://rdrr.io/r/base/sum.html) now returns a double when
+  the sum of a sparse integer vector is outside the integer range, as
+  [`sum()`](https://rdrr.io/r/base/sum.html) does for dense integer
+  vectors in current R versions, instead of overflowing silently.
+  ([\#151](https://github.com/r-lib/sparsevctrs/issues/151))
+
+- [`sum()`](https://rdrr.io/r/base/sum.html),
+  [`min()`](https://rdrr.io/r/base/Extremes.html),
+  [`max()`](https://rdrr.io/r/base/Extremes.html),
+  [`anyNA()`](https://rdrr.io/r/base/NA.html),
+  [`is.unsorted()`](https://rdrr.io/r/base/is.unsorted.html), `[`,
+  [`sparse_values()`](https://r-lib.github.io/sparsevctrs/dev/reference/extractors.md),
+  [`sparse_positions()`](https://r-lib.github.io/sparsevctrs/dev/reference/extractors.md),
+  and sparse multiplication now give up-to-date results for sparse
+  vectors that were modified in place with `x[i] <- value`.
+  ([\#148](https://github.com/r-lib/sparsevctrs/issues/148))
 
 ## sparsevctrs 0.3.6
 
