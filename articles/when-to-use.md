@@ -1,6 +1,7 @@
 # When to use sparse vectors
 
 ``` r
+
 library(sparsevctrs)
 library(lobstr)
 library(Matrix)
@@ -22,6 +23,7 @@ sparsity, the option `sparsevctrs.verbose_materialize` can be set to
 alert the user that a sparse vector was forced to materialize.
 
 ``` r
+
 options("sparsevctrs.verbose_materialize" = TRUE)
 ```
 
@@ -38,6 +40,7 @@ an integer vector with 2000 elements takes up
 `48 B + 2000 * 4 B = 8048 B` and so on.
 
 ``` r
+
 obj_size(integer(0))
 #> 48 B
 obj_size(integer(1000))
@@ -53,6 +56,7 @@ sparsely with `sparse_integer(integer(), integer(), length = 0)`. We see
 that the size of a 0-length sparse integer vector has a size of `888 B`.
 
 ``` r
+
 obj_size(sparse_integer(integer(), integer(), length = 0))
 #> 888 B
 ```
@@ -62,6 +66,7 @@ long it is. This is happening because the sparse vectors only keep track
 of the non-default values.
 
 ``` r
+
 obj_size(sparse_integer(integer(), integer(), length = 0))
 #> 888 B
 obj_size(sparse_integer(integer(), integer(), length = 1000))
@@ -78,6 +83,7 @@ A dense integer vector will have the same size, regardless of what
 values it takes
 
 ``` r
+
 dense_x <- integer(1000)
 obj_size(dense_x)
 #> 4.05 kB
@@ -91,6 +97,7 @@ The sparse integer counterpart on the other hand will increase for each
 non-default we need to store.
 
 ``` r
+
 sparse_x <- sparse_integer(integer(), integer(), 1000)
 obj_size(sparse_x)
 #> 888 B
@@ -133,6 +140,7 @@ we now can look at how much slower it is to create the sparse vector and
 go back.
 
 ``` r
+
 dense_fun <- function(x) {
   res <- numeric(x)
   res[x] <- x
@@ -164,6 +172,7 @@ As a comparison, we can look at how much time it takes if we don’t force
 materialization.
 
 ``` r
+
 dense_fun <- function(x) {
   res <- numeric(x)
   res[x] <- x
@@ -201,6 +210,7 @@ These functions have special hooks to trigger implementations that don’t
 require materialization. They will thus do quite well.
 
 ``` r
+
 dense_fun <- function(x) {
   res <- numeric(x)
   res[x] <- x
@@ -236,6 +246,7 @@ progress. Once such unsupported method is
 [`mean()`](https://rdrr.io/r/base/mean.html).
 
 ``` r
+
 dense_fun <- function(x) {
   res <- numeric(x)
   res[x] <- x
@@ -275,6 +286,7 @@ vectors without having to materialize them. Under the assumption that
 work fast again by avoiding materialization.
 
 ``` r
+
 dense_fun <- function(x) {
   res <- numeric(x)
   res[x] <- x

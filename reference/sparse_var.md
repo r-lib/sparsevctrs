@@ -25,9 +25,12 @@ single numeric value.
 ## Details
 
 This function, as with any of the other helper functions assumes that
-the input `x` is a sparse numeric vector. This is done for performance
-reasons, and it is thus the users responsibility to perform input
-checking.
+the input `x` is a numeric vector. This is done for performance reasons,
+and it is thus the users responsibility to perform input checking.
+Non-sparse numeric vectors are supported but get no performance benefit.
+
+Like [`var()`](https://rdrr.io/r/stats/cor.html), it returns `NA` when
+fewer than 2 non-missing observations remain.
 
 Much like [`var()`](https://rdrr.io/r/stats/cor.html) it uses the
 denominator `n-1`.

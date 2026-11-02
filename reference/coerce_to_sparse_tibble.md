@@ -29,7 +29,7 @@ tibble with sparse columns
 ## Details
 
 The only requirement from the sparse matrix is that it contains column
-names.
+names. Logical sparse matrices give sparse double columns.
 
 ## See also
 

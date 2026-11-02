@@ -11,10 +11,10 @@
 - [`sparse_logical()`](https://r-lib.github.io/sparsevctrs/reference/sparse_logical.md)
   : Create sparse logical vector
 
-## Convertion functions
+## Conversion functions
 
 - [`coerce_to_sparse_data_frame()`](https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_data_frame.md)
-  : Coerce sparse matrix to data frame with sparse columns
+  : Coerce sparse matrix or data frame to data frame with sparse columns
 - [`coerce_to_sparse_matrix()`](https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_matrix.md)
   : Coerce sparse data frame to sparse matrix
 - [`coerce_to_sparse_tibble()`](https://r-lib.github.io/sparsevctrs/reference/coerce_to_sparse_tibble.md)
@@ -59,13 +59,13 @@
   [`is_sparse_character()`](https://r-lib.github.io/sparsevctrs/reference/type-predicates.md)
   [`is_sparse_logical()`](https://r-lib.github.io/sparsevctrs/reference/type-predicates.md)
   : Sparse vector type checkers
-- [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmatic-scalar.md)
-  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmatic-scalar.md)
-  [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmatic-scalar.md)
-  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmatic-scalar.md)
-  : Scalar arithmatic with sparse vectors
-- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmatic.md)
-  : Vector arithmatic with sparse vectors
+- [`sparse_division_scalar()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmetic-scalar.md)
+  [`sparse_multiplication_scalar()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmetic-scalar.md)
+  [`sparse_addition_scalar()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmetic-scalar.md)
+  [`sparse_subtraction_scalar()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmetic-scalar.md)
+  : Scalar arithmetic with sparse vectors
+- [`sparse_multiplication()`](https://r-lib.github.io/sparsevctrs/reference/sparse-arithmetic.md)
+  : Vector arithmetic with sparse vectors
 - [`sparse_positions()`](https://r-lib.github.io/sparsevctrs/reference/extractors.md)
   [`sparse_values()`](https://r-lib.github.io/sparsevctrs/reference/extractors.md)
   [`sparse_default()`](https://r-lib.github.io/sparsevctrs/reference/extractors.md)

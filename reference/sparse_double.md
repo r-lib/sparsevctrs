@@ -26,7 +26,7 @@ sparse_double(values, positions, length, default = 0)
 - default:
 
   double value, value at indices not specified by `positions`. Defaults
-  to `0`. Cannot be `NA`.
+  to `0`. Cannot be `NA`, `NaN`, or infinite.
 
 ## Value
 

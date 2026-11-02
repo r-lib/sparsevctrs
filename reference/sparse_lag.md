@@ -21,9 +21,8 @@ sparse_lag(x, n = 1L, default = NULL)
 
 - default:
 
-  The value used to pad
-  ``` x`` back to its original size after the lag has been applied. The default,  ```NULL“,
-  pads with a missing value.
+  The value used to pad `x` back to its original size after the lag has
+  been applied. The default, `NULL`, pads with a missing value.
 
 ## Value
 
